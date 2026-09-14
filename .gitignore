@@ -218,8 +218,9 @@ __marimo__/
 .streamlit/secrets.toml
 
 # Custom
-tutorials/snntorch/cache/
-tutorials/snntorch/data/
-tryouts/cache/
-tryouts/data/
-tryouts/datasets/
+thesis_code.egg-info/
+_tutorials/snntorch/cache/
+_tutorials/snntorch/data/
+scripts/cache/
+scripts/data/
+scripts/datasets/
