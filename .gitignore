@@ -220,3 +220,6 @@ __marimo__/
 # Custom
 tutorials/snntorch/cache/
 tutorials/snntorch/data/
+tryouts/cache/
+tryouts/data/
+tryouts/datasets/
