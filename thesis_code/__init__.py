@@ -1,11 +1,11 @@
 from .datasets import get_SHD_dataloader
-from .networks import SimpleSRNN, train, test
+from .networks import models, train, test
 from .plotting import plot_performance
 
 __all__ = [
     "get_SHD_dataloader",
 
-    "SimpleSRNN",
+    "models",
     "train",
     "test",
 

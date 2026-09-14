@@ -1,8 +1,8 @@
-from .simple_srnn import SimpleSRNN
+from . import models
 from .train_test import train, test
 
 __all__ = [
-    "SimpleSRNN",
+    "models",
 
     "train",
     "test",
