@@ -5,11 +5,12 @@ import snntorch as snn
 
 class MaskedLinear(nn.Module):
     def __init__(self, con_matrix: Tensor) -> None:
+        super().__init__()
         self.linear = nn.Linear(*con_matrix.shape)
         self.register_buffer('con_matrix', con_matrix)
 
     def forward(self, x: Tensor) -> Tensor:
-        return nn.functional.linear(x, self.linear.weight * self.mask, self.linear.bias)
+        return nn.functional.linear(x, self.linear.weight * self.con_matrix.T, self.linear.bias)
 
 class SparseRLeaky(snn.RLeaky):
     def __init__(self, *args, rec_matrix: Tensor, **kwargs) -> None:
