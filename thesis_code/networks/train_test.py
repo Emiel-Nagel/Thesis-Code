@@ -9,7 +9,7 @@ from snntorch.functional import LossFunctions
 
 from tqdm.auto import tqdm
 
-def train(net: nn.Module, device: torch.device, trainloader: DataLoader, optimizer: Optimizer, loss_fn: LossFunctions, n_epochs: int, max_iters: int = None) -> tuple[nn.Module, list, list]:
+def train(net: nn.Module, device: torch.device, trainloader: DataLoader, optimizer: Optimizer, loss_fn: LossFunctions, loss_is_membrane: bool = False, n_epochs: int = 1, max_iters: int = None) -> tuple[nn.Module, list, list]:
     loss_hist, acc_hist = [], []
     net.train()
 
@@ -19,7 +19,7 @@ def train(net: nn.Module, device: torch.device, trainloader: DataLoader, optimiz
             data, targets = data.to(device), targets.to(device)
             
             spk_rec, mem_rec = net(data)
-            loss_val = loss_fn(mem_rec, targets)
+            loss_val = loss_fn(mem_rec, targets) if loss_is_membrane else loss_fn(spk_rec, targets)
 
             optimizer.zero_grad()
             loss_val.backward()

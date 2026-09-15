@@ -16,7 +16,10 @@ class SparseRLeaky(snn.RLeaky):
     def __init__(self, *args, rec_matrix: Tensor, **kwargs) -> None:
         assert rec_matrix.shape[0] == rec_matrix.shape[1], \
             f"expected a square matrix, got shape {tuple(rec_matrix.shape)}"
-        
+
+        n_neurons = rec_matrix.shape[0]
+        kwargs.setdefault("linear_features", n_neurons)
+
         super().__init__(*args, **kwargs)
         self.n_neurons = rec_matrix.shape[0]
         self.recurrent = MaskedLinear(rec_matrix)
