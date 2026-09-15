@@ -33,7 +33,6 @@ class BasicSparseSRNN(nn.Module):
 
         return torch.stack(spk_rec, dim=0), torch.stack(mem_rec, dim=0)
 
-
 def build_basic_pv_som_srnn(n_in: int, ns_hidden: list[int], n_out: int, beta: float, percent_pv: float, percent_som: float) -> BasicSparseSRNN:
     neurons = sample_ee_pv_som_neurons(ns_hidden, percent_pv, percent_som)
     # prob_neuron = lambda neurons: neurons.
