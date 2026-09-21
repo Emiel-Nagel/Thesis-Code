@@ -6,7 +6,7 @@ import snntorch as snn
 class MaskedLinear(nn.Module):
     def __init__(self, con_matrix: Tensor) -> None:
         super().__init__()
-        self.linear = nn.Linear(*con_matrix.shape)
+        self.linear = nn.Linear(*con_matrix.shape)      # clamp to higher than 0 + small value, cannot become negative
         self.register_buffer('con_matrix', con_matrix)
 
     def forward(self, x: Tensor) -> Tensor:

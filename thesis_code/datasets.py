@@ -8,7 +8,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATASETS_DIR = PROJECT_ROOT / "datasets"
 
-def get_SHD_dataloader(batch_size: int, time_window: float = 10000, train: bool = True, shuffle: bool = True, re_download: bool = False) -> tuple[DataLoader, int, int]:
+def get_SHD_dataloader(batch_size: int, time_window: float = 10000, train: bool = True, shuffle: bool = True, drop_last: bool = False, re_download: bool = False) -> tuple[DataLoader, int, int]:
     train_extension = "train" if train else "test"
     cache_path = DATASETS_DIR / "cache" / "SHD" / train_extension
     data_path = DATASETS_DIR / "data"
@@ -37,5 +37,6 @@ def get_SHD_dataloader(batch_size: int, time_window: float = 10000, train: bool 
         batch_size=batch_size,
         collate_fn=tonic.collation.PadTensors(batch_first=False),
         shuffle=shuffle,
+        drop_last=drop_last,
     )
     return dataloader, sensor_size[0], dataset.classes

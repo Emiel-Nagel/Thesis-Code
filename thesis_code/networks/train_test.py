@@ -17,6 +17,7 @@ def train(net: nn.Module, device: torch.device, trainloader: DataLoader, optimiz
         progress_bar = tqdm(enumerate(trainloader), total=len(trainloader), desc=f"Epoch {epoch}")
         for i, (data, targets) in progress_bar:
             data, targets = data.to(device), targets.to(device)
+            data = data.squeeze()
             
             spk_rec, mem_rec = net(data)
             loss_val = loss_fn(mem_rec, targets) if loss_is_membrane else loss_fn(spk_rec, targets)
@@ -27,7 +28,7 @@ def train(net: nn.Module, device: torch.device, trainloader: DataLoader, optimiz
 
             loss_hist.append(loss_val.item())
 
-            acc = SF.accuracy_temporal(spk_rec, targets)
+            acc = SF.accuracy_rate(spk_rec, targets)
             acc_hist.append(acc)
 
             progress_bar.set_postfix(loss=f"{loss_val.item():.2f}", acc=f"{acc * 100:.2f}%")
@@ -49,7 +50,7 @@ def test(net: nn.Module, device: torch.device, testloader: DataLoader, max_iters
             data, targets = data.to(device), targets.to(device)
             utils.reset(net)
             spk_rec, _ = net(data)
-            acc += SF.accuracy_temporal(spk_rec, targets) * spk_rec.size(1)
+            acc += SF.accuracy_rate(spk_rec, targets) * spk_rec.size(1)
             total += spk_rec.size(1)
             if max_iters is not None and i == max_iters:
                 break
