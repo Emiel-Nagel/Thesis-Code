@@ -23,7 +23,7 @@ class SimpleSRNN(nn.Module):
         utils.reset(self.net)
 
         for step in range(data.size(0)):
-            spk_out, mem_out = self.net(data[step])
+            spk_out, syn_out, mem_out = self.net(data[step])
             spk_rec.append(spk_out)
             mem_rec.append(mem_out)
 
