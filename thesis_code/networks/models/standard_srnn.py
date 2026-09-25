@@ -53,6 +53,7 @@ class StandardSRNN(nn.Module):
         rec_layers = [l for l in self.net if isinstance(l, StandardRecurrentLayer)]
         for i, layer in enumerate(rec_layers):
             self.recorder.add_layer_recordings(i, *layer.get_recordings())
+        self.recorder.increment_iterations()
 
     def get_recorder(self) -> Recorder:
         assert self.record, "recording is disabled (record=False)"
