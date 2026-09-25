@@ -17,6 +17,19 @@ def plot_performance(loss_hist: list, acc_hist: list) -> None:
     ax_plot.set_xlabel("Iteration")
     ax_plot.set_ylabel("Accuracy")
 
+def plot_gradients(max_grad_rec: list, avg_grad_rec: list) -> None:
+    fig, (ax_max, ax_avg) = plt.subplots(nrows=1, ncols=2, facecolor='w', figsize=(18, 7))
+
+    ax_max.plot(max_grad_rec)
+    ax_max.set_title("Max Gradient")
+    ax_max.set_xlabel("Iteration (n)")
+    ax_max.set_ylabel("Max Gradient (y)")
+
+    ax_avg.plot(avg_grad_rec)
+    ax_avg.set_title("Average Gradient")
+    ax_avg.set_xlabel("Iteration (n)")
+    ax_avg.set_ylabel("Average Gradient (y)")
+
 class InteractiveSpikePlot:
     def __init__(self, recorder: Recorder, iteration_i_start: int, batch_item_i: int) -> None:
         assert recorder.num_iterations > 0, "the recorder is empty"
