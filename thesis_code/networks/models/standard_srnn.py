@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+from snntorch.surrogate import atan
 from typing import Any
 
 from ...custom_objects.layers import StandardRecurrentLayer, OutputLayer
@@ -12,7 +13,7 @@ class StandardSRNN(nn.Module):
             betas: list[torch.Tensor | float],
             beta_out: float,
             n_classes: int,
-            spike_grad: Any,
+            spike_grad: Any = atan(),
             fully_learnable: bool = True,
             record: bool = True,
     ) -> None:
