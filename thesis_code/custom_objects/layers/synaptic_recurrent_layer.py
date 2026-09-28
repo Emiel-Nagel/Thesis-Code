@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+from typing import Any
 
 from ..neurons import MaskedRSynaptic
 from ..building_blocks import MaskedKaimingLinear
@@ -10,6 +11,7 @@ class SynapticRecurrentLayer(nn.Module):
         recurrent_matrix: torch.Tensor,
         alpha: torch.Tensor | float,
         beta: torch.Tensor | float,
+        spike_grad: Any,
         fully_learnable: bool = True,
         record: bool = True,
     ) -> None:
@@ -25,6 +27,7 @@ class SynapticRecurrentLayer(nn.Module):
             beta=beta,
             linear_features=n_neurons,
             init_hidden=False,
+            spike_grad=spike_grad,
             learn_alpha=fully_learnable,
             learn_beta=fully_learnable,
             rec_matrix=recurrent_matrix,

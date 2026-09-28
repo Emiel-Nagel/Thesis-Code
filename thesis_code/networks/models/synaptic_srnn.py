@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+from typing import Any
 
 from ...custom_objects.layers import SynapticRecurrentLayer, OutputLayer
 from ...custom_objects import Recorder
@@ -12,6 +13,7 @@ class SynapticSRNN(nn.Module):
             betas: list[torch.Tensor | float],
             beta_out: float,
             n_classes: int,
+            spike_grad: Any,
             fully_learnable: bool = True,
             record: bool = True,
     ) -> None:
@@ -35,6 +37,7 @@ class SynapticSRNN(nn.Module):
                 recurrent_matrix=rm,
                 alpha=alpha,
                 beta=beta,
+                spike_grad=spike_grad,
                 fully_learnable=fully_learnable,
                 record=record,
             ))

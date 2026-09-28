@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+from typing import Any
 
 from ...custom_objects.layers import StandardRecurrentLayer, OutputLayer
 from ...custom_objects import Recorder
@@ -11,6 +12,7 @@ class StandardSRNN(nn.Module):
             betas: list[torch.Tensor | float],
             beta_out: float,
             n_classes: int,
+            spike_grad: Any,
             fully_learnable: bool = True,
             record: bool = True,
     ) -> None:
@@ -33,6 +35,7 @@ class StandardSRNN(nn.Module):
                 forward_matrix=fm,
                 recurrent_matrix=rm,
                 beta=beta,
+                spike_grad=spike_grad,
                 fully_learnable=fully_learnable,
                 record=record,
             ))
