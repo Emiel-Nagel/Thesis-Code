@@ -1,18 +1,17 @@
 import torch
 import torch.nn as nn
 
-from ..neurons import SparseRLeaky
-from ..building_blocks import MaskedKaimingLinear, sample_heterogeneous_decays
+from ..neurons import MaskedRSynaptic
+from ..building_blocks import MaskedKaimingLinear
 
-class StandardRecurrentLayer(nn.Module):
+class SynapticRecurrentLayer(nn.Module):
     def __init__(self,
         forward_matrix: torch.Tensor,
         recurrent_matrix: torch.Tensor,
-        beta_upper_bound: float = 0.96,
-        beta_lower_bound: float = 0.69,
+        alpha: torch.Tensor | float,
+        beta: torch.Tensor | float,
         fully_learnable: bool = True,
         record: bool = True,
-        device=None
     ) -> None:
         n_neurons = recurrent_matrix.shape[0]
 
@@ -21,19 +20,21 @@ class StandardRecurrentLayer(nn.Module):
 
         super().__init__()
         self.weights = MaskedKaimingLinear(forward_matrix)
-        self.neurons = SparseRLeaky(
-            beta=sample_heterogeneous_decays(n_neurons, beta_upper_bound, beta_lower_bound, device),
+        self.neurons = MaskedRSynaptic(
+            alpha=alpha,
+            beta=beta,
             linear_features=n_neurons,
             init_hidden=False,
+            learn_alpha=fully_learnable,
             learn_beta=fully_learnable,
             rec_matrix=recurrent_matrix,
         )
-        self.spk, self.mem = self.neurons.init_rleaky()
+        self.spk, self.syn, self.mem = self.neurons.init_rsynaptic()
         self.spk_rec, self.mem_rec = [], []
         self.record = record
 
     def reset(self) -> None:
-        self.spk, self.mem = self.neurons.init_rleaky()
+        self.spk, self.syn, self.mem = self.neurons.init_rsynaptic()
         self.spk_rec, self.mem_rec = [], []
 
     def get_recordings(self) -> tuple[torch.Tensor, torch.Tensor]:
@@ -43,7 +44,7 @@ class StandardRecurrentLayer(nn.Module):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = self.weights(x)
-        self.spk, self.mem = self.neurons(x, self.spk, self.mem)
+        self.spk, self.syn, self.mem = self.neurons(x, self.spk, self.syn, self.mem)
         if self.record:
             self.spk_rec.append(self.spk)
             self.mem_rec.append(self.mem)

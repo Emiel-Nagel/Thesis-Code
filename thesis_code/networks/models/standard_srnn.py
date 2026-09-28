@@ -8,39 +8,36 @@ class StandardSRNN(nn.Module):
     def __init__(self, 
             forward_matrices: list[torch.Tensor],
             recurrent_matrices: list[torch.Tensor],
+            betas: list[torch.Tensor | float],
+            beta_out: float,
             n_classes: int,
-            beta_upper_bound: float = 0.96,
-            beta_lower_bound: float = 0.69,
             fully_learnable: bool = True,
             record: bool = True,
-            device = None,
     ) -> None:
         super().__init__()
 
         self.rec_layers = nn.ModuleList()
 
-        assert len(forward_matrices) == len(recurrent_matrices), \
-            "unequal number forward- and recurrent matrices"
+        assert len(forward_matrices) == len(recurrent_matrices) == len(betas), \
+            "unequal number forward- and recurrent matrices and betas"
 
         for fm_prev, fm_next in zip(forward_matrices, forward_matrices[1:]):
             assert fm_prev.shape[1] == fm_next.shape[0], \
                 f"layer output {fm_prev.shape[1]} doesn't match next layer input {fm_next.shape[0]}"
         
-        for fm, rm in zip(forward_matrices, recurrent_matrices):
+        for fm, rm, beta in zip(forward_matrices, recurrent_matrices, betas):
             assert fm.shape[-1] == rm.shape[0], \
                 f"forward matrix outputs {fm.shape[-1]} neurons, recurrent matrix has {rm.shape[0]}"
 
             self.rec_layers.append(StandardRecurrentLayer(
                 forward_matrix=fm,
                 recurrent_matrix=rm,
-                beta_upper_bound=beta_upper_bound,
-                beta_lower_bound=beta_lower_bound,
+                beta=beta,
                 fully_learnable=fully_learnable,
                 record=record,
-                device=device,
             ))
 
-        self.out_layer = OutputLayer(forward_matrices[-1].shape[-1], n_classes)
+        self.out_layer = OutputLayer(forward_matrices[-1].shape[-1], n_classes, beta_out)
         self.recorder = Recorder(num_layers=len(recurrent_matrices))
         self.record = record
 

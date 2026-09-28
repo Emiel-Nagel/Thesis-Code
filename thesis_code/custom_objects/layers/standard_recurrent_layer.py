@@ -1,18 +1,16 @@
 import torch
 import torch.nn as nn
 
-from ..neurons import SparseRLeaky
-from ..building_blocks import MaskedKaimingLinear, sample_heterogeneous_decays
+from ..neurons import MaskedRLeaky
+from ..building_blocks import MaskedKaimingLinear
 
 class StandardRecurrentLayer(nn.Module):
     def __init__(self,
         forward_matrix: torch.Tensor,
         recurrent_matrix: torch.Tensor,
-        beta_upper_bound: float = 0.96,
-        beta_lower_bound: float = 0.69,
+        beta: torch.Tensor | float,
         fully_learnable: bool = True,
         record: bool = True,
-        device=None
     ) -> None:
         n_neurons = recurrent_matrix.shape[0]
 
@@ -21,8 +19,8 @@ class StandardRecurrentLayer(nn.Module):
 
         super().__init__()
         self.weights = MaskedKaimingLinear(forward_matrix)
-        self.neurons = SparseRLeaky(
-            beta=sample_heterogeneous_decays(n_neurons, beta_upper_bound, beta_lower_bound, device),
+        self.neurons = MaskedRLeaky(
+            beta=beta,
             linear_features=n_neurons,
             init_hidden=False,
             learn_beta=fully_learnable,

@@ -4,11 +4,11 @@ import torch.nn as nn
 import snntorch as snn
 from snntorch import utils
 
-from ...custom_objects.neurons import SparseRLeaky
+from ...custom_objects.neurons import MaskedRLeaky
 from ...connectivity import sample_ee_pv_som_neurons, build_rec_matrices
 
 class BasicSparseSRNN(nn.Module):
-    def __init__(self, n_in: int, n_out: int, rec_layers: list[SparseRLeaky], out_layer: snn.Leaky) -> None:
+    def __init__(self, n_in: int, n_out: int, rec_layers: list[MaskedRLeaky], out_layer: snn.Leaky) -> None:
         super().__init__()
         ns_hidden = [l.n_neurons for l in rec_layers]              # assuming all rec_matrices are square
         layers = [n_in] + ns_hidden
@@ -39,6 +39,6 @@ def build_basic_pv_som_srnn(n_in: int, ns_hidden: list[int], n_out: int, beta: f
     return BasicSparseSRNN(
         n_in=n_in,
         n_out=n_out,
-        rec_layers=[SparseRLeaky(beta=beta, init_hidden=True, rec_matrix=rc) for rc in rec_matrices],
+        rec_layers=[MaskedRLeaky(beta=beta, init_hidden=True, rec_matrix=rc) for rc in rec_matrices],
         out_layer=snn.Leaky(beta=beta, init_hidden=True, output=True),
     )

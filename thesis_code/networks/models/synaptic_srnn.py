@@ -1,62 +1,78 @@
 import torch
-from torch import Tensor
 import torch.nn as nn
-import snntorch as snn
 
-class RecurrentLayer(nn.Module):
-    def __init__(self, n_in: int, n_out: int, alpha: float, beta: float, fully_learnable: bool = True) -> None:
-        super().__init__()
-        self.weights = nn.Linear(n_in, n_out, bias=False)
-        self.neurons = snn.RSynaptic(alpha=alpha, beta=beta, linear_features=n_out, init_hidden=False, learn_alpha=fully_learnable, learn_beta=fully_learnable)
-        self.spk, self.syn, self.mem = self.neurons.init_rsynaptic()
-
-    def reset(self) -> None:
-        self.spk, self.syn, self.mem = self.neurons.init_rsynaptic()
-
-    def forward(self, x: Tensor) -> Tensor:
-        x = self.weights(x)
-        self.spk, self.syn, self.mem = self.neurons(x, self.spk, self.syn, self.mem)
-        return self.spk
-
-class OutputLayer(nn.Module):
-    def __init__(self, n_in: int, n_out: int) -> None:
-        super().__init__()
-        self.weights = nn.Linear(n_in, n_out, bias=False)
-        self.neurons = snn.Leaky(beta=0.9, init_hidden=False, reset_mechanism='none')
-        self.mem = self.neurons.init_leaky()
-
-    def reset(self) -> None:
-        self.mem = self.neurons.init_leaky()
-
-    def forward(self, x: Tensor) -> tuple[Tensor, Tensor]:
-        x = self.weights(x)
-        spk, self.mem = self.neurons(x, self.mem)
-        return spk, self.mem
+from ...custom_objects.layers import SynapticRecurrentLayer, OutputLayer
+from ...custom_objects import Recorder
 
 class SynapticSRNN(nn.Module):
-    def __init__(self, n_in: int, ns_hidden: list[int], n_out: int, alpha: float, beta: float, fully_learnable: bool = True) -> None:
+    def __init__(self, 
+            forward_matrices: list[torch.Tensor],
+            recurrent_matrices: list[torch.Tensor],
+            alphas: list[torch.Tensor | float],
+            betas: list[torch.Tensor | float],
+            beta_out: float,
+            n_classes: int,
+            fully_learnable: bool = True,
+            record: bool = True,
+    ) -> None:
         super().__init__()
-        layers = [n_in] + ns_hidden
-        modules = [nn.Flatten()]
 
-        for _n_in, _n_out in zip(layers[:-1], layers[1:]):
-            modules.append(RecurrentLayer(_n_in, _n_out, alpha, beta, fully_learnable))
+        self.rec_layers = nn.ModuleList()
 
-        modules.append(OutputLayer(ns_hidden[-1], n_out))
-        self.net = nn.Sequential(*modules)
+        assert len(forward_matrices) == len(recurrent_matrices) == len(alphas) == len(betas), \
+            "unequal number forward- and recurrent matrices, alphas and betas"
+
+        for fm_prev, fm_next in zip(forward_matrices, forward_matrices[1:]):
+            assert fm_prev.shape[1] == fm_next.shape[0], \
+                f"layer output {fm_prev.shape[1]} doesn't match next layer input {fm_next.shape[0]}"
+        
+        for fm, rm, alpha, beta in zip(forward_matrices, recurrent_matrices, alphas, betas):
+            assert fm.shape[-1] == rm.shape[0], \
+                f"forward matrix outputs {fm.shape[-1]} neurons, recurrent matrix has {rm.shape[0]}"
+
+            self.rec_layers.append(SynapticRecurrentLayer(
+                forward_matrix=fm,
+                recurrent_matrix=rm,
+                alpha=alpha,
+                beta=beta,
+                fully_learnable=fully_learnable,
+                record=record,
+            ))
+
+        self.out_layer = OutputLayer(forward_matrices[-1].shape[-1], n_classes, beta_out)
+        self.recorder = Recorder(num_layers=len(recurrent_matrices))
+        self.record = record
 
     def reset(self) -> None:
-        for module in self.net:
-            if isinstance(module, (RecurrentLayer, OutputLayer)):
-                module.reset()
+        for layer in self.rec_layers:
+            layer.reset()
+        self.out_layer.reset()
 
-    def forward(self, data: Tensor) -> tuple[Tensor, Tensor]:
-        spk_rec, mem_rec = [], []
+    def record_layers(self) -> None:
+        for i, layer in enumerate(self.rec_layers):
+            self.recorder.add_layer_recordings(i, *layer.get_recordings())
+        self.recorder.increment_iterations()
+
+    def get_recorder(self) -> Recorder:
+        assert self.record, "recording is disabled (record=False)"
+        return self.recorder
+
+    def forward(self, data: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, list[torch.Tensor]]:
+        spk_outs, mem_outs = [], []
+        hidden_spks = [[] for _ in range(len(self.rec_layers))]
         self.reset()
 
         for step in range(data.size(0)):
-            spk_out, mem_out = self.net(data[step])
-            spk_rec.append(spk_out)
-            mem_rec.append(mem_out)
+            x = data[step]
+            for i, layer in enumerate(self.rec_layers):
+                x = layer(x)
+                hidden_spks[i].append(x)
 
-        return torch.stack(spk_rec, dim=0), torch.stack(mem_rec, dim=0)
+            spk_out, mem_out = self.out_layer(x)
+            spk_outs.append(spk_out)
+            mem_outs.append(mem_out)
+
+        if self.record:
+            self.record_layers()
+
+        return torch.stack(spk_outs, dim=0), torch.stack(mem_outs, dim=0), [torch.stack(spks_h, dim=0) for spks_h in hidden_spks]

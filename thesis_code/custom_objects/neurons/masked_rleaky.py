@@ -3,7 +3,7 @@ import snntorch as snn
 
 from ..building_blocks import MaskedKaimingLinear
 
-class SparseRLeaky(snn.RLeaky):
+class MaskedRLeaky(snn.RLeaky):
     def __init__(self, *args, rec_matrix: torch.Tensor, **kwargs) -> None:
         assert rec_matrix.shape[0] == rec_matrix.shape[1], \
             f"expected a square matrix, got shape {tuple(rec_matrix.shape)}"
