@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import snntorch.spikeplot as splt
 
-from .network_components import Recorder
+from .recording import NeuronRecorder
 
 def plot_performance(loss_hist: list, acc_hist: list) -> None:
     fig, (ax_loss, ax_plot) = plt.subplots(nrows=1, ncols=2, facecolor='w', figsize=(18, 7))
@@ -31,7 +31,7 @@ def plot_gradients(max_grad_rec: list, avg_grad_rec: list) -> None:
     ax_avg.set_ylabel("Average Gradient (y)")
 
 class InteractiveSpikePlot:
-    def __init__(self, recorder: Recorder, iteration_i_start: int, batch_item_i: int) -> None:
+    def __init__(self, recorder: NeuronRecorder, iteration_i_start: int, batch_item_i: int) -> None:
         assert recorder.num_iterations > 0, "the recorder is empty"
 
         self.recorder = recorder

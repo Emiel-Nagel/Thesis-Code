@@ -3,7 +3,10 @@ from thesis_code.datasets import get_SHD_dataset
 from thesis_code.connectivity import sample_ee_pv_som_neurons, build_recurrent_matrices
 from thesis_code.networks import models
 from thesis_code.decay_sampling import sample_heterogeneous_decays_normal, tau_to_beta
+from thesis_code.plotting import plot_performance, plot_gradients, InteractiveSpikePlot
 from thesis_code.training import compute_loss, get_compute_loss_reg_fn, train_net, test_net
+
+from matplotlib import pyplot as plt
 
 torch.manual_seed(42)
 dtype = torch.float
@@ -36,20 +39,26 @@ def run():
         L=2,
     )
 
-    accuracy = test_net(net, device, SHD_testloader)
+    accuracy = test_net(net, SHD_testloader)
     print(f"Test Accuracy before training is: {accuracy}")
 
-    net, loss_hist, acc_hist, spike_hist, max_grad_rec, avg_grad_rec = train_net(net, device, SHD_trainloader,
+    net, loss_hist, acc_hist, spike_hist, max_grad_rec, avg_grad_rec = train_net(net, SHD_trainloader,
         loss_fn=lambda mem_outs, targets, hidden_spks: compute_loss(mem_outs, targets) + compute_loss_reg(hidden_spks),
         lr=1e-3,
         n_epochs=50,
         max_iters=None,
     )
 
-    accuracy = test_net(net, device, SHD_testloader)
+    accuracy = test_net(net, SHD_testloader)
     print(f"Test Accuracy after training is: {accuracy}")
 
     # add code to send data to github repo
+
+    plot_performance(loss_hist, acc_hist)
+    plot_gradients(max_grad_rec, avg_grad_rec)
+
+    InteractiveSpikePlot(spike_hist, iteration_i_start=0, batch_item_i=0).draw()
+    plt.show()
 
 if __name__ == "__main__":
     run()
