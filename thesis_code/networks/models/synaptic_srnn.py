@@ -1,5 +1,5 @@
 import torch
-from snntorch.surrogate import atan
+from snntorch.surrogate import fast_sigmoid
 from typing import Any
 
 from .srnn_base import SRNN
@@ -13,7 +13,7 @@ class SynapticSRNN(SRNN):
             betas: list[torch.Tensor | float],
             beta_out: float,
             n_classes: int,
-            spike_grad: Any = atan(),
+            spike_grad: Any = fast_sigmoid(slope=25),
             fully_learnable: bool = True,
             record: bool = True,
     ) -> None:

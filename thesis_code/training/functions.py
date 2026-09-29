@@ -1,11 +1,21 @@
-"""
-Based on:
-Friedemann Zenke, Tim P. Vogels; The Remarkable Robustness of Surrogate Gradient Learning for Instilling Complex Function in Spiking Neural Networks. Neural Comput 2021; 33 (4): 899-925. doi: https://doi.org/10.1162/neco_a_01367
-"""
-
 import torch
+import torch.nn.functional as F
+import numpy as np
+
+def measure_accuracy(mem_outs: torch.Tensor, targets: torch.Tensor):
+    _, idx = mem_outs.sum(dim=0).max(1)
+    return np.mean((targets == idx).detach().cpu().numpy())
+
+def compute_loss(mem_outs: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
+    probs = F.softmax(mem_outs, dim=-1)
+    log_probs = torch.log(probs.mean(dim=0) + 1e-8) # to avoid log(0)
+    return F.nll_loss(log_probs, targets)
 
 def get_compute_loss_reg_fn(lam_lower: float, v_lower: float, lam_uppers: list[float], v_uppers: list[float], L: int = 2) -> callable:
+    """
+    Based on:
+    Friedemann Zenke, Tim P. Vogels; The Remarkable Robustness of Surrogate Gradient Learning for Instilling Complex Function in Spiking Neural Networks. Neural Comput 2021; 33 (4): 899-925. doi: https://doi.org/10.1162/neco_a_01367
+    """
     assert len(lam_uppers) == len(v_uppers), \
         f"Mismatching parameter counts: lam_uppers={len(lam_uppers)}, v_uppers={len(v_uppers)}"
     

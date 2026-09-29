@@ -20,3 +20,6 @@ class NeuronRecorder:
         spk_rec = self.recordings[layer_i]["spk_recs"][iteration_i]
         mem_rec = self.recordings[layer_i]["mem_recs"][iteration_i]
         return spk_rec, mem_rec
+
+class GradRecorder:
+    pass # implement later

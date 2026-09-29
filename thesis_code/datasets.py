@@ -1,21 +1,56 @@
 import tonic
 from tonic import DiskCachedDataset
 import tonic.transforms as transforms
-from torch.utils.data import DataLoader
+import torch
+from torch.utils.data import DataLoader, Dataset
 import shutil
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATASETS_DIR = PROJECT_ROOT / "datasets"
 
-def get_SHD_dataloader(batch_size: int, time_window: float = 1000, train: bool = True, shuffle: bool = True, drop_last: bool = False, re_download: bool = False) -> tuple[DataLoader, int, int]:
+def _build_dataloader(dataset: Dataset, cache_path: Path, batch_size: int, train: bool) -> DataLoader:
     train_extension = "train" if train else "test"
-    cache_path = DATASETS_DIR / "cache" / "SHD" / train_extension
-    data_path = DATASETS_DIR / "data"
 
+    cached_dataset = DiskCachedDataset(
+        dataset,
+        cache_path=str(cache_path / train_extension)
+    )
+    return DataLoader(
+        cached_dataset,
+        batch_size=batch_size,
+        collate_fn=tonic.collation.PadTensors(batch_first=False),
+        shuffle=train,
+        drop_last=train,
+    )
+
+class PreparedLoader:
+    """Wraps a DataLoader and applies the standard device/dtype/shape ops to each batch."""
+
+    def __init__(self, loader: DataLoader, device: torch.device | str) -> None:
+        self.loader = loader
+        self.device = device
+
+    def __len__(self) -> int:
+        return len(self.loader)
+
+    def __iter__(self):
+        for data, targets in self.loader:
+            data = data.to(self.device, non_blocking=True).squeeze(2)
+            targets = targets.to(self.device, non_blocking=True).long()
+            yield data, targets
+
+    def __getattr__(self, name: str):
+        # Forward .dataset, .batch_size, .sampler, etc. to the wrapped loader
+        return getattr(self.loader, name)
+
+def get_SHD_dataset(batch_size: int, device: torch.device, time_window: float = 1000, re_download: bool = False) -> tuple[PreparedLoader, PreparedLoader, int, list]:
+    data_path = DATASETS_DIR / "data"
+    cache_path = DATASETS_DIR / "cache" / "SHD" / f"tw{int(time_window)}"
+    
     if re_download:
-        shutil.rmtree(cache_path, ignore_errors=True)
-        shutil.rmtree(DATASETS_DIR / "data" / "SHD", ignore_errors=True)
+        shutil.rmtree(data_path / "SHD", ignore_errors=True)
+        shutil.rmtree(DATASETS_DIR / "cache" / "SHD", ignore_errors=True)
 
     sensor_size = tonic.datasets.SHD.sensor_size
     frame_transform=transforms.ToFrame(
@@ -23,44 +58,24 @@ def get_SHD_dataloader(batch_size: int, time_window: float = 1000, train: bool =
         time_window=time_window,
         start_time=0,
     )
-    dataset = tonic.datasets.SHD(
+
+    train_dataset = tonic.datasets.SHD(
         save_to=str(data_path), 
-        train=train,
+        train=True,
         transform=frame_transform,
     )
-    cached_dataset = DiskCachedDataset(
-        dataset,
-        cache_path=str(cache_path)
+    trainloader = _build_dataloader(train_dataset, cache_path, batch_size, train=True)
+
+    test_dataset = tonic.datasets.SHD(
+        save_to=str(data_path), 
+        train=False,
+        transform=frame_transform,
     )
-    dataloader = DataLoader(
-        cached_dataset,
-        batch_size=batch_size,
-        collate_fn=tonic.collation.PadTensors(batch_first=False),
-        shuffle=shuffle,
-        drop_last=drop_last,
+    testloader = _build_dataloader(test_dataset, cache_path, batch_size, train=False)
+
+    return (
+        PreparedLoader(trainloader, device),
+        PreparedLoader(testloader, device),
+        sensor_size[0],
+        train_dataset.classes,
     )
-    return dataloader, sensor_size[0], dataset.classes
-
-class Dataset:
-    def __init__(self) -> None:
-        pass
-
-    def __iter__(self) -> ...:
-        pass
-
-    def train_data(self) -> ...:
-        pass
-
-    def test_data(self) -> ...:
-        pass
-
-class SHDDataset(Dataset):
-    def __init__(self, batch_size: int, time_window: float = 1000, train: bool = True, shuffle: bool = True, drop_last: bool = False, re_download: bool = False) -> None:
-        self.batch_size = batch_size
-        self.time_window = time_window
-        self.input_dim = sensor_size = tonic.datasets.SHD.sensor_size
-
-        
-        self.train_dataloader, self.input_dim, self.n_classes = get_SHD_dataloader(batch_size, time_window, train, shuffle, drop_last, re_download)
-
-    def 
