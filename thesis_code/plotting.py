@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import snntorch.spikeplot as splt
 
-from .custom_objects import Recorder
+from .network_components import Recorder
 
 def plot_performance(loss_hist: list, acc_hist: list) -> None:
     fig, (ax_loss, ax_plot) = plt.subplots(nrows=1, ncols=2, facecolor='w', figsize=(18, 7))

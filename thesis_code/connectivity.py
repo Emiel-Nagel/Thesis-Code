@@ -47,7 +47,7 @@ def sample_ee_pv_som_neurons(ns_hidden: list[int], percent_pv: float, percent_so
 def build_recurrent_matrices(neurons: list[list[Neurons]]) -> list[Tensor]:
     rec_matrices = []
     for layer in neurons:
-        type_idx = torch.tensor([type_order.index(n) for n in layer])
+        type_idx = torch.tensor([type_order.index(n) for n in layer], dtype=torch.float)
         rec_matrix = type_matrix[type_idx][:, type_idx]
         rec_matrices.append(rec_matrix)
     return rec_matrices

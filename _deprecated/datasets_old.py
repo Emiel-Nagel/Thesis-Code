@@ -40,27 +40,3 @@ def get_SHD_dataloader(batch_size: int, time_window: float = 1000, train: bool =
         drop_last=drop_last,
     )
     return dataloader, sensor_size[0], dataset.classes
-
-class Dataset:
-    def __init__(self) -> None:
-        pass
-
-    def __iter__(self) -> ...:
-        pass
-
-    def train_data(self) -> ...:
-        pass
-
-    def test_data(self) -> ...:
-        pass
-
-class SHDDataset(Dataset):
-    def __init__(self, batch_size: int, time_window: float = 1000, train: bool = True, shuffle: bool = True, drop_last: bool = False, re_download: bool = False) -> None:
-        self.batch_size = batch_size
-        self.time_window = time_window
-        self.input_dim = sensor_size = tonic.datasets.SHD.sensor_size
-
-        
-        self.train_dataloader, self.input_dim, self.n_classes = get_SHD_dataloader(batch_size, time_window, train, shuffle, drop_last, re_download)
-
-    def 

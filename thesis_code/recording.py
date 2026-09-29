@@ -1,6 +1,6 @@
 import torch
 
-class Recorder:
+class NeuronRecorder:
     def __init__(self, num_layers: int) -> None:
         self.num_layers = num_layers
         self.num_iterations = 0
