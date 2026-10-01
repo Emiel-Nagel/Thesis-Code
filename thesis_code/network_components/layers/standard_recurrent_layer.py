@@ -12,7 +12,6 @@ class StandardRecurrentLayer(nn.Module):
         beta: torch.Tensor | float,
         spike_grad: Any,
         fully_learnable: bool = True,
-        # record: bool = True,
     ) -> None:
         self.n_neurons = recurrent_matrix.shape[0]
 
@@ -30,36 +29,21 @@ class StandardRecurrentLayer(nn.Module):
             rec_matrix=recurrent_matrix,
         )
         self.spk, self.mem = self.neurons.init_rleaky()
-        # self.spk_rec, self.mem_rec = [], []
-        # self.record = record
 
     def reset(self) -> None:
         self.spk, self.mem = self.neurons.init_rleaky()
-        # self.spk_rec, self.mem_rec = [], []
-
-    # def get_recordings(self) -> tuple[torch.Tensor, torch.Tensor]:
-    #     assert self.record, "recording is disabled (record=False)"
-    #     assert self.spk_rec, "no recordings yet; run at least one forward step"
-    #     return torch.stack(self.spk_rec), torch.stack(self.mem_rec)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = self.weights(x)
         self.spk, self.mem = self.neurons(x, self.spk, self.mem)
-        # if self.record:
-        #     self.spk_rec.append(self.spk)
-        #     self.mem_rec.append(self.mem)
         return self.spk
 
-    def forward_sequence(self, x: torch.Tensor) -> torch.Tensor:
-        # computes forward for all timesteps simultaneously
-        x = self.weights(x)
+    def forward_sequence(self, x_seq: torch.Tensor) -> torch.Tensor:
+        x_seq = self.weights(x_seq)
         spks = []
 
-        for t in range(x.size(0)):
-            self.spk, self.mem = self.neurons(x[t], self.spk, self.mem)
+        for x in x_seq.unbind(0):
+            self.spk, self.mem = self.neurons(x, self.spk, self.mem)
             spks.append(self.spk)
-            # if self.record:
-            #     self.spk_rec.append(self.spk)
-            #     self.mem_rec.append(self.mem)
 
         return torch.stack(spks, dim=0)

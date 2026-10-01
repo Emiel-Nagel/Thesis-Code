@@ -1,7 +1,7 @@
 import torch
 from thesis_code.datasets import get_SHD_dataset
 from thesis_code.connectivity import sample_ee_pv_som_neurons, build_recurrent_matrices
-from thesis_code.networks import models
+from _deprecated.networks import models
 from thesis_code.decay_sampling import sample_heterogeneous_decays_normal, tau_to_beta
 from thesis_code.plotting import plot_performance, plot_gradients, InteractiveSpikePlot
 from thesis_code.training import compute_loss, get_compute_loss_reg_fn, train_net, test_net

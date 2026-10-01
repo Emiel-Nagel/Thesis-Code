@@ -3,7 +3,7 @@ from snntorch.surrogate import fast_sigmoid
 from typing import Any
 
 from .srnn_base import SRNN
-from ...network_components.layers import StandardRecurrentLayer
+from ....thesis_code.network_components.layers import StandardRecurrentLayer
 
 class StandardSRNN(SRNN):
     def __init__(self, 

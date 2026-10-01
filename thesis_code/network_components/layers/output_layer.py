@@ -16,3 +16,14 @@ class OutputLayer(nn.Module):
         x = self.weights(x)
         spk, self.mem = self.neurons(x, self.mem)
         return spk, self.mem
+
+    def forward_sequence(self, x_seq: torch.Tensor) -> tuple[list, list]:
+        x_seq = self.weights(x_seq)
+        spk_outs, mem_outs = [], []
+
+        for x in x_seq.unbind(0):
+            spk, self.mem = self.neurons(x, self.mem)
+            spk_outs.append(spk)
+            mem_outs.append(self.mem)
+
+        return torch.stack(spk_outs, dim=0), torch.stack(mem_outs, dim=0)

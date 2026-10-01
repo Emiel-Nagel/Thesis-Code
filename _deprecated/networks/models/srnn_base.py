@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-from ...network_components.layers import OutputLayer, StandardRecurrentLayer, SynapticRecurrentLayer
+from ....thesis_code.network_components.layers import OutputLayer, StandardRecurrentLayer, SynapticRecurrentLayer
 # from ...recording import NeuronRecorder
 
 class SRNN(nn.Module):
