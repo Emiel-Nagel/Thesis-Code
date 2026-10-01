@@ -10,12 +10,12 @@ def plot_performance(perf_rec: PerformanceRecorder) -> None:
 
     ax_loss.plot(loss_hist)
     ax_loss.set_title("Train Set Loss")
-    ax_loss.set_xlabel("Iteration")
+    ax_loss.set_xlabel("Epoch")
     ax_loss.set_ylabel("Loss")
 
     ax_plot.plot(acc_hist)
     ax_plot.set_title("Train Set Accuracy")
-    ax_plot.set_xlabel("Iteration")
+    ax_plot.set_xlabel("Epoch")
     ax_plot.set_ylabel("Accuracy")
 
 def plot_gradients(grad_rec: GradientRecorder) -> None:

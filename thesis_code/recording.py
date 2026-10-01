@@ -67,7 +67,7 @@ class GradientRecorder(Recorder):
         if len(grads) > 0:
             flat_grads = torch.cat([t.flatten() for t in grads.values()])
             self.max_grad_rec.append(flat_grads.max(dim=0).values.item())
-            self.avg_grad_rec.append(flat_grads.mean(dim=0).item)
+            self.avg_grad_rec.append(flat_grads.mean(dim=0).item())
         else:
             self.max_grad_rec.append(0)
             self.avg_grad_rec.append(0)

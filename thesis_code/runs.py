@@ -6,24 +6,34 @@ from .recording import Recorder
 from .srnn import SRNN
 
 REPO = "Emiel-Nagel/Thesis-Code"
+CODE_DIR = Path(__file__).resolve().parent.parent
+RUNS_TEMP_DIR = CODE_DIR / "_runs_tmp"
 
 def generate_run_id() -> str:
     return time.strftime("%Y%m%d-%H%M%S") + "-" + uuid.uuid4().hex[:6]
 
+def get_git_commit() -> str:
+    return subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        capture_output=True, text=True, check=True, cwd=CODE_DIR,
+    ).stdout.strip()
+
 def push_run(run_dir: Path, run_id: str, cfg: dict):
     subprocess.run(
         ["gh", "release", "create", f"run-{run_id}", str(run_dir / "run.pt.gz"),
-         "-R", REPO, "--title", run_id, "--notes", yaml.safe_dump(cfg)],
+         "-R", REPO, "--title", run_id, "--notes", yaml.safe_dump(cfg),
+         "--target", cfg["git_commit"]],
         check=True,
     )
     shutil.rmtree(run_dir)
 
 def save_run(run_id: str, cfg: dict, net: SRNN, **recorders: Recorder) -> Path:
-    run_dir = Path(tempfile.mkdtemp(prefix=f"run-{run_id}-"))
+    RUNS_TEMP_DIR.mkdir(exist_ok=True)
+    run_dir = Path(tempfile.mkdtemp(prefix=f"run-{run_id}-", dir=RUNS_TEMP_DIR))
     state = {
         "cfg": cfg,
         "net": {k: v.detach().cpu() for k, v in net.state_dict().items()},
-        **{name: rec.to_state() for name, rec in recorders.items()}
+        **{name: rec.to_state() for name, rec in recorders.items() if rec is not None}
     }
     buf = io.BytesIO()
     torch.save(state, buf)
