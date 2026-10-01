@@ -41,18 +41,18 @@ class SynapticSRNN(SRNN):
                 record=record,
             ))
 
-    def forward_net(self, data: torch.Tensor) -> tuple[list, list, list[list]]:
-        spk_outs, mem_outs = [], []
-        hidden_spks = [[] for _ in range(len(self.rec_layers))]
+    # def forward_net(self, data: torch.Tensor) -> tuple[list, list, list[list]]:
+    #     spk_outs, mem_outs = [], []
+    #     hidden_spks = [[] for _ in range(len(self.rec_layers))]
 
-        for step in range(data.size(0)):
-            x = data[step]
-            for i, layer in enumerate(self.rec_layers):
-                x = layer(x)
-                hidden_spks[i].append(x)
+    #     for step in range(data.size(0)):
+    #         x = data[step]
+    #         for i, layer in enumerate(self.rec_layers):
+    #             x = layer(x)
+    #             hidden_spks[i].append(x)
 
-            spk_out, mem_out = self.out_layer(x)
-            spk_outs.append(spk_out)
-            mem_outs.append(mem_out)
+    #         spk_out, mem_out = self.out_layer(x)
+    #         spk_outs.append(spk_out)
+    #         mem_outs.append(mem_out)
 
-        return spk_outs, mem_outs, hidden_spks
+    #     return spk_outs, mem_outs, hidden_spks

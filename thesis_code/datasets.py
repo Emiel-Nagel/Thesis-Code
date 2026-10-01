@@ -36,12 +36,11 @@ class PreparedLoader:
 
     def __iter__(self):
         for data, targets in self.loader:
-            data = data.to(self.device, non_blocking=True).squeeze(2)
+            data = data.to(self.device, non_blocking=True).squeeze()
             targets = targets.to(self.device, non_blocking=True).long()
             yield data, targets
 
     def __getattr__(self, name: str):
-        # Forward .dataset, .batch_size, .sampler, etc. to the wrapped loader
         return getattr(self.loader, name)
 
 def get_SHD_dataset(batch_size: int, device: torch.device, time_window: float = 1000, re_download: bool = False) -> tuple[PreparedLoader, PreparedLoader, int, list]:

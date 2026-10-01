@@ -19,18 +19,20 @@ class MaskedLinear(nn.Module):
     def __init__(self, con_matrix: torch.Tensor) -> None:
         super().__init__()
         self.linear = nn.Linear(*con_matrix.shape, bias=False)      # clamp to higher than 0 + small value, cannot become negative
-        # self.register_buffer('con_matrix', con_matrix)
-        nn.utils.parametrize.register_parametrization(self.linear, "weight", Mask(con_matrix.T.contiguous()))
+        self.register_buffer('con_matrix', con_matrix)
+        # nn.utils.parametrize.register_parametrization(self.linear, "weight", Mask(con_matrix.T.contiguous()))
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return nn.functional.linear(x, self.linear.weight * self.con_matrix.T)
         return self.linear(x)
 
 class MaskedKaimingLinear(nn.Module):
     def __init__(self, con_matrix: torch.Tensor) -> None:
         super().__init__()
         self.linear = KaimingLinear(*con_matrix.shape)
-        # self.register_buffer('con_matrix', con_matrix)
-        nn.utils.parametrize.register_parametrization(self.linear, "weight", Mask(con_matrix.T.contiguous()))
+        self.register_buffer('con_matrix', con_matrix)
+        # nn.utils.parametrize.register_parametrization(self.linear, "weight", Mask(con_matrix.T.contiguous()))
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return nn.functional.linear(x, self.linear.weight * self.con_matrix.T)
         return self.linear(x)

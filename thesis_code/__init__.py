@@ -1,14 +1,19 @@
-from .datasets import get_SHD_dataset
-from .networks import models
+from .srnn import SRNN
+from . import training
+from . import datasets
+from . import network_components
 from . import decay_sampling
-from .plotting import plot_performance
+from . import recording
+from . import plotting
+from . import runs
 
 __all__ = [
-    "get_SHD_dataset",
-
-    "models",
-
+    "SRNN",
+    "training",
+    "datasets",
+    "network_components",
     "decay_sampling",
-
-    "plot_performance",
+    "recording",
+    "plotting",
+    "runs",
 ]

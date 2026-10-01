@@ -49,7 +49,11 @@ def train_net(net: nn.Module, trainloader: DataLoader, loss_fn: Callable, lr: fl
             progress_bar.set_postfix(loss=f"{loss_val.item():.2f}", acc=f"{acc * 100:.2f}%")
 
             if i % 25 == 0:
-                tqdm.write(f"Epoch {epoch}, Iteration {i} — Loss: {loss_val.item():.2f}, Acc: {acc*100:.2f}%")
+                elapsed = progress_bar.format_dict["elapsed"]
+                tqdm.write(
+                    f"Epoch {epoch}, Iteration {i} — Loss: {loss_val.item():.2f}, "
+                    f"Acc: {acc*100:.2f}%, Time elapsed: {elapsed:.1f}s"
+                )
 
             if max_iters is not None and i == max_iters:
                 break
