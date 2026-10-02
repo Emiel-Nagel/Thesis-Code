@@ -4,13 +4,13 @@ on:
     types: [published]
 permissions:
   contents: write
+env:
+  GITHUB_TOKEN: ${{ github.token }}
+  TAG: ${{ github.event.release.tag_name }}
 
 jobs:
   run-analysis:
     runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ github.token }}
-      TAG: ${{ github.event.release.tag_name }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
