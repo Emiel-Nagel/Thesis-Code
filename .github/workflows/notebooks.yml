@@ -23,6 +23,6 @@ jobs:
       - run: |
           mkdir work
           gh release download "$TAG" -p run.pt.gz -D work
-          cd scripts/analysis.ipynb work/analysis.ipynb
-          papermill work/analysis.ipynb work/analysis.ipynb -p run_dir work --cwd
+          cp scripts/analysis.ipynb work/analysis.ipynb
+          papermill work/analysis.ipynb work/analysis.ipynb -p run_dir work --cwd . 
           gh release upload "$TAG" work/analysis.ipynb --clobber
