@@ -24,6 +24,5 @@ jobs:
           mkdir work
           gh release download "$TAG" -p run.pt.gz -D work
           cp scripts/analysis.ipynb work/analysis.ipynb
-          papermill work/analysis.ipynb work/analysis.ipynb -k python3 -p run_dir work --cwd .
-          interactive False --cwd . 
+          papermill work/analysis.ipynb work/analysis.ipynb -k python3 -p run_dir work interactive False --cwd .
           gh release upload "$TAG" work/analysis.ipynb --clobber
