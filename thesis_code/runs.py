@@ -1,5 +1,5 @@
 import torch
-import subprocess, tempfile, shutil, yaml, io, gzip, uuid, time
+import subprocess, tempfile, shutil, yaml, io, gzip, datetime
 from pathlib import Path
 
 from .recording import Recorder
@@ -10,7 +10,7 @@ CODE_DIR = Path(__file__).resolve().parent.parent
 RUNS_TEMP_DIR = CODE_DIR / "_runs_tmp"
 
 def generate_run_id() -> str:
-    return time.strftime("%Y%m%d-%H%M%S") + "-" + uuid.uuid4().hex[:6]
+    return str(datetime.datetime.now())
 
 def get_git_commit() -> str:
     return subprocess.run(
@@ -18,7 +18,7 @@ def get_git_commit() -> str:
         capture_output=True, text=True, check=True, cwd=CODE_DIR,
     ).stdout.strip()
 
-def push_run(run_dir: Path, run_id: str, cfg: dict):
+def push_run(run_dir: Path, run_id: str, cfg: dict) -> None:
     subprocess.run(
         ["gh", "release", "create", f"run-{run_id}", str(run_dir / "run.pt.gz"),
          "-R", REPO, "--title", run_id, "--notes", yaml.safe_dump(cfg),
@@ -40,8 +40,8 @@ def save_run(run_id: str, cfg: dict, net: SRNN, **recorders: Recorder) -> Path:
     (run_dir / "run.pt.gz").write_bytes(gzip.compress(buf.getvalue()))
     return run_dir
 
-def load_run(path, classes: dict):
+def load_run(path, classes: dict) -> tuple[dict, dict, dict]:
     with open(path, "rb") as f:
         state = torch.load(io.BytesIO(gzip.decompress(f.read())), weights_only=True, map_location="cpu")
-    recs = {name: cls.from_state(state[name]) for name, cls in classes.items()}
+    recs = {name: cls.from_state(state[name]) for name, cls in classes.items() if state[name] is not None}
     return state["cfg"], state["net"], recs

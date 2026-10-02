@@ -1,0 +1,28 @@
+name: Run analysis
+on:
+  release:
+    types: [published]
+permissions:
+  contents: write
+
+jobs:
+  run-analysis:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+      TAG: ${{ github.event.release.tag_name }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: |
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install papermill ipykernel matplotlib pyyaml
+          pip install -e . 
+          python -m ipykernel install --user --name python3
+      - run: |
+          mkdir work
+          gh release download "$TAG" -p run.pt.gz -D work
+          cd scripts/analysis.ipynb work/analysis.ipynb
+          papermill work/analysis.ipynb work/analysis.ipynb -p run_dir work --cwd
+          gh release upload "$TAG" work/analysis.ipynb --clobber
