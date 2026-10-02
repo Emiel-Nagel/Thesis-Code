@@ -10,7 +10,7 @@ CODE_DIR = Path(__file__).resolve().parent.parent
 RUNS_TEMP_DIR = CODE_DIR / "_runs_tmp"
 
 def generate_run_id() -> str:
-    return str(datetime.datetime.now())
+    return str(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
 
 def get_git_commit() -> str:
     return subprocess.run(
