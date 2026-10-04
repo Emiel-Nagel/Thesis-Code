@@ -24,7 +24,7 @@ def save_run(run_id: str, cfg: dict, net: SRNN, **recorders: Recorder) -> Path:
     net.reset()
     state = {
         "cfg": cfg,
-        "net_state": {k: v.cpu() for k, v in net.state_dict().items()},
+        "net": copy.deepcopy(net).cpu(),
         **{name: rec.to_state() for name, rec in recorders.items() if rec is not None}
     }
     buf = io.BytesIO()
@@ -46,8 +46,7 @@ def load_run(path: Path) -> tuple[SRNN, dict, dict]:
         state = torch.load(io.BytesIO(gzip.decompress(f.read())), weights_only=True, map_location="cpu")
     # recs = {name: sd for name, sd in state.items() if name not in ["cfg", "net"]}
     cfg = state["cfg"]
-    net = SRNN(**cfg["net"])          # whatever args your constructor takes
-    net.load_state_dict(state["net_state"])
+    net = state["net"]          # whatever args your constructor takes
 
     # recs = {name: cls.from_state(state[name]) for name, cls in classes.items() if state[name] is not None}
     return net, cfg, state

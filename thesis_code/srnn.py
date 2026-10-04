@@ -5,14 +5,13 @@ from .network_components.layers import OutputLayer, StandardRecurrentLayer, Syna
 
 class SRNN(nn.Module):
     def __init__(self,
-            rec_layers: list[StandardRecurrentLayer | SynapticRecurrentLayer],
-            beta_out: float,
-            n_classes: int,
+            rec_layers: list[StandardRecurrentLayer | SynapticRecurrentLayer] = [],
+            out_layer: OutputLayer | None = None,
         ) -> None:
         super().__init__()
 
         self.rec_layers = nn.ModuleList(rec_layers)
-        self.out_layer = OutputLayer(rec_layers[-1].n_neurons, n_classes, beta_out)
+        self.out_layer = out_layer
 
     def reset(self) -> None:
         for layer in self.rec_layers:
