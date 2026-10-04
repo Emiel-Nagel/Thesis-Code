@@ -1,7 +1,7 @@
 import torch
 import snntorch as snn
 
-from ..building_blocks import MaskedKaimingLinear
+from ..linears import MaskedKaimingLinear
 
 class MaskedRSynaptic(snn.RSynaptic):
     def __init__(self, *args, rec_matrix: torch.Tensor, **kwargs) -> None:
@@ -13,3 +13,6 @@ class MaskedRSynaptic(snn.RSynaptic):
         if not self.learn_recurrent:
             for param in self.recurrent.parameters():
                 param.requires_grad = False
+
+    def reset_recurrent_weights(self) -> None:
+        self.recurrent.reset()

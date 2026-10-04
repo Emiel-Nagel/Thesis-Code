@@ -3,7 +3,7 @@ import torch.nn as nn
 from typing import Any
 
 from ..neurons import MaskedRLeaky
-from ..building_blocks import MaskedKaimingLinear
+from ..linears import MaskedKaimingLinear
 
 class StandardRecurrentLayer(nn.Module):
     def __init__(self,
@@ -32,6 +32,8 @@ class StandardRecurrentLayer(nn.Module):
 
     def reset(self) -> None:
         self.spk, self.mem = self.neurons.init_rleaky()
+        self.neurons.reset_recurrent_weights()
+        self.weights.reset()
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = self.weights(x)

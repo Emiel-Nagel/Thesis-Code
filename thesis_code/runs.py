@@ -1,5 +1,5 @@
 import torch
-import subprocess, tempfile, shutil, yaml, io, gzip, datetime
+import subprocess, tempfile, shutil, yaml, io, gzip, datetime, copy
 from pathlib import Path
 
 from .recording import Recorder
@@ -18,21 +18,13 @@ def get_git_commit() -> str:
         capture_output=True, text=True, check=True, cwd=CODE_DIR,
     ).stdout.strip()
 
-def push_run(run_dir: Path, run_id: str, cfg: dict) -> None:
-    subprocess.run(
-        ["gh", "release", "create", f"run-{run_id}", str(run_dir / "run.pt.gz"),
-         "-R", REPO, "--title", run_id, "--notes", yaml.safe_dump(cfg),
-         "--target", cfg["git_commit"]],
-        check=True,
-    )
-    shutil.rmtree(run_dir)
-
 def save_run(run_id: str, cfg: dict, net: SRNN, **recorders: Recorder) -> Path:
     RUNS_TEMP_DIR.mkdir(exist_ok=True)
     run_dir = Path(tempfile.mkdtemp(prefix=f"run-{run_id}-", dir=RUNS_TEMP_DIR))
+    net.reset()
     state = {
         "cfg": cfg,
-        "net": {k: v.detach().cpu() for k, v in net.state_dict().items()},
+        "net_state": {k: v.cpu() for k, v in net.state_dict().items()},
         **{name: rec.to_state() for name, rec in recorders.items() if rec is not None}
     }
     buf = io.BytesIO()
@@ -40,8 +32,22 @@ def save_run(run_id: str, cfg: dict, net: SRNN, **recorders: Recorder) -> Path:
     (run_dir / "run.pt.gz").write_bytes(gzip.compress(buf.getvalue()))
     return run_dir
 
-def load_run(path, classes: dict) -> tuple[dict, dict, dict]:
+def push_run(run_dir: Path, run_id: str, cfg: dict) -> None:
+    subprocess.run(
+        ["gh", "release", "create", f"run-{run_id}", str(run_dir / "run.pt.gz"),
+         "-R", REPO, "--title", run_id, "--notes", yaml.safe_dump(cfg),
+         "--target", cfg["git_commit"]],
+        check=True,
+    )
+    # shutil.rmtree(run_dir)
+
+def load_run(path: Path) -> tuple[SRNN, dict, dict]:
     with open(path, "rb") as f:
         state = torch.load(io.BytesIO(gzip.decompress(f.read())), weights_only=True, map_location="cpu")
-    recs = {name: cls.from_state(state[name]) for name, cls in classes.items() if state[name] is not None}
-    return state["cfg"], state["net"], recs
+    # recs = {name: sd for name, sd in state.items() if name not in ["cfg", "net"]}
+    cfg = state["cfg"]
+    net = SRNN(**cfg["net"])          # whatever args your constructor takes
+    net.load_state_dict(state["net_state"])
+
+    # recs = {name: cls.from_state(state[name]) for name, cls in classes.items() if state[name] is not None}
+    return net, cfg, state

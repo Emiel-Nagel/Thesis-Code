@@ -3,7 +3,7 @@ import torch.nn as nn
 from typing import Any
 
 from ..neurons import MaskedRSynaptic
-from ..building_blocks import MaskedKaimingLinear
+from ..linears import MaskedKaimingLinear
 
 class SynapticRecurrentLayer(nn.Module):
     def __init__(self,
@@ -35,6 +35,8 @@ class SynapticRecurrentLayer(nn.Module):
 
     def reset(self) -> None:
         self.spk, self.syn, self.mem = self.neurons.init_rsynaptic()
+        self.neurons.reset_recurrent_weights()
+        self.weights.reset()
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = self.weights(x)
