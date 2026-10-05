@@ -24,9 +24,9 @@ SHD_trainloader, SHD_testloader, input_dim, classes = datasets.get_SHD_dataset(b
 
 regularizer = tr.Regularizer(lam_lower=100.0, v_lower=1e-2, lam_uppers=[0.5, 0.5], v_uppers=[50, 50], L=2)
 
-ns_hidden=[256]
+ns_hidden=[1024]
 layers = [input_dim] + ns_hidden
-n_trials = 1
+n_trials = 5
 
 def build_srnn(rec_matrices: list[torch.Tensor], betas: list[torch.Tensor]) -> SRNN:
     return SRNN(

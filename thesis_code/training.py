@@ -72,7 +72,10 @@ def train_net(net: SRNN, device: torch.device, trainloader: DataLoader, lr: floa
     net.train()
 
     for epoch in range(n_epochs):
-        progress_bar = tqdm(enumerate(trainloader), total=len(trainloader), desc=f"Epoch {epoch}", dynamic_ncols=True)
+        progress_bar = tqdm(enumerate(trainloader), total=len(trainloader), position=0, desc=f"Epoch {epoch}"
+                            , dynamic_ncols=True, bar_format="{n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_fmt}] {bar}",)
+        status_bar = tqdm(total=0, position=1, bar_format="{desc}", dynamic_ncols=True)
+
         losses, accs = [], []
         for i, (data, targets) in progress_bar:
 
@@ -100,12 +103,21 @@ def train_net(net: SRNN, device: torch.device, trainloader: DataLoader, lr: floa
             acc = measure_accuracy(mem_outs.detach(), targets)
             accs.append(acc)
 
-            progress_bar.set_postfix(
-                loss=f"{loss_val.item():.2f}",
-                acc=f"{acc * 100:.2f}%",
-                time_elapsed=f"{progress_bar.format_dict['elapsed']:.1f}s",
-                used_memory=f"{process.memory_info().rss / 1e9:.2f} GB",
+            status_bar.set_description_str(
+                f"loss={loss_val.item():.2f}, acc={acc * 100:.2f}% "
+                f"time_elapsed={progress_bar.format_dict['elapsed']:.1f}s, used_memory={process.memory_info().rss / 1e9:.2f} GB"
+                # loss=f"{loss_val.item():.2f}",
+                # acc=f"{acc * 100:.2f}%",
+                # time_elapsed=f"{progress_bar.format_dict['elapsed']:.1f}s",
+                # used_memory=f"{process.memory_info().rss / 1e9:.2f} GB",
             )
+
+            # print(
+            #     f"\rloss={loss_val.item():.2f}, acc={acc * 100:.2f}%, \
+            #         time_elapsed={progress_bar.format_dict['elapsed']:.1f}s, used_memory={process.memory_info().rss / 1e9:.2f} GB",
+            #     end="", 
+            #     flush=True
+            # )
 
             if max_iters is not None and i == max_iters:
                 break
