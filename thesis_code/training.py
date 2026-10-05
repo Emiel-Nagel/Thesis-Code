@@ -59,22 +59,27 @@ def test_net(net: SRNN, testloader: DataLoader, max_iters: int = None) -> float:
 
     return acc / len(testloader)
 
-def train_net(net: SRNN, trainloader: DataLoader, lr: float = 1e-3, n_epochs: int = 1, max_iters: int = None,
-        regularizer: Regularizer = None, grad_rec: GradientRecorder = None, spk_rec: SpikeRecorder = None,
+def train_net(net: SRNN, device: torch.device, trainloader: DataLoader, lr: float = 1e-3, n_epochs: int = 1, max_iters: int = None, 
+              separate_timesteps: bool = False, regularizer: Regularizer = None, 
+              perf_rec: PerformanceRecorder = None, grad_rec: GradientRecorder = None, spk_rec: SpikeRecorder = None,
     ) -> tuple[nn.Module, PerformanceRecorder, GradientRecorder | None, SpikeRecorder | None]:
-
     optimizer = torch.optim.Adam(net.parameters(), lr=lr)
     process = psutil.Process(os.getpid())
-    perf_rec = PerformanceRecorder()
+
+    perf_rec.add_trial()
+    use_amp = device.type == "cuda"
 
     net.train()
 
     for epoch in range(n_epochs):
-        progress_bar = tqdm(enumerate(trainloader), total=len(trainloader), desc=f"Epoch {epoch}")
+        progress_bar = tqdm(enumerate(trainloader), total=len(trainloader), desc=f"Epoch {epoch}", dynamic_ncols=True)
         losses, accs = [], []
         for i, (data, targets) in progress_bar:
 
-            spk_outs, mem_outs, hidden_spks = net(data)
+            forward_fn = net.forward_sequence if separate_timesteps else net
+            with torch.autocast(device.type, dtype=torch.bfloat16, enabled=use_amp):
+                spk_outs, mem_outs, hidden_spks = forward_fn(data)
+
             loss_val = compute_loss(mem_outs, targets)
             
             if regularizer is not None:

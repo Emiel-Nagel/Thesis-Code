@@ -3,18 +3,22 @@ from matplotlib.widgets import Button
 import snntorch.spikeplot as splt
 
 from .recording import SpikeRecorder, PerformanceRecorder, GradientRecorder
+from . import analysis as a
 
 def plot_performance(perf_rec: PerformanceRecorder) -> None:
-    loss_hist, acc_hist = perf_rec.get_performance()
+    loss_rec, acc_rec = perf_rec.get_performance()
     fig, (ax_loss, ax_plot) = plt.subplots(nrows=1, ncols=2, facecolor='w', figsize=(18, 7))
 
-    ax_loss.plot(loss_hist)
-    ax_loss.set_title("Train Set Loss")
+
+    ax_loss.plot(a.get_median_line(loss_rec), label="Median loss curve")
+    ax_loss.fill_between(a.get_percentile_band(loss_rec), label="Percentile band between 25 and 75")
+    ax_loss.set_title(f"Train Set Loss for {loss_rec.shape[1]} trials")
     ax_loss.set_xlabel("Epoch")
     ax_loss.set_ylabel("Loss")
 
-    ax_plot.plot(acc_hist)
-    ax_plot.set_title("Train Set Accuracy")
+    ax_plot.plot(a.get_median_line(acc_rec), label="Median accuracy curve")
+    ax_loss.fill_between(a.get_percentile_band(acc_rec), label="Percentile band between 25 and 75")
+    ax_plot.set_title(f"Train Set Accuracy for {acc_rec.shape[1]} trials")
     ax_plot.set_xlabel("Epoch")
     ax_plot.set_ylabel("Accuracy")
 
@@ -76,3 +80,6 @@ class InteractiveSpikePlot:
         self.iteration_i = (self.iteration_i + 1) % self.recorder.num_iterations
         self.draw()
 
+def generate_spikeplot_pdf(recorder: SpikeRecorder) -> None:
+    pass
+    # TODO finish

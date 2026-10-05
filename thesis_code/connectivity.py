@@ -21,7 +21,7 @@ connectivity_rules = {
     "SOM": {
         "EXCITATORY": -1,
         "PV": -1,
-        "SOM": -1,
+        "SOM": 0,      # should be 0
     },
 }
 

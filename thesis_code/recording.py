@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import numpy as np
 
 class Recorder:
     def to_state(self) -> dict:
@@ -46,15 +47,21 @@ class SpikeRecorder(Recorder):
 
 class PerformanceRecorder(Recorder):
     def __init__(self) -> None:
-        self.loss_rec = []
-        self.acc_rec = []
+        self.loss_rec: list[list[float]] = []   # will store nested lists for per-trial separation
+        self.acc_rec: list[list[float]] = []
+
+    def add_trial(self) -> None:
+        self.loss_rec.append([])
+        self.acc_rec.append([])
 
     def record(self, loss_val: float, acc: float) -> None:
-        self.loss_rec.append(loss_val)
-        self.acc_rec.append(acc)
+        self.loss_rec[-1].append(loss_val)
+        self.acc_rec[-1].append(acc)
 
-    def get_performance(self) -> tuple[list, list]:
-        return self.loss_rec, self.acc_rec
+    def get_performance(self) -> tuple[np.ndarray, np.ndarray]:
+        loss_rec = np.array(self.loss_rec, dtype=float)
+        acc_rec = np.array(self.acc_rec, dtype=float)
+        return loss_rec, acc_rec
 
 class GradientRecorder(Recorder):
     def __init__(self) -> None:
