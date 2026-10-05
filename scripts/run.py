@@ -8,8 +8,11 @@ from thesis_code.training import compute_loss, get_compute_loss_reg_fn, train_ne
 
 from matplotlib import pyplot as plt
 
+flushing = torch.set_flush_denormal(True)
+print(f"Floating point flushing is set to {flushing}")
+
 torch.manual_seed(42)
-dtype = torch.float
+torch.set_num_threads(4)
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("mps") if torch.backends.mps.is_available() else torch.device("cpu")
 
 def run():

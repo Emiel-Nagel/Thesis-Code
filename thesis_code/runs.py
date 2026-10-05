@@ -21,10 +21,16 @@ def get_git_commit() -> str:
 def save_run(run_id: str, cfg: dict, net: SRNN, **recorders: Recorder) -> Path:
     RUNS_TEMP_DIR.mkdir(exist_ok=True)
     run_dir = Path(tempfile.mkdtemp(prefix=f"run-{run_id}-", dir=RUNS_TEMP_DIR))
+
     net.reset()
+    net_cpu = copy.deepcopy(net).cpu()
+    for m in net_cpu.modules():
+        if hasattr(m, "spike_grad"):
+            m.spike_grad = None
+
     state = {
         "cfg": cfg,
-        "net": copy.deepcopy(net).cpu(),
+        "net": net_cpu,
         **{name: rec.to_state() for name, rec in recorders.items() if rec is not None}
     }
     buf = io.BytesIO()
