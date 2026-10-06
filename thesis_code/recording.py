@@ -13,7 +13,8 @@ class RecorderBase:
         return obj
 
 class Recorder(RecorderBase):
-    def __init__(self)
+    def __init__(self) -> None:
+        pass
 
 class SpikeRecorder(RecorderBase):
     def __init__(self, num_hidden_layers: int) -> None:

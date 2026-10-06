@@ -6,6 +6,7 @@ batch_size = 128
 n_epochs = 50
 lr = 1e-3
 separate_timesteps = false
+n_trials = 5
 
 [training.regularization]
 apply = true
