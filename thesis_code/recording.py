@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import numpy as np
 
-class Recorder:
+class RecorderBase:
     def to_state(self) -> dict:
         return dict(self.__dict__)
 
@@ -12,7 +12,10 @@ class Recorder:
         obj.__dict__.update(state)    # restores num_layers etc. as well
         return obj
 
-class SpikeRecorder(Recorder):
+class Recorder(RecorderBase):
+    def __init__(self)
+
+class SpikeRecorder(RecorderBase):
     def __init__(self, num_hidden_layers: int) -> None:
         self.num_hidden_layers = num_hidden_layers
         self.num_layers = num_hidden_layers + 2
@@ -45,7 +48,7 @@ class SpikeRecorder(Recorder):
         layer_name = list(self.recordings)[layer_i]
         return self.recordings[layer_name][iteration_i]
 
-class PerformanceRecorder(Recorder):
+class PerformanceRecorder(RecorderBase):
     def __init__(self) -> None:
         self.loss_rec: list[list[float]] = []   # will store nested lists for per-trial separation
         self.acc_rec: list[list[float]] = []
@@ -63,7 +66,7 @@ class PerformanceRecorder(Recorder):
         acc_rec = np.array(self.acc_rec, dtype=float)
         return loss_rec, acc_rec
 
-class GradientRecorder(Recorder):
+class GradientRecorder(RecorderBase):
     def __init__(self) -> None:
         self.max_grad_rec = []
         self.avg_grad_rec = []

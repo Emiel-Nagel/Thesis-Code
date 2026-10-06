@@ -20,7 +20,7 @@ print(f"Using device: {device}")
 
 dt = 0.001     # Timesteps are in milliseconds
 batch_size = 128
-SHD_trainloader, SHD_testloader, input_dim, classes = datasets.get_SHD_dataset(batch_size, device, time_window=1000)
+SHD_trainloader, SHD_testloader, input_dim, classes = datasets.get_SHD_dataset(batch_size, device, time_window=dt * 1e6)
 
 regularizer = tr.Regularizer(lam_lower=100.0, v_lower=1e-2, lam_uppers=[0.5, 0.5], v_uppers=[50, 50], L=2)
 

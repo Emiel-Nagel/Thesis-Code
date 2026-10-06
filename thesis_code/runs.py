@@ -1,5 +1,5 @@
 import torch
-import subprocess, tempfile, shutil, yaml, io, gzip, datetime, copy
+import subprocess, tempfile, shutil, yaml, io, gzip, datetime, copy, tomllib
 from pathlib import Path
 
 from .recording import Recorder
@@ -7,7 +7,12 @@ from .srnn import SRNN
 
 REPO = "Emiel-Nagel/Thesis-Code"
 CODE_DIR = Path(__file__).resolve().parent.parent
-RUNS_TEMP_DIR = CODE_DIR / "_runs_tmp"
+RUNS_DIR = CODE_DIR / "runs"
+RUNS_TEMP_DIR = RUNS_DIR / "_runs_tmp"
+
+def load_config() -> dict:
+    with open(RUNS_DIR / "config.toml", 'rb') as cfg_file:
+        return tomllib.load(cfg_file)
 
 def generate_run_id() -> str:
     return str(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
