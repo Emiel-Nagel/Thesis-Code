@@ -1,15 +1,4 @@
-for personal computers:
-
 pip install -r requirements.txt
 pip install -e .
 
 .venv/Scripts/activate
-
-
-for compute cluster:
-
-cd /vol/battaglialab/imaging1/vinck_students/emiel
-miniconda3/envs/.venv/scripts/activate
-which pip
-
-pip install -e .
