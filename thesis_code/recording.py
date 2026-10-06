@@ -81,3 +81,28 @@ class GradientRecorder(Recorder):
 
     def get_grads(self) -> tuple[list, list]:
         return self.max_grad_rec, self.avg_grad_rec
+
+class WeightRecorder(Recorder):
+    def __init__(self, num_hidden_layers: int) -> None:
+        self.num_hidden_layers = num_hidden_layers
+        self.clear()
+
+    def clear(self) -> None:
+        self.w_rec = {
+            i : {"forward": [], "recurrent": []}
+            for i in range(self.num_hidden_layers)
+        }
+        self.w_rec[self.num_hidden_layers + 1] = {"forward": []}
+
+    def record(self, weights: list[tuple[torch.Tensor, torch.Tensor | None]]) -> None:
+        for layer_i, (w_forward, w_recurrent) in enumerate(weights):
+            self.w_rec[layer_i]["forward"].append(w_forward)
+            if w_recurrent is not None:
+                self.w_rec[layer_i]["recurrent"].append(w_recurrent)
+
+    def get_weights(self) -> dict[int, dict[str, list[torch.Tensor]]]:
+        return self.w_rec
+
+    def get_layer_weights(self, layer_i: int) -> tuple[list[torch.Tensor], list[torch.Tensor]]:
+        layer = self.w_rec[layer_i]
+        return layer["forward"], layer["recurrent"]

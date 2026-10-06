@@ -18,6 +18,11 @@ class SRNN(nn.Module):
             layer.reset()
         self.out_layer.reset()
 
+    def get_weights(self) -> list[tuple[torch.Tensor, torch.Tensor | None]]:
+        w_rec = [layer.get_weights() for layer in self.rec_layers]
+        w_rec.append((self.out_layer.get_weights(), None))
+        return w_rec
+
     def forward(self, data: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, list[torch.Tensor]]:
         self.reset()
 

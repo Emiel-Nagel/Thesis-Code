@@ -8,7 +8,7 @@ from tqdm.auto import tqdm
 import psutil, os
 
 from .srnn import SRNN
-from .recording import SpikeRecorder, PerformanceRecorder, GradientRecorder
+from .recording import SpikeRecorder, PerformanceRecorder, GradientRecorder, WeightRecorder
 
 def measure_accuracy(mem_outs: torch.Tensor, targets: torch.Tensor) -> float:
     probs = F.softmax(mem_outs, dim=-1)
@@ -61,7 +61,7 @@ def test_net(net: SRNN, testloader: DataLoader, max_iters: int = None) -> float:
 
 def train_net(net: SRNN, device: torch.device, trainloader: DataLoader, lr: float = 1e-3, n_epochs: int = 1, max_iters: int = None, 
               separate_timesteps: bool = False, regularizer: Regularizer = None, 
-              perf_rec: PerformanceRecorder = None, grad_rec: GradientRecorder = None, spk_rec: SpikeRecorder = None,
+              perf_rec: PerformanceRecorder = None, grad_rec: GradientRecorder = None, spk_rec: SpikeRecorder = None, w_rec: WeightRecorder = None,
     ) -> tuple[nn.Module, PerformanceRecorder, GradientRecorder | None, SpikeRecorder | None]:
     optimizer = torch.optim.Adam(net.parameters(), lr=lr)
     process = psutil.Process(os.getpid())
@@ -112,15 +112,9 @@ def train_net(net: SRNN, device: torch.device, trainloader: DataLoader, lr: floa
                 # used_memory=f"{process.memory_info().rss / 1e9:.2f} GB",
             )
 
-            # print(
-            #     f"\rloss={loss_val.item():.2f}, acc={acc * 100:.2f}%, \
-            #         time_elapsed={progress_bar.format_dict['elapsed']:.1f}s, used_memory={process.memory_info().rss / 1e9:.2f} GB",
-            #     end="", 
-            #     flush=True
-            # )
-
             if max_iters is not None and i == max_iters:
                 break
 
         perf_rec.record(float(np.mean(losses)), float(np.mean(accs)))
-    return net, perf_rec, grad_rec, spk_rec
+        w_rec.record(net.get_weights())
+    return net, perf_rec, grad_rec, spk_rec, w_rec
