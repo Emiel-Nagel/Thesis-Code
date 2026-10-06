@@ -8,8 +8,7 @@ from . import analysis as a
 def plot_performance(perf_rec: PerformanceRecorder) -> None:
     loss_rec, acc_rec = perf_rec.get_performance()
     fig, (ax_loss, ax_plot) = plt.subplots(nrows=1, ncols=2, facecolor='w', figsize=(18, 7))
-
-
+    
     ax_loss.plot(a.get_median_line(loss_rec), label="Median loss curve")
     ax_loss.fill_between(a.get_percentile_band(loss_rec), label="Percentile band between 25 and 75")
     ax_loss.set_title(f"Train Set Loss for {loss_rec.shape[1]} trials")

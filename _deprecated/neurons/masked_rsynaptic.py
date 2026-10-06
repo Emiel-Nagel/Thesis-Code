@@ -16,3 +16,6 @@ class MaskedRSynaptic(snn.RSynaptic):
 
     def reset_recurrent_weights(self) -> None:
         self.recurrent.reset()
+
+    def get_recurrent_weights(self) -> torch.Tensor:
+        return self.recurrent.get_weights()

@@ -1,0 +1,27 @@
+fix connectivity
+- som to som should be 0						DONE
+- only prune inhibitory connections					
+- clamp weights (prevent exploding, enforce dale's law)			
+
+plot individual neurons
+- quantify firing rates
+- plot membrane potentials next to spikes
+- really get what's going on!!
+
+plot loss-variance
+
+test with different timestep lengths (longer)				DONE
+
+train with only one layer!!						DONE
+
+see how weights evolve!!
+
+ENFORCE SPARSITY!!!!
+- init neurons more sparsely (add normalization term)
+- train bigger networks 1028
+- try with alif neurons (see if becomes sparse)
+- maybe play with regularization term
+- look into reference network
+
+
+Really dive into tahvili et al paper for details how they tested!!

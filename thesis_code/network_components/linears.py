@@ -11,10 +11,17 @@ class MaskedLinear(nn.Module):
     def reset(self) -> None:
         self._masked_weight = None
 
+    def get_weights(self) -> torch.Tensor:
+        return self.linear.weight.clone().detach()
+
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         if self._masked_weight is None:
             self._masked_weight = self.linear.weight * self.con_matrix_t    # we only compute this on the first forward, so it's reused until reset() is called after a learning step
         return nn.functional.linear(x, self._masked_weight)
+
+    def update(self) -> None:
+        """Clamps weights to positive values to enforce dale's law"""
+        self.linear.weight.clamp_(1e-6)
 
 class MaskedKaimingLinear(MaskedLinear):
     def __init__(self, con_matrix: torch.Tensor) -> None:

@@ -38,6 +38,9 @@ class SynapticRecurrentLayer(nn.Module):
         self.neurons.reset_recurrent_weights()
         self.weights.reset()
 
+    def get_weights(self) -> tuple[torch.Tensor, torch.Tensor]:
+        return self.weights.get_weights(), self.neurons.get_recurrent_weights()
+
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = self.weights(x)
         self.spk, self.syn, self.mem = self.neurons(x, self.spk, self.syn, self.mem)
