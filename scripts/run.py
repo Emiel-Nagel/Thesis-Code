@@ -1,16 +1,14 @@
 import torch
 from snntorch.surrogate import fast_sigmoid
+from pathlib import Path
 
 from thesis_code import SRNN, datasets, runs
 from thesis_code.network_components.layers import SynapticRecurrentLayer, StandardRecurrentLayer, OutputLayer
 from thesis_code.decay_sampling import tau_to_beta, sample_heterogeneous_decays_uniform, sample_heterogeneous_decays_normal
-from thesis_code.connectivity import sample_ee_pv_som_neurons, build_recurrent_matrix, build_recurrent_and_pruned_matrices
+from thesis_code.connectivity import sample_ee_pv_som_neurons, build_recurrent_and_pruned_matrices
 
-from thesis_code.recording import Recorder, SpikeRecorder, PerformanceRecorder, GradientRecorder
+from thesis_code.recording import Recorder
 import thesis_code.training as tr
-from thesis_code.plotting import plot_performance, plot_gradients, InteractiveSpikePlot
-
-from matplotlib import pyplot as plt
 
 def setup(seed: int) -> torch.device:
     flushing = torch.set_flush_denormal(True)
@@ -47,32 +45,30 @@ def train(
         device: torch.device,
         trainloader: torch.utils.data.DataLoader,
         testloader: torch.utils.data.DataLoader,
-        lr: int,
+        lr: float,
         n_epochs: int,
         regularizer: tr.Regularizer | None,
         recorder: Recorder | None,
-    ) -> tuple[SRNN, Recorder]:
+    ) -> tuple[SRNN, torch.optim.Optimizer, Recorder]:
         acc_before = tr.test_net(net, testloader)
         print(f"Test Accuracy before training is: {acc_before}")
 
-        net, recorder = tr.train_net(
+        net, optimizer, recorder = tr.train_net(
             net=net,
             device=device,
             trainloader=trainloader,
-            lr=1e-3,
-            n_epochs=20,
+            lr=lr,
+            n_epochs=n_epochs,
             regularizer=regularizer,
-            perf_rec=perf_rec,
-            # grad_rec=GradientRecorder(),
-            # spk_rec=SpikeRecorder(num_hidden_layers=len(ns_hidden)),
+            recorder=recorder
         )
 
         acc_after = tr.test_net(net, testloader)
         print(f"Test Accuracy after training is: {acc_after}")
 
-        return net, recorder
+        return net, optimizer, recorder
 
-def run(seed: int, cfg: dict, recorder: Recorder) -> tuple[..., Recorder]:
+def run(seed: int, cfg: dict, output_dir: Path) -> None:
     device = setup(seed)
     train_cfg = cfg["training"]
     dt = train_cfg["dt"]
@@ -80,7 +76,7 @@ def run(seed: int, cfg: dict, recorder: Recorder) -> tuple[..., Recorder]:
         batch_size=train_cfg["batch_size"],
         device=device,
         time_window=dt*1e6,
-        re_download=train_cfg["dataset"]["re_download"],
+        re_download=False,
     )
 
     reg_cfg = train_cfg["regularization"]
@@ -114,43 +110,63 @@ def run(seed: int, cfg: dict, recorder: Recorder) -> tuple[..., Recorder]:
             betas = [sample_heterogeneous_decays_uniform(dt, n, tau_upper=tu*dt, tau_lower=tl*dt, device=device)
                      for n, tu, tl in zip(ns_hidden, decay_cfg["tau_uppers"], decay_cfg["tau_lowers"])]
 
+    recorder = Recorder(
+        num_hidden_layers=len(ns_hidden),
+        options=cfg.get("recording", {}),
+    )
+
     print("\n\n---------------")
     print("Now testing net")
     net = build_srnn(
-        layer_class=SynapticRecurrentLayer if cfg["srnn"]["use_synapses"] else StandardRecurrentLayer,
+        rec_layer_class=SynapticRecurrentLayer if cfg["srnn"]["use_synapses"] else StandardRecurrentLayer,
         forw_matrices=forw_matrices,
         rec_matrices=rec_matrices,
         betas=betas,
         out_layer=OutputLayer(ns_hidden[-1], len(classes), beta=tau_to_beta(dt, decay_cfg["tau_out"]*dt)),
         device=device,
     )
-    net, recorder = train(net, device, SHD_trainloader, SHD_testloader, train_cfg["lr"], train_cfg["n_epochs"],
-                          regularizer, recorder)
+    net, optimizer, recorder = train(net, device, SHD_trainloader, SHD_testloader, train_cfg["lr"], train_cfg["n_epochs"], regularizer, recorder)
+    runs.save_net(net, optimizer, epoch=train_cfg["n_epochs"], save_path=output_dir / "net.checkpoint.pt")
+    recorder.save(output_dir / "data_net")
 
     if cfg["srnn"]["add_control_net"]:
+        recorder.clear()
+            
         print("\n\n---------------")
         print("Now testing control net")
         net_control = build_srnn(
-            layer_class=SynapticRecurrentLayer if cfg["srnn"]["use_synapses"] else StandardRecurrentLayer,
+            rec_layer_class=SynapticRecurrentLayer if cfg["srnn"]["use_synapses"] else StandardRecurrentLayer,
             forw_matrices=forw_matrices,
             rec_matrices=pruned_matrices,
             betas=betas,
             out_layer=OutputLayer(ns_hidden[-1], len(classes), beta=tau_to_beta(dt, decay_cfg["tau_out"]*dt)),
             device=device,
         )
-        net_control, recorder = train(net_control, device, SHD_trainloader, SHD_testloader, train_cfg["lr"], train_cfg["n_epochs"],
-                                      regularizer, recorder)
-
-    # add code to send data to github repo
+        net_control, optimizer_control, recorder = train(net_control, device, SHD_trainloader, SHD_testloader, train_cfg["lr"], train_cfg["n_epochs"], regularizer, recorder)
+        runs.save_net(net_control, optimizer_control, epoch=train_cfg["n_epochs"], save_path=output_dir / "net_control.checkpoint.pt")
+        recorder.save(output_dir / "data_net_control")
 
 import multiprocessing as mp
 from concurrent.futures import ProcessPoolExecutor
 
 if __name__ == "__main__":
-    cfg = run.get_config()
+    cfg = runs.load_config()
+    run_name = f"{runs.generate_run_id()}-{cfg["run_name"]}"
+    output_dir = runs.create_output_dir(run_name)
+
     n_trials = cfg["training"]["n_trials"]
     seeds = range(n_trials)
+    output_subdirs = [output_dir / f"seed_{i}" for i in seeds]
+
+    datasets.download_SHD_dataset(
+        time_window=cfg["training"]["dt"]*1e6,
+        re_download=cfg["training"]["dataset"]["re_download"],
+    )
 
     ctx = mp.get_context("spawn")       # required for CUDA
     with ProcessPoolExecutor(max_workers=n_trials, mp_context=ctx) as pool:
-        results = list(pool.map(run, seeds, [cfg] * len(seeds)))
+        results = list(pool.map(run, seeds, [cfg] * len(seeds), output_subdirs))
+
+    runs.push_output(output_dir, )
+
+    # add code to send data to github repo

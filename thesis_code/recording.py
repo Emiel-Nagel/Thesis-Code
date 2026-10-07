@@ -94,8 +94,7 @@ class SpikeRecorder(RecorderBase):
         )
 
 class Recorder:
-    def __init__(self, output_dir: Path, num_hidden_layers: int, options: dict[str, bool]) -> None:
-        self.output_dir = output_dir    # = output_folder/seed_(n)
+    def __init__(self, num_hidden_layers: int, options: dict[str, bool]) -> None:
         self.iter_recorders: list[RecorderBase] = []
         self.epoch_recorders: list[RecorderBase] = []
 
@@ -120,22 +119,7 @@ class Recorder:
         for r in self.iter_recorders + self.epoch_recorders:
             r.clear()
 
-    def save_recordings(self) -> None:
+    def save(self, output_dir: Path) -> None:
+        output_dir.mkdir(parents=True, exist_ok=True)
         for r in self.iter_recorders + self.epoch_recorders:
-            r.save(self.output_dir)
-
-
-
-
-
-
-rec_map = {
-    "iter": {
-        "record_gradients": GradientRecorder,
-    },
-    "epoch": {
-        "record_performance": PerformanceRecorder,
-        "record_weights": WeightRecorder,
-        "record_spikes": SpikeRecorder,
-    }
-}
+            r.save(output_dir)

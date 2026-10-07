@@ -64,7 +64,7 @@ def test_net(net: SRNN, testloader: DataLoader, max_iters: int = None) -> float:
 
 def train_net(net: SRNN, device: torch.device, trainloader: DataLoader, lr: float = 1e-3, n_epochs: int = 1, max_iters: int = None, 
               separate_timesteps: bool = False, regularizer: Regularizer = None, recorder: Recorder = None,
-    ) -> tuple[nn.Module, Recorder]:
+    ) -> tuple[SRNN, torch.optim.Optimizer, Recorder]:
     optimizer = torch.optim.Adam(net.parameters(), lr=lr)
     process = psutil.Process(os.getpid())
 
@@ -124,4 +124,4 @@ def train_net(net: SRNN, device: torch.device, trainloader: DataLoader, lr: floa
                 targets=targets,
             )
 
-    return net, recorder
+    return net, optimizer, recorder
