@@ -8,7 +8,7 @@ from tqdm.auto import tqdm
 import psutil, os
 
 from .srnn import SRNN
-from .recording import SpikeRecorder, PerformanceRecorder, GradientRecorder, WeightRecorder
+from .recording import Recorder
 
 def measure_accuracy(mem_outs: torch.Tensor, targets: torch.Tensor) -> float:
     probs = F.softmax(mem_outs, dim=-1)
@@ -63,13 +63,11 @@ def test_net(net: SRNN, testloader: DataLoader, max_iters: int = None) -> float:
     return acc / len(testloader)
 
 def train_net(net: SRNN, device: torch.device, trainloader: DataLoader, lr: float = 1e-3, n_epochs: int = 1, max_iters: int = None, 
-              separate_timesteps: bool = False, regularizer: Regularizer = None, 
-              perf_rec: PerformanceRecorder = None, grad_rec: GradientRecorder = None, spk_rec: SpikeRecorder = None, w_rec: WeightRecorder = None,
-    ) -> tuple[nn.Module, PerformanceRecorder, GradientRecorder | None, SpikeRecorder | None]:
+              separate_timesteps: bool = False, regularizer: Regularizer = None, recorder: Recorder = None,
+    ) -> tuple[nn.Module, Recorder]:
     optimizer = torch.optim.Adam(net.parameters(), lr=lr)
     process = psutil.Process(os.getpid())
 
-    perf_rec.add_trial()
     use_amp = device.type == "cuda"
 
     net.train()
@@ -94,11 +92,8 @@ def train_net(net: SRNN, device: torch.device, trainloader: DataLoader, lr: floa
             optimizer.zero_grad()
             loss_val.backward()
 
-            if spk_rec is not None:
-                spk_rec.record(data, hidden_spks, spk_outs, targets)
-
-            if grad_rec is not None:
-                grad_rec.record(net)
+            if recorder is not None:
+                recorder.record_iteration(net=net)
 
             optimizer.step()
 
@@ -118,6 +113,15 @@ def train_net(net: SRNN, device: torch.device, trainloader: DataLoader, lr: floa
             if max_iters is not None and i == max_iters:
                 break
 
-        perf_rec.record(float(np.mean(losses)), float(np.mean(accs)))
-        w_rec.record(net.get_weights())
-    return net, perf_rec, grad_rec, spk_rec, w_rec
+        if recorder is not None:
+            recorder.record_epoch(
+                loss_val=float(np.mean(losses)),
+                acc=float(np.mean(accs)),
+                weights=net.get_weights(),
+                spk_ins=data,
+                hidden_spks=hidden_spks,
+                spk_outs=spk_outs,
+                targets=targets,
+            )
+
+    return net, recorder
