@@ -16,6 +16,9 @@ def measure_accuracy(mem_outs: torch.Tensor, targets: torch.Tensor) -> float:
     return (idx == targets).float().mean().item()
 
 def compute_loss(mem_outs: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
+    """Should converge to cross-entropy loss
+    TODO: figure out why
+    """
     probs = F.softmax(mem_outs, dim=-1)
     log_probs = torch.log(probs.mean(dim=0) + 1e-8) # to avoid log(0)
     return F.nll_loss(log_probs, targets)
@@ -88,11 +91,11 @@ def train_net(net: SRNN, device: torch.device, trainloader: DataLoader, lr: floa
             if regularizer is not None:
                 loss_val = loss_val +  regularizer(hidden_spks)
 
-            if spk_rec is not None:
-                spk_rec.record(data, hidden_spks, spk_outs, targets)
-
             optimizer.zero_grad()
             loss_val.backward()
+
+            if spk_rec is not None:
+                spk_rec.record(data, hidden_spks, spk_outs, targets)
 
             if grad_rec is not None:
                 grad_rec.record(net)

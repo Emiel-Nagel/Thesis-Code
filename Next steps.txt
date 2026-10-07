@@ -25,3 +25,5 @@ ENFORCE SPARSITY!!!!
 
 
 Really dive into tahvili et al paper for details how they tested!!
+Also get deep understanding of Garner paper
+- Really understand the loss!!

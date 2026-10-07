@@ -23,6 +23,15 @@ def get_git_commit() -> str:
         capture_output=True, text=True, check=True, cwd=CODE_DIR,
     ).stdout.strip()
 
+def create_output_folder() -> ...:
+    """
+    Output folder will contain:
+    - copy of config.toml
+    - seed_(n) output data
+        - all .npy datas
+        - 
+    """
+
 def save_run(run_id: str, cfg: dict, net: SRNN, **recorders: Recorder) -> Path:
     RUNS_TEMP_DIR.mkdir(exist_ok=True)
     run_dir = Path(tempfile.mkdtemp(prefix=f"run-{run_id}-", dir=RUNS_TEMP_DIR))

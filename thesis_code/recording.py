@@ -1,20 +1,91 @@
 import torch
 import torch.nn as nn
 import numpy as np
+from pathlib import Path
+from typing import Literal, Sequence
 
 class RecorderBase:
-    def to_state(self) -> dict:
-        return dict(self.__dict__)
+    def __init__(self, *rec_names: str) -> None:
+        self.rec_names = rec_names
+        self.recordings: dict[str, list[float | torch.Tensor]] = {n: [] for n in rec_names}
 
-    @classmethod
-    def from_state(cls, state: dict):
-        obj = cls.__new__(cls)        # skips __init__, so no constructor args needed
-        obj.__dict__.update(state)    # restores num_layers etc. as well
-        return obj
+    def _record(self, **metrics: float | torch.Tensor) -> None:
+        if not metrics:
+            raise TypeError("_record() requires at least one keyword argument")
+        unknown = metrics.keys() - self.recordings.keys()
+        if unknown:
+            raise KeyError(f"unknown recordings {sorted(unknown)}, expected {self.rec_names}")
+        for name, value in metrics.items():
+            if isinstance(value, torch.Tensor):
+                value = value.detach().cpu()
+            self.recordings[name].append(value)
 
-class Recorder(RecorderBase):
+    def clear(self) -> None:
+        for data in self.recordings.values():
+            data.clear()
+
+    def save(self, output_dir: Path) -> None:
+        output_dir.mkdir(parents=True, exist_ok=True)
+        for name, data in self.recordings.items():
+            if not data:
+                continue
+            if isinstance(data[0], torch.Tensor):
+                npy_array = torch.stack(data).numpy()
+            else:
+                npy_array = np.asarray(data, dtype=np.float32)
+            np.save(output_dir / name, npy_array)
+
+class GradientRecorder(RecorderBase):
     def __init__(self) -> None:
-        pass
+        super().__init__("max_grad", "avg_grad")
+
+    def record(self, *, net: nn.Module, **_) -> None:
+        grads = [p.grad for p in net.parameters() if p.grad is not None]
+        if grads:
+            n = sum(g.numel() for g in grads)
+            max_grad = torch.stack([g.max() for g in grads]).max().item()
+            avg_grad = (torch.stack([g.sum() for g in grads]).sum() / n).item()
+        else:
+            max_grad = avg_grad = 0.0
+        self._record(max_grad_rec=max_grad, avg_grad_rec=avg_grad)
+
+
+
+
+RecorderOptions = Literal["performance", "gradients", "weights", "spikes"]
+rec_map = {
+    "performance": PerformanceRecorder,
+    "gradients": GradientRecorder,
+    "weights": WeightRecorder,
+    "spikes": SpikeRecorder,
+}
+class Recorder:
+    def __init__(self, output_dir: Path, num_hidden_layers: int, options: Sequence[RecorderOptions]) -> None:
+        self.output_dir = output_dir    # = output_folder/seed_(n)
+        self.num_hidden_layers = num_hidden_layers
+        self.iter_recorders = [rec_map[option]() for option in options
+                               if option in ["gradients"]]
+        self.epoch_recorders = [rec_map[option]() for option in options
+                               if option in ["performance", "weights", "spikes"]]
+
+    def record_iteration(self, **kwargs) -> None:
+        for r in self.iter_recorders:
+            r.record(**kwargs)
+
+    def record_epoch(self, **kwargs) -> None:
+        for r in self.epoch_recorders:
+            r.record(**kwargs)
+
+    def clear(self) -> None:
+        for r in self.iter_recorders + self.epoch_recorders:
+            r.clear()
+
+    def save_recordings(self) -> None:
+        for r in self.iter_recorders + self.epoch_recorders:
+            r.save(self.output_dir)
+
+
+
 
 class SpikeRecorder(RecorderBase):
     def __init__(self, num_hidden_layers: int) -> None:
@@ -67,24 +138,7 @@ class PerformanceRecorder(RecorderBase):
         acc_rec = np.array(self.acc_rec, dtype=float)
         return loss_rec, acc_rec
 
-class GradientRecorder(RecorderBase):
-    def __init__(self) -> None:
-        self.max_grad_rec = []
-        self.avg_grad_rec = []
 
-    def record(self, net: nn.Module) -> None:
-        grads = {name: p.grad.detach().clone()
-            for name, p in net.named_parameters() if p.grad is not None}
-        if len(grads) > 0:
-            flat_grads = torch.cat([t.flatten() for t in grads.values()])
-            self.max_grad_rec.append(flat_grads.max(dim=0).values.item())
-            self.avg_grad_rec.append(flat_grads.mean(dim=0).item())
-        else:
-            self.max_grad_rec.append(0)
-            self.avg_grad_rec.append(0)
-
-    def get_grads(self) -> tuple[list, list]:
-        return self.max_grad_rec, self.avg_grad_rec
 
 class WeightRecorder(Recorder):
     def __init__(self, num_hidden_layers: int) -> None:

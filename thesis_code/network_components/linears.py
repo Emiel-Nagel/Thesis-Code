@@ -27,3 +27,11 @@ class MaskedKaimingLinear(MaskedLinear):
     def __init__(self, con_matrix: torch.Tensor) -> None:
         super().__init__(con_matrix)
         nn.init.kaiming_uniform_(self.linear.weight, mode="fan_in", nonlinearity="relu")
+
+        # for recurrent: nn.init.orthogonal()
+
+
+        # look into xavier initialization
+        # nn.init.xavier_normal_(w)
+
+        # look into fan_in vs fan_out
