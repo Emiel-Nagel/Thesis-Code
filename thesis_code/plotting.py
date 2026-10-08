@@ -1,39 +1,59 @@
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import snntorch.spikeplot as splt
+import numpy as np
 
-from .recording import SpikeRecorder, PerformanceRecorder, GradientRecorder
+from .recording import SpikeRecorder
 from . import analysis as a
 
-def plot_performance(perf_rec: PerformanceRecorder) -> None:
-    loss_rec, acc_rec = perf_rec.get_performance()
+def plot_performance(loss_rec: np.ndarray, acc_rec: np.ndarray) -> None:
     fig, (ax_loss, ax_plot) = plt.subplots(nrows=1, ncols=2, facecolor='w', figsize=(18, 7))
-    
+    fig.suptitle("Training losses and accuracies per epoch")
+
     ax_loss.plot(a.get_median_line(loss_rec), label="Median loss curve")
-    ax_loss.fill_between(a.get_percentile_band(loss_rec), label="Percentile band between 25 and 75")
-    ax_loss.set_title(f"Train Set Loss for {loss_rec.shape[1]} trials")
+    # lower_bound, upper_bound = a.get_percentile_band(loss_rec)
+    ax_loss.fill_between(np.arange(loss_rec.shape[-1]), *a.get_percentile_band(loss_rec), label="Percentile band between 25 and 75")
+    ax_loss.set_title(f"Train Set Loss for {loss_rec.shape[0]} trials")
     ax_loss.set_xlabel("Epoch")
     ax_loss.set_ylabel("Loss")
+    ax_loss.legend()
 
     ax_plot.plot(a.get_median_line(acc_rec), label="Median accuracy curve")
-    ax_loss.fill_between(a.get_percentile_band(acc_rec), label="Percentile band between 25 and 75")
-    ax_plot.set_title(f"Train Set Accuracy for {acc_rec.shape[1]} trials")
+    ax_loss.fill_between(np.arange(loss_rec.shape[-1]), *a.get_percentile_band(acc_rec), label="Percentile band between 25 and 75")
+    ax_plot.set_title(f"Train Set Accuracy for {acc_rec.shape[0]} trials")
     ax_plot.set_xlabel("Epoch")
     ax_plot.set_ylabel("Accuracy")
+    ax_plot.legend()
 
-def plot_gradients(grad_rec: GradientRecorder) -> None:
-    max_grad_rec, avg_grad_rec = grad_rec.get_grads()
+def plot_gradients(max_grad_rec: np.ndarray, avg_grad_rec: np.ndarray) -> None:
     fig, (ax_max, ax_avg) = plt.subplots(nrows=1, ncols=2, facecolor='w', figsize=(18, 7))
+    fig.suptitle("Training udpate gradients per iteration per trial")
 
-    ax_max.plot(max_grad_rec)
+    for trial_i in range(max_grad_rec.shape[0]):
+        ax_max.plot(max_grad_rec[trial_i], label=f"seed_{trial_i}")
     ax_max.set_title("Max Gradient")
     ax_max.set_xlabel("Iteration (n)")
     ax_max.set_ylabel("Max Gradient (y)")
+    ax_max.legend()
 
-    ax_avg.plot(avg_grad_rec)
+    for trial_i in range(avg_grad_rec.shape[0]):
+        ax_avg.plot(avg_grad_rec[trial_i], label=f"seed_{trial_i}")
     ax_avg.set_title("Average Gradient")
     ax_avg.set_xlabel("Iteration (n)")
     ax_avg.set_ylabel("Average Gradient (y)")
+    ax_avg.legend()
+
+def plot_weight_matrices(weights: np.ndarray) -> None:
+    n_epochs = weights.shape[1]
+    fig, axes = plt.subplots(nrows=1, ncols=n_epochs, squeeze=False, figsize=(8, 8 * n_epochs))
+    for ax, w_matrix in zip(axes, [*weights[0]]):
+        print(w_matrix.shape)
+        ax = ax[0]
+        im = ax.imshow(w_matrix, cmap="bwr")
+
+    fig.suptitle("Plots of weight-updating per training epoch")
+    fig.tight_layout()
+    fig.colorbar(im)
 
 class InteractiveSpikePlot:
     def __init__(self, recorder: SpikeRecorder, iteration_i_start: int, batch_item_i: int) -> None:
