@@ -1,7 +1,7 @@
 import torch
 from snntorch.surrogate import fast_sigmoid
 from pathlib import Path
-from tqdm import tqdm
+# from tqdm import tqdm
 
 from thesis_code import SRNN, datasets, runs
 from thesis_code.network_components.layers import SynapticRecurrentLayer, StandardRecurrentLayer, OutputLayer
@@ -165,12 +165,12 @@ if __name__ == "__main__":
     )
 
     ctx = mp.get_context("spawn")       # required for CUDA
-    lock = ctx.RLock()
+    # lock = ctx.RLock()
     with ProcessPoolExecutor(
-        max_workers=n_trials,
+        max_workers=3,
         mp_context=ctx,
-        initializer=lambda lock: tqdm.set_lock(lock),
-        initargs=(lock,),
+        # initializer=lambda lock: tqdm.set_lock(lock),
+        # initargs=(lock,),
     ) as pool:
         results = list(pool.map(run, seeds, [cfg] * len(seeds), output_subdirs))
 

@@ -68,8 +68,6 @@ def train_net(net: SRNN, device: torch.device, trainloader: DataLoader, lr: floa
     optimizer = torch.optim.Adam(net.parameters(), lr=lr)
     process = psutil.Process(os.getpid())
 
-    use_amp = device.type == "cuda"
-
     net.train()
 
     for epoch in range(n_epochs):
@@ -81,8 +79,7 @@ def train_net(net: SRNN, device: torch.device, trainloader: DataLoader, lr: floa
         for i, (data, targets) in progress_bar:
 
             forward_fn = net.forward_sequence if separate_timesteps else net
-            with torch.autocast(device.type, dtype=torch.bfloat16, enabled=use_amp):
-                spk_outs, mem_outs, hidden_spks = forward_fn(data)
+            spk_outs, mem_outs, hidden_spks = forward_fn(data)
 
             loss_val = compute_loss(mem_outs, targets)
             
@@ -100,6 +97,9 @@ def train_net(net: SRNN, device: torch.device, trainloader: DataLoader, lr: floa
             losses.append(loss_val.item())
             acc = measure_accuracy(mem_outs.detach(), targets)
             accs.append(acc)
+
+            if device.type == "cuda" and i == 0:
+                tqdm.write(f"peak after first iter: {torch.cuda.max_memory_allocated(device) / 2**30:.2f} GiB")
 
             status_bar.set_description_str(
                 f"loss={loss_val.item():.2f}, acc={acc * 100:.2f}% "
