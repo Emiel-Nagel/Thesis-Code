@@ -13,7 +13,7 @@ class OutputLayer(nn.Module):
         self.mem = self.neurons.init_leaky()
 
     def get_weights(self) -> torch.Tensor:
-        return self.weights.get_weights()
+        return self.weights.weight.clone().detach()
 
     def forward(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
         x = self.weights(x)

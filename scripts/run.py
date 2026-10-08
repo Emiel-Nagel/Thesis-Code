@@ -1,6 +1,7 @@
 import torch
 from snntorch.surrogate import fast_sigmoid
 from pathlib import Path
+from tqdm import tqdm
 
 from thesis_code import SRNN, datasets, runs
 from thesis_code.network_components.layers import SynapticRecurrentLayer, StandardRecurrentLayer, OutputLayer
@@ -69,6 +70,7 @@ def train(
         return net, optimizer, recorder
 
 def run(seed: int, cfg: dict, output_dir: Path) -> None:
+    output_dir.mkdir(parents=True, exist_ok=True)
     device = setup(seed)
     train_cfg = cfg["training"]
     dt = train_cfg["dt"]
@@ -76,7 +78,6 @@ def run(seed: int, cfg: dict, output_dir: Path) -> None:
         batch_size=train_cfg["batch_size"],
         device=device,
         time_window=dt*1e6,
-        re_download=False,
     )
 
     reg_cfg = train_cfg["regularization"]
@@ -146,10 +147,10 @@ def run(seed: int, cfg: dict, output_dir: Path) -> None:
         runs.save_net(net_control, optimizer_control, epoch=train_cfg["n_epochs"], save_path=output_dir / "net_control.checkpoint.pt")
         recorder.save(output_dir / "data_net_control")
 
-import multiprocessing as mp
-from concurrent.futures import ProcessPoolExecutor
-
 if __name__ == "__main__":
+    import multiprocessing as mp
+    from concurrent.futures import ProcessPoolExecutor
+
     cfg = runs.load_config()
     run_name = f"{runs.generate_run_id()}-{cfg["run_name"]}"
     output_dir = runs.create_output_dir(run_name)
@@ -164,9 +165,13 @@ if __name__ == "__main__":
     )
 
     ctx = mp.get_context("spawn")       # required for CUDA
-    with ProcessPoolExecutor(max_workers=n_trials, mp_context=ctx) as pool:
+    lock = ctx.RLock()
+    with ProcessPoolExecutor(
+        max_workers=n_trials,
+        mp_context=ctx,
+        initializer=lambda lock: tqdm.set_lock(lock),
+        initargs=(lock,),
+    ) as pool:
         results = list(pool.map(run, seeds, [cfg] * len(seeds), output_subdirs))
 
-    runs.push_output(output_dir, )
-
-    # add code to send data to github repo
+    runs.push_output(output_dir, message=f"Successfully completed run {run_name}")

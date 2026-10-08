@@ -120,6 +120,5 @@ class Recorder:
             r.clear()
 
     def save(self, output_dir: Path) -> None:
-        output_dir.mkdir(parents=True, exist_ok=True)
         for r in self.iter_recorders + self.epoch_recorders:
             r.save(output_dir)
