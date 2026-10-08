@@ -33,11 +33,14 @@ class RecorderBase:
         for name, data in self.recordings.items():
             if not data:
                 continue
-            if isinstance(data[0], torch.Tensor):
-                npy_array = torch.stack(data).numpy()
-            else:
-                npy_array = np.asarray(data, dtype=np.float32)
-            np.save(output_dir / name, npy_array)
+            try:
+                if isinstance(data[0], torch.Tensor):
+                    npy_array = torch.stack(data).numpy()
+                else:
+                    npy_array = np.asarray(data, dtype=np.float32)
+                np.save(output_dir / name, npy_array)
+            except Exception as e:
+                raise RuntimeError(f"Could not save {name}") from e
 
 class PerformanceRecorder(RecorderBase):
     def __init__(self) -> None:
