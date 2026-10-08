@@ -5,7 +5,7 @@ from flask import Flask, Response, request
 USER = os.environ["DASH_USER"]
 PASSWORD = os.environ["DASH_PASS"]
 TOKEN = os.environ["DASH_TOKEN"]
-ALLOWED_FRAME = "https://USERNAME.github.io"     # your GitHub Pages origin
+ALLOWED_FRAME = "https://emiel-nagel.github.io"     # your GitHub Pages origin
 
 app = Flask(__name__)
 history: dict[int, deque] = {}                   # seed -> lines
