@@ -227,3 +227,4 @@ scripts/datasets/
 datasets/
 _runs_tmp/
 startup_commands_cluster.txt
+dashboard_secrets.txt
