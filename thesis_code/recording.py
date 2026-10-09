@@ -28,6 +28,15 @@ class RecorderBase:
             data.clear()
 
     def save(self, output_dir: Path) -> None:
+        def save_compressed(path: Path, npy_array: np.ndarray) -> None:
+            meta = {}
+            if npy_array.dtype == np.bool_ or (npy_array.dtype == np.uint8 and npy_array.max() <= 1):
+                meta["n_cols"] = npy_array.shape[-1]
+                npy_array = np.packbits(npy_array.astype(bool), axis=-1)
+                meta["packed"] = True
+            np.savez_compressed(path, data=npy_array)
+
+
         output_dir = output_dir / self.subfolder_name
         output_dir.mkdir(parents=True, exist_ok=True)
         for name, data in self.recordings.items():
@@ -41,7 +50,8 @@ class RecorderBase:
                         npy_array = torch.stack(data).numpy()
                 else:
                     npy_array = np.asarray(data, dtype=np.float32)
-                np.save(output_dir / name, npy_array)
+                save_compressed(output_dir / name, npy_array)
+                # np.save(output_dir / name, npy_array)
             except Exception as e:
                 raise RuntimeError(f"Could not save '{name}'") from e
 
@@ -75,9 +85,9 @@ class WeightRecorder(RecorderBase):
     def record(self, *, weights: list[tuple[torch.Tensor, torch.Tensor | None]], **_) -> None:
         metrics: dict[str, torch.Tensor] = {}
         for i, (w_forward, w_recurrent) in enumerate(weights):
-            metrics[f"weights_forward_{i}"] = w_forward
+            metrics[f"weights_forward_{i}"] = w_forward.to(torch.float16)
             if w_recurrent is not None:
-                metrics[f"weights_recurrent_{i}"] = w_recurrent
+                metrics[f"weights_recurrent_{i}"] = w_recurrent.to(torch.float16)
         self._record(**metrics)
 
 class SpikeRecorder(RecorderBase):
@@ -94,7 +104,7 @@ class SpikeRecorder(RecorderBase):
                                             for i, spks in enumerate(hidden_spks)}
         self._record(
             spikes_in=spk_ins[:, 0, :].to(torch.uint8),
-            mems_out=mem_outs[:, 0, :].to(torch.bool),
+            mems_out=mem_outs[:, 0, :].to(torch.float16),
             targets=targets[0],
             **metrics,
         )
