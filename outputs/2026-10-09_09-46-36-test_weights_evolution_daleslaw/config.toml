@@ -1,0 +1,47 @@
+run_name = "test_weights_evolution_daleslaw"
+
+[training]
+dt = 0.001  # timesteps are now in milliseconds
+batch_size = 128
+n_epochs = 20
+lr = 1e-3
+separate_timesteps = false
+n_trials = 1
+
+[training.regularization]
+apply = true
+lam_lower = 100.0
+v_lower = 1e-2
+lam_uppers = [0.5]
+v_uppers = [50]
+L = 2
+
+[training.dataset]
+re_download = false
+
+[srnn]
+ns_hidden = [1024]
+percent_pv = 25.0
+percent_som = 25.0
+add_control_net = false
+use_synapses = false
+
+[srnn.decays]
+# beta_sampling_mode = "single_value"
+# tau_single_values = [10] #ms
+
+beta_sampling_mode = "normal"
+tau_means = [10] #ms
+tau_stds = [1] #ms
+
+# beta_sampling_mode = "uniform"
+# tau_uppers = [11] #ms
+# tau_lowers = [9] #ms
+
+tau_out = 20 #ms
+
+[recording]
+record_performance = true
+record_gradients = true
+record_weights = true
+record_spikes = true
