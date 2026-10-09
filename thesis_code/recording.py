@@ -34,7 +34,7 @@ class RecorderBase:
                 meta["n_cols"] = npy_array.shape[-1]
                 npy_array = np.packbits(npy_array.astype(bool), axis=-1)
                 meta["packed"] = True
-            np.savez_compressed(path, data=npy_array)
+            np.savez_compressed(path, data=npy_array, **meta)
 
 
         output_dir = output_dir / self.subfolder_name
