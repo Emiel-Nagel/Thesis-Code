@@ -44,16 +44,18 @@ def plot_gradients(max_grad_rec: np.ndarray, avg_grad_rec: np.ndarray) -> None:
     ax_avg.legend()
 
 def plot_weight_matrices(weights: np.ndarray) -> None:
+    matrices = [np.asarray(w) for w in weights[0]]
     n_epochs = weights.shape[1]
-    fig, axes = plt.subplots(nrows=1, ncols=n_epochs, squeeze=False, figsize=(8, 8 * n_epochs))
-    for ax, w_matrix in zip(axes, [*weights[0]]):
-        print(w_matrix.shape)
-        ax = ax[0]
-        im = ax.imshow(w_matrix, cmap="bwr")
+    vmax = max(np.abs(m).max() for m in matrices)
+
+    fig, axes = plt.subplots(nrows=1, ncols=n_epochs, squeeze=False, figsize=(8 * n_epochs, 8), constrained_layout=True)
+    axes = axes[0]
+    for epoch, (ax, w_matrix) in enumerate(zip(axes, matrices)):
+        im = ax.imshow(w_matrix, cmap="bwr", vmin=-vmax, vmax=vmax)
+        ax.set_title(f"Epoch {epoch}")
 
     fig.suptitle("Plots of weight-updating per training epoch")
-    fig.tight_layout()
-    fig.colorbar(im)
+    fig.colorbar(im, ax=axes, shrink=0.8)  # single colorbar for all axes
 
 class InteractiveSpikePlot:
     def __init__(self, recorder: SpikeRecorder, iteration_i_start: int, batch_item_i: int) -> None:
