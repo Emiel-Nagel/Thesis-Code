@@ -3,7 +3,7 @@ import torch.nn as nn
 from typing import Any
 
 from ..neurons import MaskedRLeaky
-from ..linears import MaskedKaimingLinear
+from ..linears import DaleslawLinear
 
 class StandardRecurrentLayer(nn.Module):
     def __init__(self,
@@ -19,7 +19,7 @@ class StandardRecurrentLayer(nn.Module):
             f"forward_matrix outputs {forward_matrix.shape[1]} neurons, recurrent_matrix has {self.n_neurons}"
 
         super().__init__()
-        self.weights = MaskedKaimingLinear(forward_matrix)
+        self.weights = DaleslawLinear(forward_matrix)
         self.neurons = MaskedRLeaky(
             beta=beta,
             linear_features=self.n_neurons,

@@ -7,7 +7,6 @@ import numpy as np
 from tqdm.auto import tqdm
 import psutil, os
 
-from .network_components.linears import DaleslawLinear
 from .srnn import SRNN
 from .recording import Recorder
 
@@ -94,10 +93,7 @@ def train_net(net: SRNN, device: torch.device, trainloader: DataLoader, lr: floa
                 recorder.record_iteration(net=net)
 
             optimizer.step()
-            
-            for m in net.modules():
-                if isinstance(m, DaleslawLinear):
-                    m.apply_daleslaw()
+            net.apply_daleslaw()
 
             losses.append(loss_val.item())
             acc = measure_accuracy(mem_outs.detach(), targets)

@@ -35,12 +35,15 @@ class RecorderBase:
                 continue
             try:
                 if isinstance(data[0], torch.Tensor):
-                    npy_array = torch.stack(data).numpy()
+                    if any(t.shape != data[0].shape for t in data):     # if any tensors have unequal shapes, pad them
+                        npy_array = nn.utils.rnn.pad_sequence(data, batch_first=True, padding_value=0).numpy()
+                    else:
+                        npy_array = torch.stack(data).numpy()
                 else:
                     npy_array = np.asarray(data, dtype=np.float32)
                 np.save(output_dir / name, npy_array)
             except Exception as e:
-                raise RuntimeError(f"Could not save {name}") from e
+                raise RuntimeError(f"Could not save '{name}'") from e
 
 class PerformanceRecorder(RecorderBase):
     def __init__(self) -> None:
