@@ -19,10 +19,6 @@ class MaskedLinear(nn.Module):
             self._masked_weight = self.linear.weight * self.con_matrix_t    # we only compute this on the first forward, so it's reused until reset() is called after a learning step
         return nn.functional.linear(x, self._masked_weight)
 
-    def update(self) -> None:
-        """Clamps weights to positive values to enforce dale's law"""
-        self.linear.weight.clamp_(1e-6)
-
 class MaskedKaimingLinear(MaskedLinear):
     def __init__(self, con_matrix: torch.Tensor) -> None:
         super().__init__(con_matrix)
@@ -35,3 +31,16 @@ class MaskedKaimingLinear(MaskedLinear):
         # nn.init.xavier_normal_(w)
 
         # look into fan_in vs fan_out
+
+class DaleslawLinear(MaskedLinear):
+    def __init__(self, con_matrix: torch.Tensor, w_min: float = 0.01) -> None:
+        super().__init__(con_matrix)
+        nn.init.kaiming_uniform_(self.linear.weight, mode="fan_in", nonlinearity="relu")
+        self.w_min = w_min
+        self.apply_daleslaw()
+
+    @torch.no_grad()
+    def apply_daleslaw(self) -> None:
+        """Call after every optimizer.step()."""
+        self.linear.weight.abs_().clamp_(min=self.w_min)                # make all weights positive and nonzero (inhibition comes from the mask)
+        self.reset()
