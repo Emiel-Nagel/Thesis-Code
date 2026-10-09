@@ -121,7 +121,7 @@ def train_net(net: SRNN, device: torch.device, trainloader: DataLoader, lr: floa
                 weights=net.get_weights(),
                 spk_ins=data,
                 hidden_spks=hidden_spks,
-                spk_outs=spk_outs,
+                mem_outs=mem_outs,
                 targets=targets,
             )
 

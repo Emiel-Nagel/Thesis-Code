@@ -1,9 +1,10 @@
+import torch
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
+from matplotlib.backends.backend_pdf import PdfPages
 import snntorch.spikeplot as splt
 import numpy as np
 
-from .recording import SpikeRecorder
 from . import analysis as a
 
 def plot_performance(loss_rec: np.ndarray, acc_rec: np.ndarray) -> None:
@@ -42,7 +43,7 @@ def plot_gradients(max_grad_rec: np.ndarray, avg_grad_rec: np.ndarray) -> None:
     ax_avg.set_ylabel("Average Gradient (y)")
     ax_avg.legend()
 
-def plot_weight_matrices(weights: np.ndarray) -> None:
+def plot_weight_matrices(weights: np.ndarray, name: str) -> None:
     matrices = [np.asarray(w) for w in weights[0]]
     n_epochs = weights.shape[1]
     vmax = max(np.abs(m).max() for m in matrices)
@@ -53,22 +54,21 @@ def plot_weight_matrices(weights: np.ndarray) -> None:
         im = ax.imshow(w_matrix, cmap="bwr", vmin=-vmax, vmax=vmax)
         ax.set_title(f"Epoch {epoch}")
 
-    fig.suptitle("Plots of weight-updating per training epoch")
+    fig.suptitle(f"Plots of weight-updating of {name} per training epoch")
     fig.colorbar(im, ax=axes, shrink=0.8)  # single colorbar for all axes
+    fig.savefig(fname=name, dpi='figure')
 
 class InteractiveSpikePlot:
-    def __init__(self, recorder: SpikeRecorder, iteration_i_start: int, batch_item_i: int) -> None:
-        assert recorder.num_iterations > 0, "the recorder is empty"
-
-        self.recorder = recorder
-        self.iteration_i = iteration_i_start % self.recorder.num_iterations
-        self.batch_item_i = batch_item_i
+    def __init__(self, layer_spikes: dict[str, np.ndarray], target_labels: list[str], epoch_i_start: int = 0) -> None:
+        self.layer_spikes = layer_spikes
+        self.target_labels = target_labels
+        self.num_epochs = layer_spikes["spikes_in"].shape[0]
+        self.epoch_i = epoch_i_start % self.num_epochs
 
         self.fig, axes = plt.subplots(
-            self.recorder.num_layers,
+            len(layer_spikes),
             1,
-            figsize=(10, 3 * self.recorder.num_layers),
-            sharex=True,
+            figsize=(10, 3 * len(layer_spikes)),
             squeeze=False,
             facecolor="w"
         )
@@ -81,25 +81,60 @@ class InteractiveSpikePlot:
         self.btn_next.on_clicked(self.turn_page_right)
 
     def draw(self) -> None:
-        for layer_l, ax in enumerate(self.axes):
+        for ax, (layer_name, data) in zip(self.axes, self.layer_spikes.items()):
             ax.clear()
-            spk_rec, _ = self.recorder.get_recordings(layer_l, self.iteration_i)
-            splt.raster(spk_rec[:, self.batch_item_i, :], ax, s=1.5, c="black")
-            ax.set_title(f"Layer {layer_l}")
-            ax.set_ylabel("Neuron (n)")
+            if layer_name == "targets":
+                target = data[self.epoch_i]
+                counts = np.zeros(len(self.target_labels))
+                counts[target] = 1
 
-        self.axes[-1].set_xlabel("Time step (t)")
-        self.fig.suptitle(f"Iteration {self.iteration_i + 1} / {self.recorder.num_iterations} (batch_item {self.batch_item_i})")
+                ax.bar(self.target_labels, counts)
+                ax.set_title(f"{layer_name}")
+                ax.set_ylabel("Count (n)")
+                ax.set_xlabel("Target label")
+                ax.set_xticks(range(1, 21))
+                continue
+
+            if layer_name == "mems_out":
+                mems_matrix = data[self.epoch_i, :, :]
+                im = ax.imshow(mems_matrix, aspect="auto", cmap="viridis", interpolation="nearest")
+                self.fig.colorbar(im, ax=ax, label="Membrane potential")
+                ax.set_title(f"{layer_name}")
+                ax.set_ylabel("Neuron (n)")
+                ax.set_xlabel("Time step (t)")
+                continue
+
+            spike_matrix = data[self.epoch_i, :, :]
+            splt.raster(torch.from_numpy(spike_matrix), ax, s=0.1, c="black")
+            ax.set_title(f"{layer_name} (mean rate = {round(a.get_layer_mean_spike_rate(spike_matrix), 3)}")
+            ax.set_ylabel("Neuron (n)")
+            ax.set_xlabel("Time step (t)")
+
+        self.fig.suptitle(f"Epoch {self.epoch_i + 1} / {self.num_epochs}")
         self.fig.canvas.draw_idle()
 
     def turn_page_left(self, event=None) -> None:
-        self.iteration_i = (self.iteration_i - 1) % self.recorder.num_iterations
+        self.epoch_i = (self.epoch_i - 1) % self.num_epochs
         self.draw()
 
     def turn_page_right(self, event=None) -> None:
-        self.iteration_i = (self.iteration_i + 1) % self.recorder.num_iterations
+        self.epoch_i = (self.epoch_i + 1) % self.num_epochs
         self.draw()
 
-def generate_spikeplot_pdf(recorder: SpikeRecorder) -> None:
-    pass
-    # TODO finish
+    def save_as_pdf(self, path: str = "spikes_plot.pdf") -> None:
+        original_epoch = self.epoch_i
+        buttons = (self.btn_prev.ax, self.btn_next.ax)
+        for b in buttons:
+            b.set_visible(False)
+
+        with PdfPages(path) as pdf:
+            for i in range(self.num_epochs):
+                self.epoch_i = i
+                self.draw()
+                pdf.savefig(self.fig)
+
+        for b in buttons:
+            b.set_visible(True)
+
+        self.epoch_i = original_epoch
+        self.draw()

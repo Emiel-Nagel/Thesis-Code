@@ -34,7 +34,7 @@ class RecorderBase:
             if not data:
                 continue
             try:
-                if isinstance(data[0], torch.Tensor):
+                if isinstance(data[0], torch.Tensor):                   # look into compressing spikes and weights more efficiently (maybe quantizing?)
                     if any(t.shape != data[0].shape for t in data):     # if any tensors have unequal shapes, pad them
                         npy_array = nn.utils.rnn.pad_sequence(data, batch_first=True, padding_value=0).numpy()
                     else:
@@ -82,11 +82,11 @@ class WeightRecorder(RecorderBase):
 
 class SpikeRecorder(RecorderBase):
     def __init__(self, num_hidden_layers: int) -> None:
-        rec_names = ["spikes_in", "spikes_out", "targets"]
+        rec_names = ["spikes_in", "mems_out", "targets"]
         rec_names += [f"spikes_hidden_{i}" for i in range(num_hidden_layers)]
         super().__init__(*rec_names, subfolder_name="spikes")
 
-    def record(self, *, spk_ins: torch.Tensor, hidden_spks: list[torch.Tensor], spk_outs: torch.Tensor, targets: torch.Tensor, **_) -> None:
+    def record(self, *, spk_ins: torch.Tensor, hidden_spks: list[torch.Tensor], mem_outs: torch.Tensor, targets: torch.Tensor, **_) -> None:
         """
         Consistently only records one item in the batch, and converts dtypes to save storage space.
         """
@@ -94,7 +94,7 @@ class SpikeRecorder(RecorderBase):
                                             for i, spks in enumerate(hidden_spks)}
         self._record(
             spikes_in=spk_ins[:, 0, :].to(torch.uint8),
-            spikes_out=spk_outs[:, 0, :].to(torch.bool),
+            mems_out=mem_outs[:, 0, :].to(torch.bool),
             targets=targets[0],
             **metrics,
         )
