@@ -93,6 +93,7 @@ def train_net(net: SRNN, device: torch.device, trainloader: DataLoader, lr: floa
                 recorder.record_iteration(net=net)
 
             optimizer.step()
+            net.apply_daleslaw()
 
             losses.append(loss_val.item())
             acc = measure_accuracy(mem_outs.detach(), targets)

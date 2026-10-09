@@ -174,4 +174,4 @@ if __name__ == "__main__":
     ) as pool:
         results = list(pool.map(run, seeds, [cfg] * len(seeds), output_subdirs))
 
-    runs.push_output(output_dir, message=f"Successfully completed run {run_name}")
+    runs.push_output(output_dir)

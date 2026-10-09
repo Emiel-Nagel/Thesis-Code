@@ -3,7 +3,7 @@ import torch.nn as nn
 from typing import Any
 
 from ..neurons import MaskedRSynaptic
-from ..linears import MaskedKaimingLinear
+from ..linears import DaleslawLinear
 
 class SynapticRecurrentLayer(nn.Module):
     def __init__(self,
@@ -20,7 +20,7 @@ class SynapticRecurrentLayer(nn.Module):
             f"forward_matrix outputs {forward_matrix.shape[1]} neurons, recurrent_matrix has {self.n_neurons}"
 
         super().__init__()
-        self.weights = MaskedKaimingLinear(forward_matrix)
+        self.weights = DaleslawLinear(forward_matrix)
         self.neurons = MaskedRSynaptic(
             alpha=alpha,
             beta=beta,

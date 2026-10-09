@@ -1,9 +1,9 @@
-run_name = "test_cluster_memory_failed_to_save"
+run_name = "test_targets_shape_mismatch"
 
 [training]
 dt = 0.001  # timesteps are now in milliseconds
 batch_size = 128
-n_epochs = 20
+n_epochs = 2
 lr = 1e-3
 separate_timesteps = false
 n_trials = 1
@@ -41,7 +41,7 @@ tau_stds = [1] #ms
 tau_out = 20 #ms
 
 [recording]
-record_performance = true
+record_performance = false
 record_gradients = false
-record_weights = true
+record_weights = false
 record_spikes = true

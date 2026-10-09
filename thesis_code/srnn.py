@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 
+from .network_components.linears import DaleslawLinear
 from .network_components.layers import OutputLayer, StandardRecurrentLayer, SynapticRecurrentLayer
 
 class SRNN(nn.Module):
@@ -53,3 +54,8 @@ class SRNN(nn.Module):
         spk_outs, mem_outs = self.out_layer.forward_sequence(x_seq)
 
         return spk_outs, mem_outs, hidden_spks
+
+    def apply_daleslaw(self) -> None:
+        for m in self.modules():
+            if isinstance(m, DaleslawLinear):
+                m.apply_daleslaw()
