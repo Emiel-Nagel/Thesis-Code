@@ -48,7 +48,21 @@ def build_recurrent_matrix(layer: list[Neurons]) -> torch.Tensor:
     type_idx = torch.tensor([type_order.index(n) for n in layer], dtype=torch.long)
     return type_matrix[type_idx][:, type_idx]
 
+def prune_recurrent_matrix(rec_matrix: torch.Tensor) -> torch.Tensor:
+    """
+    Scrambles all inhibitory and nonexistent connections, but keeps excitatory connections the same.
+    """
+    pruned_matrix = rec_matrix.clone()
+    mask = (rec_matrix == 0) | (rec_matrix == -1)
+    vals = rec_matrix[mask]
+    perm = torch.randperm(vals.numel(), device=rec_matrix.device)
+    pruned_matrix[mask] = vals[perm]
+    return pruned_matrix
+
 def build_pruned_matrix(rec_matrix: torch.Tensor) -> torch.Tensor:
+    """
+    Constructs a new pruned matrix where all connections are scrambled.
+    """
     n_neurons = rec_matrix.numel()
     n_zero = int((rec_matrix == 0).sum())
     n_inh = int((rec_matrix == -1).sum())
@@ -67,7 +81,7 @@ def build_recurrent_and_pruned_matrices(neurons: list[list[Neurons]]) -> tuple[l
         rec_matrix = build_recurrent_matrix(layer)
         rec_matrices.append(rec_matrix)
 
-        pruned_matrix = build_pruned_matrix(rec_matrix)
+        pruned_matrix = prune_recurrent_matrix(rec_matrix)
         pruned_matrices.append(pruned_matrix)
 
         print(f"shapes are equal = {rec_matrix.shape == pruned_matrix.shape}")
