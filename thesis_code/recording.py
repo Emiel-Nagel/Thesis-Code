@@ -28,14 +28,12 @@ class RecorderBase:
             data.clear()
 
     def save(self, output_dir: Path) -> None:
-        def save_compressed(path: Path, npy_array: np.ndarray) -> None:
-            meta = {}
+        def _save_compressed(path: Path, npy_array: np.ndarray, lengths: np.ndarray | None) -> None:
+            meta = {"lengths": lengths} if lengths is not None else {}
             if npy_array.dtype == np.bool_ or (npy_array.dtype == np.uint8 and npy_array.max() <= 1):
                 meta["n_cols"] = npy_array.shape[-1]
                 npy_array = np.packbits(npy_array.astype(bool), axis=-1)
-                meta["packed"] = True
             np.savez_compressed(path, data=npy_array, **meta)
-
 
         output_dir = output_dir / self.subfolder_name
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -43,15 +41,16 @@ class RecorderBase:
             if not data:
                 continue
             try:
-                if isinstance(data[0], torch.Tensor):                   # look into compressing spikes and weights more efficiently (maybe quantizing?)
+                lengths = None
+                if isinstance(data[0], torch.Tensor):
                     if any(t.shape != data[0].shape for t in data):     # if any tensors have unequal shapes, pad them
+                        lengths = np.array([t.shape[0] for t in data])
                         npy_array = nn.utils.rnn.pad_sequence(data, batch_first=True, padding_value=0).numpy()
                     else:
                         npy_array = torch.stack(data).numpy()
                 else:
                     npy_array = np.asarray(data, dtype=np.float32)
-                save_compressed(output_dir / name, npy_array)
-                # np.save(output_dir / name, npy_array)
+                _save_compressed(output_dir / name, npy_array, lengths)
             except Exception as e:
                 raise RuntimeError(f"Could not save '{name}'") from e
 
