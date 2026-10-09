@@ -57,7 +57,8 @@ def push_output(output_dir: Path, branch: str = "main") -> None:
 
     def call(method: str, path: str, **kw) -> dict:
         r = s.request(method, f"{repo_url}{path}", timeout=120, **kw)
-        r.raise_for_status()
+        if not r.ok:
+            raise RuntimeError(f"{method} {path} -> {r.status_code}: {r.text}")
         return r.json()
 
     files = [p for p in output_dir.rglob("*") if p.is_file()]
@@ -75,10 +76,14 @@ def push_output(output_dir: Path, branch: str = "main") -> None:
     # One blob per file
     entries = []
     for p in files:
-        blob = call("POST", "/git/blobs", json={
-            "content": base64.b64encode(p.read_bytes()).decode(),
-            "encoding": "base64",
-        })
+        size = p.stat().st_size
+        try:
+            blob = call("POST", "/git/blobs", json={
+                "content": base64.b64encode(p.read_bytes()).decode(),
+                "encoding": "base64",
+            })
+        except RuntimeError as e:
+            raise RuntimeError(f"Failed on {p} ({size / 1024**2:.1f} MB): {e}") from e
         repo_path = (rel / p.relative_to(output_dir)).as_posix()
         entries.append({"path": repo_path, "mode": "100644", "type": "blob", "sha": blob["sha"]})
 
