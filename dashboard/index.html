@@ -1,0 +1,74 @@
+<!doctype html>
+<meta charset="utf-8">
+<body style="margin:0;font-family:monospace;background:#111;color:#ddd">
+    <h1>Thesis-Code logstream</h1>
+
+    <div style="padding:6px">
+        run_name: <select id="run_selector"></select> &nbsp;
+        seed: <select id="seed_selector"></select>
+    </div>
+
+    <div id="box_output" style="height:calc(100vh - 40px);overflow:auto">
+        <pre id="output" style="margin:0;padding:6px;white-space:pre-wrap"></pre>
+    </div>
+
+    <script>
+        const runSelector = document.getElementById("run_selector"),
+            seedSelector = document.getElementById("seed_selector"),
+            outputEl = document.getElementById("output"),
+            outputBox = document.getElementById("box_output");
+
+        let buffer = {}, current = null;
+
+        const getKey = (run, seed) => `${run}/${seed}`;
+
+        function addOption(selector, value) {
+            if (![...selector.options].some(o => o.value === value)) {
+                const o = document.createElement("option");
+                o.value = o.textContent = value;
+                selector.appendChild(o);
+            }
+        }
+
+        function render() {
+            outputEl.textContent = current === null ? "" : buffer[current].join("\n") + "\n";
+            outputBox.scrollTop = outputBox.scrollHeight;
+        }
+
+        function onSelect() {
+            current = getKey(runSelector.value, seedSelector.value);
+            render();
+        }
+        runSelector.onchange = seedSelector.onchange = onSelect;
+
+        new EventSource("/stream").onmessage = ev => {
+            const e = JSON.parse(ev.data);
+            if (e.type === "reset") {
+                buffer = {}; current = null;
+                runSelector.innerHTML = ""; seedSelector.innerHTML = "";
+                outputEl.textContent = "";
+                return;
+            }
+
+            const runName = e.run_name, seed = String(e.seed), text = e.text;
+            const key = getKey(runName, seed);
+
+            (buffer[key] ??= []).push(text);
+            addOption(runSelector, runName);
+            addOption(seedSelector, seed);
+
+            if (current === null) {
+                runSelector.value = runName;
+                seedSelector.value = seed;
+                onSelect();
+                return;
+            }
+
+            if (key === current) {
+                const atBottom = outputBox.scrollTop + outputBox.clientHeight >= outputBox.scrollHeight - 50;
+                outputEl.appendChild(document.createTextNode(text + "\n"));
+                if (atBottom) outputBox.scrollTop = outputBox.scrollHeight;
+            }
+        };
+    </script>
+</body>

@@ -1,6 +1,9 @@
 import hmac, json, os, queue, threading
-from collections import deque
-from flask import Flask, Response, request
+from collections import deque, defaultdict
+from pathlib import Path
+from flask import Flask, Response, request, send_file
+from dotenv import load_dotenv
+load_dotenv()   # for local dev
 
 USER = os.environ["DASH_USER"]
 PASSWORD = os.environ["DASH_PASS"]
@@ -8,20 +11,44 @@ TOKEN = os.environ["DASH_TOKEN"]
 ALLOWED_FRAME = "https://emiel-nagel.github.io"     # your GitHub Pages origin
 
 app = Flask(__name__)
-history: dict[int, deque] = {}                   # seed -> lines
-run_name = ""
 listeners: list[queue.Queue] = []
 lock = threading.Lock()
+curdir = Path(__file__).resolve().parent
 
+class History:
+    def __init__(self) -> None:
+        self.contents: dict[str, deque] = defaultdict(lambda: deque(maxlen=20000))        # run_name / seed -> lines
+
+    def clear(self) -> None:
+        self.contents.clear()
+
+    def put(self, run_name: str, seed: int, text: str) -> None:
+        key = f"{run_name}/{seed}"
+        self.contents[key].append(text)
+
+    def get(self, run_name: str, seed: int) -> deque | None:
+        key = f"{run_name}/{seed}"
+        return self.contents.get(key)
+
+    def __iter__(self):
+        for key, lines in self.contents.items():
+            run_name, seed = key.split("/")
+            yield run_name, seed, lines
+
+history = History()
+
+def command_reset() -> dict:
+    return {"type": "reset"}
+
+def command_push_text(run_name: str, seed: int, text: str) -> dict:
+    return {"run_name": run_name, "seed": seed, "text": text}
 
 def same(a: str, b: str) -> bool:
     return hmac.compare_digest(a.encode(), b.encode())
 
-
 def broadcast(event: dict) -> None:              # call with lock held
     for q in listeners:
         q.put(event)
-
 
 @app.before_request
 def auth():
@@ -35,45 +62,46 @@ def auth():
                         {"WWW-Authenticate": 'Basic realm="dashboard"'})
     return None
 
-
 @app.after_request
 def frame_policy(resp):
     resp.headers["Content-Security-Policy"] = f"frame-ancestors {ALLOWED_FRAME}"
     return resp
 
-
 @app.post("/log")
 def log():
-    e = request.get_json(force=True)             # {"seed": 0, "lines": ["...", ...]}
-    seed = int(e["seed"])
+    e = request.get_json(force=True, silent=True)
+    print(e)
+    if not isinstance(e, dict):
+        return "bad json", 400
+    try:
+        run_name = e["run_name"]
+        seed = int(e["seed"])
+    except (KeyError, ValueError, TypeError):
+        return "run_name and integer seed required", 400
     lines = [str(t) for t in e.get("lines", [])]
     with lock:
-        dq = history.setdefault(seed, deque(maxlen=20000))
         for t in lines:
-            dq.append(t)
-            broadcast({"seed": seed, "text": t})
+            history.put(run_name, seed, t)
+            broadcast(command_push_text(run_name, seed, t))
     return "", 204
-
 
 @app.post("/reset")
 def reset():
-    global run_name
-    run_name = str((request.get_json(silent=True) or {}).get("run", ""))
     with lock:
         history.clear()
-        broadcast({"type": "reset", "run": run_name})
+        broadcast(command_reset())
     return "", 204
-
 
 @app.get("/stream")
 def stream():
     q: queue.Queue = queue.Queue()
     with lock:
-        backlog = [{"type": "reset", "run": run_name}]
-        backlog += [{"seed": s, "text": t} for s, lines in history.items() for t in lines]
+        backlog = [command_reset()]
+        backlog += [command_push_text(r, s, t) for r, s, lines in list(history) for t in lines]
+        print(backlog)
         listeners.append(q)
 
-    def gen():
+    def generate():
         try:
             for e in backlog:
                 yield f"data: {json.dumps(e)}\n\n"
@@ -86,55 +114,12 @@ def stream():
             with lock:
                 listeners.remove(q)
 
-    return Response(gen(), mimetype="text/event-stream",
+    return Response(generate(), mimetype="text/event-stream",
                     headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
-
 
 @app.get("/")
 def index():
-    return PAGE
-
-
-PAGE = """
-<body style="margin:0;font-family:monospace;background:#111;color:#ddd">
-<div style="padding:6px"><b id="run">no run</b> &nbsp;
-  seed: <select id="sel"></select></div>
-<div id="box" style="height:calc(100vh - 40px);overflow:auto">
-  <pre id="out" style="margin:0;padding:6px;white-space:pre-wrap"></pre>
-</div>
-<script>
-const sel = document.getElementById("sel"), out = document.getElementById("out"),
-      box = document.getElementById("box"), runEl = document.getElementById("run");
-let buf = {}, current = null;
-
-function render() {
-  out.textContent = current === null ? "" : buf[current].join("\\n") + "\\n";
-  box.scrollTop = box.scrollHeight;
-}
-sel.onchange = () => { current = sel.value; render(); };
-
-new EventSource("/stream").onmessage = ev => {
-  const e = JSON.parse(ev.data);
-  if (e.type === "reset") {
-    buf = {}; current = null; sel.innerHTML = ""; out.textContent = "";
-    runEl.textContent = e.run || "no run";
-    return;
-  }
-  if (!(e.seed in buf)) {
-    buf[e.seed] = [];
-    const o = document.createElement("option");
-    o.value = o.textContent = e.seed;
-    sel.appendChild(o);
-    if (current === null) { current = String(e.seed); sel.value = current; }
-  }
-  buf[e.seed].push(e.text);
-  if (String(e.seed) === current) {
-    const atBottom = box.scrollTop + box.clientHeight >= box.scrollHeight - 50;
-    out.textContent += e.text + "\\n";
-    if (atBottom) box.scrollTop = box.scrollHeight;
-  }
-};
-</script></body>"""
+    return send_file(curdir / "index.html")
 
 if __name__ == "__main__":                       # local testing only; gunicorn ignores this
     app.run(host="127.0.0.1", port=8000, threaded=True)
