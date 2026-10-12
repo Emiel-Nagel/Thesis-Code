@@ -36,3 +36,8 @@ class MaskedRSynaptic(snn.RSynaptic):
 
     def get_recurrent_weights(self) -> torch.Tensor:
         return self.recurrent.get_weights()
+
+
+
+rleaky = snn.RLeaky()
+rleaky.fire
