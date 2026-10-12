@@ -3,10 +3,10 @@ run_name = "test_weights_evolution_daleslaw"
 [training]
 dt = 0.001  # timesteps are now in milliseconds
 batch_size = 128
-n_epochs = 20
+n_epochs = 1
 lr = 1e-3
 separate_timesteps = false
-n_trials = 1
+n_trials = 2
 
 [training.regularization]
 apply = true

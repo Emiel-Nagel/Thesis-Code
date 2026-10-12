@@ -10,7 +10,6 @@ _session.headers["X-Token"] = os.environ["DASH_TOKEN"]
 
 forbidden_content = []
 forbidden_content += str(Path(__file__).resolve()).split('\\')
-print(forbidden_content)
 
 def send_to_log_stream(run_name: str, seed: int, *content: str, timeout: float = 5.0) -> bool:
     """Send one or more lines to the dashboard. Returns True on success."""

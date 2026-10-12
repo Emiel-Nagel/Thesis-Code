@@ -11,15 +11,17 @@ from thesis_code.connectivity import sample_ee_pv_som_neurons, build_recurrent_a
 from thesis_code.recording import Recorder
 import thesis_code.training as tr
 
-def setup(seed: int) -> torch.device:
+from thesis_code.logging import Logger
+
+def setup(seed: int, logger: Logger) -> torch.device:
     flushing = torch.set_flush_denormal(True)
-    print(f"Floating point flushing is set to {flushing}")
+    logger.log(f"Floating point flushing is set to {flushing}")
 
     torch.manual_seed(seed)
     torch.set_num_threads(1)
 
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("mps") if torch.backends.mps.is_available() else torch.device("cpu")
-    print(f"Using device: {device}")
+    logger.log(f"Using device: {device}")
     return device
 
 def build_srnn(
@@ -37,12 +39,14 @@ def build_srnn(
                 recurrent_matrix=rm.clone().to(device),
                 beta=beta.clone().to(device),
                 spike_grad=fast_sigmoid(slope=25),
+                refractory_period = 5,
             ) for fm, rm, beta in zip(forw_matrices, rec_matrices, betas)],
         out_layer=out_layer
     ).to(device)
 
 def train(
         net: SRNN,
+        logger: Logger,
         device: torch.device,
         trainloader: torch.utils.data.DataLoader,
         testloader: torch.utils.data.DataLoader,
@@ -52,10 +56,11 @@ def train(
         recorder: Recorder | None,
     ) -> tuple[SRNN, torch.optim.Optimizer, Recorder]:
         acc_before = tr.test_net(net, testloader)
-        print(f"Test Accuracy before training is: {acc_before}")
+        logger.log(f"Test Accuracy before training is: {acc_before}")
 
         net, optimizer, recorder = tr.train_net(
             net=net,
+            logger=logger,
             device=device,
             trainloader=trainloader,
             lr=lr,
@@ -65,13 +70,15 @@ def train(
         )
 
         acc_after = tr.test_net(net, testloader)
-        print(f"Test Accuracy after training is: {acc_after}")
+        logger.log(f"Test Accuracy after training is: {acc_after}")
 
         return net, optimizer, recorder
 
-def run(seed: int, cfg: dict, output_dir: Path) -> None:
+def run(run_name: str, seed: int, cfg: dict, output_dir: Path) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
-    device = setup(seed)
+    logger = Logger(run_name=run_name, seed=seed)
+    device = setup(seed, logger)
+
     train_cfg = cfg["training"]
     dt = train_cfg["dt"]
     SHD_trainloader, SHD_testloader, input_dim, classes = datasets.get_SHD_dataset(
@@ -116,8 +123,8 @@ def run(seed: int, cfg: dict, output_dir: Path) -> None:
         options=cfg.get("recording", {}),
     )
 
-    print("\n\n---------------")
-    print("Now testing net")
+    logger.log("\n\n---------------")
+    logger.log("Now testing net")
     net = build_srnn(
         rec_layer_class=SynapticRecurrentLayer if cfg["srnn"]["use_synapses"] else StandardRecurrentLayer,
         forw_matrices=forw_matrices,
@@ -126,15 +133,15 @@ def run(seed: int, cfg: dict, output_dir: Path) -> None:
         out_layer=OutputLayer(ns_hidden[-1], len(classes), beta=tau_to_beta(dt, decay_cfg["tau_out"]*dt)),
         device=device,
     )
-    net, optimizer, recorder = train(net, device, SHD_trainloader, SHD_testloader, train_cfg["lr"], train_cfg["n_epochs"], regularizer, recorder)
+    net, optimizer, recorder = train(net, logger, device, SHD_trainloader, SHD_testloader, train_cfg["lr"], train_cfg["n_epochs"], regularizer, recorder)
     runs.save_net(net, optimizer, epoch=train_cfg["n_epochs"], save_path=output_dir / "net.checkpoint.pt")
     recorder.save(output_dir / "data_net")
 
     if cfg["srnn"]["add_control_net"]:
         recorder.clear()
             
-        print("\n\n---------------")
-        print("Now testing control net")
+        logger.log("\n\n---------------")
+        logger.log("Now testing control net")
         net_control = build_srnn(
             rec_layer_class=SynapticRecurrentLayer if cfg["srnn"]["use_synapses"] else StandardRecurrentLayer,
             forw_matrices=forw_matrices,
@@ -143,9 +150,11 @@ def run(seed: int, cfg: dict, output_dir: Path) -> None:
             out_layer=OutputLayer(ns_hidden[-1], len(classes), beta=tau_to_beta(dt, decay_cfg["tau_out"]*dt)),
             device=device,
         )
-        net_control, optimizer_control, recorder = train(net_control, device, SHD_trainloader, SHD_testloader, train_cfg["lr"], train_cfg["n_epochs"], regularizer, recorder)
+        net_control, optimizer_control, recorder = train(net_control, logger, device, SHD_trainloader, SHD_testloader, train_cfg["lr"], train_cfg["n_epochs"], regularizer, recorder)
         runs.save_net(net_control, optimizer_control, epoch=train_cfg["n_epochs"], save_path=output_dir / "net_control.checkpoint.pt")
         recorder.save(output_dir / "data_net_control")
+
+    logger.write_to_file(output_dir)
 
 if __name__ == "__main__":
     import multiprocessing as mp
@@ -172,6 +181,6 @@ if __name__ == "__main__":
         # initializer=lambda lock: tqdm.set_lock(lock),
         # initargs=(lock,),
     ) as pool:
-        results = list(pool.map(run, seeds, [cfg] * len(seeds), output_subdirs))
+        results = list(pool.map(run, [run_name] * len(seeds), seeds, [cfg] * len(seeds), output_subdirs))
 
     runs.push_output(output_dir)

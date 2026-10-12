@@ -9,6 +9,7 @@ import psutil, os
 
 from .srnn import SRNN
 from .recording import Recorder
+from .logging import Logger
 
 def measure_accuracy(mem_outs: torch.Tensor, targets: torch.Tensor) -> float:
     probs = F.softmax(mem_outs, dim=-1)
@@ -62,7 +63,7 @@ def test_net(net: SRNN, testloader: DataLoader, max_iters: int = None) -> float:
 
     return acc / len(testloader)
 
-def train_net(net: SRNN, device: torch.device, trainloader: DataLoader, lr: float = 1e-3, n_epochs: int = 1, max_iters: int = None, 
+def train_net(net: SRNN, logger: Logger, device: torch.device, trainloader: DataLoader, lr: float = 1e-3, n_epochs: int = 1, max_iters: int = None, 
               separate_timesteps: bool = False, regularizer: Regularizer = None, recorder: Recorder = None,
     ) -> tuple[SRNN, torch.optim.Optimizer, Recorder]:
     optimizer = torch.optim.Adam(net.parameters(), lr=lr)
@@ -109,6 +110,13 @@ def train_net(net: SRNN, device: torch.device, trainloader: DataLoader, lr: floa
                 # acc=f"{acc * 100:.2f}%",
                 # time_elapsed=f"{progress_bar.format_dict['elapsed']:.1f}s",
                 # used_memory=f"{process.memory_info().rss / 1e9:.2f} GB",
+            )
+
+            logger.log(
+                str(progress_bar) +
+                f"\nloss={loss_val.item():.2f}, acc={acc * 100:.2f}%, "
+                f"time_elapsed={progress_bar.format_dict['elapsed']:.1f}s, used_memory={process.memory_info().rss / 1e9:.2f} GB, "
+                f"memory_peak_cuda={torch.cuda.max_memory_allocated(device) / 2**30:.2f} GiB"
             )
 
             if max_iters is not None and i == max_iters:
