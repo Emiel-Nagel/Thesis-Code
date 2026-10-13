@@ -76,6 +76,7 @@ def train_net(net: SRNN, logger: Logger, device: torch.device, trainloader: Data
     net.train()
 
     for epoch in range(n_epochs):
+        logger.log(f"\n\n\nNow evaluating epoch {epoch}:\n\n")
         progress_bar = tqdm(enumerate(trainloader), total=len(trainloader), position=0, desc=f"Epoch {epoch}"
                             , dynamic_ncols=True, bar_format="{n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_fmt}] {bar}",)
         status_bar = tqdm(total=0, position=1, bar_format="{desc}", dynamic_ncols=True)
@@ -104,9 +105,6 @@ def train_net(net: SRNN, logger: Logger, device: torch.device, trainloader: Data
             acc = measure_accuracy(mem_outs.detach(), targets)
             accs.append(acc)
 
-            if device.type == "cuda" and i == 0:
-                tqdm.write(f"peak after first iter: {torch.cuda.max_memory_allocated(device) / 2**30:.2f} GiB")
-
             status_bar.set_description_str(
                 f"loss={loss_val.item():.2f}, acc={acc * 100:.2f}% "
                 f"time_elapsed={progress_bar.format_dict['elapsed']:.1f}s, used_memory={process.memory_info().rss / 1e9:.2f} GB"
@@ -120,7 +118,7 @@ def train_net(net: SRNN, logger: Logger, device: torch.device, trainloader: Data
                 str(progress_bar) +
                 f"\nloss={loss_val.item():.2f}, acc={acc * 100:.2f}%, "
                 f"time_elapsed={progress_bar.format_dict['elapsed']:.1f}s, used_memory={process.memory_info().rss / 1e9:.2f} GB, "
-                f"memory_peak_cuda={torch.cuda.max_memory_allocated(device) / 2**30:.2f} GiB"
+                f"cuda_memory_peak={torch.cuda.max_memory_allocated(device) / 2**30:.2f} GiB"
             )
 
             if max_iters is not None and i == max_iters:

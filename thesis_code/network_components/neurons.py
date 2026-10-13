@@ -1,7 +1,7 @@
 import torch
 import snntorch as snn
 
-from .linears import DaleslawLinear
+from .linears import DaleslawLinear, MaskedKaimingLinear
 
 class MaskedRLeaky(snn.RLeaky):
     def __init__(self, *args, rec_matrix: torch.Tensor, **kwargs) -> None:
@@ -9,7 +9,7 @@ class MaskedRLeaky(snn.RLeaky):
             f"expected a square matrix, got shape {tuple(rec_matrix.shape)}"
 
         super().__init__(*args, **kwargs)
-        self.recurrent = DaleslawLinear(rec_matrix)
+        self.recurrent = MaskedKaimingLinear(rec_matrix)
         if not self.learn_recurrent:
             for param in self.recurrent.parameters():
                 param.requires_grad = False
