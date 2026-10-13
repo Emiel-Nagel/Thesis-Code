@@ -105,7 +105,9 @@ def run(run_name: str, seed: int, cfg: dict, output_dir: Path) -> None:
         percent_som=cfg["srnn"]["percent_som"],
     )
     forw_matrices = [torch.ones(n_in, n_out) for n_in, n_out in zip(layers[:-1], layers[1:])]
-    rec_matrices, pruned_matrices = build_recurrent_and_pruned_matrices(neurons)
+    # rec_matrices, pruned_matrices = build_recurrent_and_pruned_matrices(neurons)
+    rec_matrices = [torch.ones(n, n) for n in ns_hidden]
+    pruned_matrices = [torch.ones(n, n) for n in ns_hidden]
 
     decay_cfg = cfg["srnn"]["decays"]
     match decay_cfg["beta_sampling_mode"]:

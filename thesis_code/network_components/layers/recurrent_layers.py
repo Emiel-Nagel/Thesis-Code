@@ -3,7 +3,7 @@ import torch.nn as nn
 from typing import Any
 
 from ..neurons import MaskedRLeaky, MaskedRSynaptic
-from ..linears import DaleslawLinear
+from ..linears import DaleslawLinear, MaskedKaimingLinear
 
 class RecurrentLayer(nn.Module):
     def __init__(self,
@@ -17,7 +17,7 @@ class RecurrentLayer(nn.Module):
         assert forward_matrix.shape[1] == self.n_neurons, \
             f"forward_matrix outputs {forward_matrix.shape[1]} neurons, recurrent_matrix has {self.n_neurons}"
 
-        self.weights = DaleslawLinear(forward_matrix)
+        self.weights = MaskedKaimingLinear(forward_matrix)
 
         assert isinstance(refractory_period, int) and refractory_period >= 0, \
             "refractory_period is set incorrectly"

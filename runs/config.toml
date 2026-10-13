@@ -1,4 +1,4 @@
-run_name = "test_refractory_period"
+run_name = "test_no_daleslaw"
 
 [training]
 dt = 0.001  # timesteps are now in milliseconds
@@ -6,7 +6,7 @@ batch_size = 128
 n_epochs = 20
 lr = 1e-3
 separate_timesteps = false
-n_trials = 2
+n_trials = 3
 
 [training.regularization]
 apply = true
@@ -20,7 +20,7 @@ L = 2
 re_download = false
 
 [srnn]
-ns_hidden = [1024]
+ns_hidden = [256]
 percent_pv = 25.0
 percent_som = 25.0
 add_control_net = false
