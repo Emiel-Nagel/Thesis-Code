@@ -1,5 +1,6 @@
 import torch
 import matplotlib.pyplot as plt
+from matplotlib.patches import Patch
 from matplotlib.widgets import Button
 from matplotlib.backends.backend_pdf import PdfPages
 import snntorch.spikeplot as splt
@@ -12,14 +13,14 @@ def plot_performance(loss_rec: np.ndarray, acc_rec: np.ndarray) -> None:
     fig.suptitle(f"Training losses and accuracies per epoch")
 
     ax_loss.plot(a.get_median_line(loss_rec), label="Median loss curve")
-    ax_loss.fill_between(np.arange(loss_rec.shape[-1]), *a.get_percentile_band(loss_rec), label="Percentile band between 25 and 75")
+    ax_loss.fill_between(np.arange(loss_rec.shape[-1]), *a.get_percentile_band(loss_rec), alpha=0.3, label="Percentile band between 25 and 75")
     ax_loss.set_title(f"Train Set Loss for {loss_rec.shape[0]} trial(s)")
     ax_loss.set_xlabel("Epoch")
     ax_loss.set_ylabel("Loss")
     ax_loss.legend()
 
     ax_plot.plot(a.get_median_line(acc_rec), label="Median accuracy curve")
-    ax_loss.fill_between(np.arange(loss_rec.shape[-1]), *a.get_percentile_band(acc_rec), label="Percentile band between 25 and 75")
+    ax_loss.fill_between(np.arange(loss_rec.shape[-1]), *a.get_percentile_band(acc_rec), alpha=0.3, label="Percentile band between 25 and 75")
     ax_plot.set_title(f"Train Set Accuracy for {acc_rec.shape[0]} trial(s)")
     ax_plot.set_xlabel("Epoch")
     ax_plot.set_ylabel("Accuracy")
@@ -96,9 +97,13 @@ class InteractiveSpikePlot:
                 continue
 
             if layer_name == "mems_out":
-                mems_matrix = data[self.epoch_i, :, :]
+                mems_matrix = data[self.epoch_i, :, :].T
                 im = ax.imshow(mems_matrix, aspect="auto", cmap="viridis", interpolation="nearest")
-                self.fig.colorbar(im, ax=ax, label="Membrane potential")
+                handles = [
+                    Patch(facecolor=im.cmap(im.norm(mems_matrix.min())), label="Low"),
+                    Patch(facecolor=im.cmap(im.norm(mems_matrix.max())), label="High"),
+                ]
+                ax.legend(handles=handles, loc="upper right", title="Membrane potential")
                 ax.set_title(f"{layer_name}")
                 ax.set_ylabel("Neuron (n)")
                 ax.set_xlabel("Time step (t)")
@@ -109,6 +114,8 @@ class InteractiveSpikePlot:
             ax.set_title(f"{layer_name} (mean rate = {round(a.get_layer_mean_spike_rate(spike_matrix), 3)}")
             ax.set_ylabel("Neuron (n)")
             ax.set_xlabel("Time step (t)")
+            ax.set_xlim(0, spike_matrix.shape[0])
+            ax.set_ylim(0, spike_matrix.shape[1])
 
         self.fig.suptitle(f"Epoch {self.epoch_i + 1} / {self.num_epochs}")
         self.fig.canvas.draw_idle()

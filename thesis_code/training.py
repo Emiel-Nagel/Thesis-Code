@@ -118,7 +118,7 @@ def train_net(net: SRNN, logger: Logger, device: torch.device, trainloader: Data
                 str(progress_bar) +
                 f"\nloss={loss_val.item():.2f}, acc={acc * 100:.2f}%, "
                 f"time_elapsed={progress_bar.format_dict['elapsed']:.1f}s, used_memory={process.memory_info().rss / 1e9:.2f} GB, "
-                f"cuda_memory_peak={torch.cuda.max_memory_allocated(device) / 2**30:.2f} GiB"
+                f"cuda_memory_peak={torch.cuda.max_memory_allocated(device) / 2**30:.2f} GiB\n"
             )
 
             if max_iters is not None and i == max_iters:

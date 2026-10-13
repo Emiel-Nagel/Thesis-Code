@@ -8,7 +8,7 @@ plot individual neurons
 - plot membrane potentials next to spikes
 - really get what's going on!!
 
-plot loss-variance
+plot loss-variance                              DONE
 
 test with different timestep lengths (longer)				DONE
 
