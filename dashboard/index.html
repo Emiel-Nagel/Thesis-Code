@@ -1,6 +1,7 @@
 <!doctype html>
 <meta charset="utf-8">
-<body style="margin:0;font-family:monospace;background:#111;color:#ddd">
+<body style="margin:0;font-family:monospace;background:#111;color:#ddd;
+             height:100vh;display:flex;flex-direction:column">
     <h1>Thesis-Code logstream</h1>
 
     <div style="padding:6px">
@@ -8,7 +9,7 @@
         seed: <select id="seed_selector"></select>
     </div>
 
-    <div id="box_output" style="height:calc(100vh - 40px);overflow:auto">
+    <div id="box_output" style="flex:1;min-height:0;overflow:auto">
         <pre id="output" style="margin:0;padding:6px;white-space:pre-wrap"></pre>
     </div>
 

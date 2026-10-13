@@ -2,6 +2,8 @@ import hmac, json, os, queue, threading
 from collections import deque, defaultdict
 from pathlib import Path
 from flask import Flask, Response, request, send_file
+# from dotenv import load_dotenv
+# load_dotenv
 
 USER = os.environ["DASH_USER"]
 PASSWORD = os.environ["DASH_PASS"]
