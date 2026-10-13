@@ -1,10 +1,10 @@
 fix connectivity
 - som to som should be 0						DONE
-- only prune inhibitory connections					
-- clamp weights (prevent exploding, enforce dale's law)			
+- only prune inhibitory connections		        DONE			
+- clamp weights (prevent exploding, enforce dale's law)			DONE
 
 plot individual neurons
-- quantify firing rates
+- quantify firing rates                         
 - plot membrane potentials next to spikes
 - really get what's going on!!
 
@@ -14,11 +14,11 @@ test with different timestep lengths (longer)				DONE
 
 train with only one layer!!						DONE
 
-see how weights evolve!!
+see how weights evolve!!                        DONE
 
 ENFORCE SPARSITY!!!!
 - init neurons more sparsely (add normalization term)
-- train bigger networks 1028
+- train bigger networks 1028                            DONE
 - try with alif neurons (see if becomes sparse)
 - maybe play with regularization term
 - look into reference network

@@ -1,9 +1,9 @@
-run_name = "test_weights_evolution_daleslaw"
+run_name = "test_refractory_period"
 
 [training]
 dt = 0.001  # timesteps are now in milliseconds
 batch_size = 128
-n_epochs = 1
+n_epochs = 20
 lr = 1e-3
 separate_timesteps = false
 n_trials = 2

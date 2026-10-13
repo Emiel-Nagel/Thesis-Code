@@ -46,7 +46,7 @@ class DaleslawLinear(MaskedLinear):
     For explanation, see:
     Barranca, V. J., Bhuiyan, A., Sundgren, M., & Xing, F. (2022). Functional implications of dale's law in balanced neuronal network dynamics and decision making. Frontiers in Neuroscience, 16. https://doi.org/10.3389/fnins.2022.801847
     """
-    def __init__(self, con_matrix: torch.Tensor, w_min: float = 0.01, gain: float = 1.0) -> None:
+    def __init__(self, con_matrix: torch.Tensor, w_min: float = 1e-4, gain: float = 1.0) -> None:
         super().__init__(con_matrix)
         with torch.no_grad():                                           # applies my own custom kaiming init to compensate for fan_in loss from the mask
             mask = self.con_matrix_t != 0
