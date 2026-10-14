@@ -37,7 +37,6 @@ class RecorderBase:
             self.recordings[name] = [d.result() if isinstance(d, Future) else d for d in data]
 
     def clear(self) -> None:
-        self._resolve()
         for data in self.recordings.values():
             data.clear()
 
