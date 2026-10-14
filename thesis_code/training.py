@@ -96,7 +96,6 @@ def train_net(net: SRNN, logger: Logger, device: torch.device, trainloader: Data
             loss_val.backward()
 
             grad_norm = torch.nn.utils.clip_grad_norm_(net.parameters(), max_norm=max_norm)
-
             if recorder is not None:
                 recorder.record_iteration(net=net)
 
