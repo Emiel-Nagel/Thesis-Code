@@ -1,4 +1,4 @@
-run_name = "test_recorder_speed_baseline"
+run_name = "test_recorder_speed_speedup"
 
 [training]
 dt = 0.001  # timesteps are now in milliseconds
