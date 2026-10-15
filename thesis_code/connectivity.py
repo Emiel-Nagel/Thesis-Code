@@ -1,6 +1,7 @@
 import torch
 from enum import Enum
 import numpy as np
+from pathlib import Path
 
 class Neurons(Enum):
     EXCITATORY = 1
@@ -44,7 +45,19 @@ def sample_ee_pv_som_neurons(ns_hidden: list[int], percent_pv: float, percent_so
         for n in ns_hidden
     ]
 
+def save_neurons(output_dir: Path, neurons: list[list[Neurons]]) -> None:
+    npy_array = np.array([[n.value for n in row] for row in neurons], dtype=np.int8)
+    np.save(output_dir / "neurons.npy", npy_array)
+
+def load_neurons(work_dir: Path) -> list[list[Neurons]]:
+    npy_array = np.load(work_dir / "neurons.npy")
+    return [[Neurons(v) for v in row] for row in npy_array]
+
+def sort_neuron_layer(layer: list[Neurons]) -> list[Neurons]:
+    return layer.sort(key=lambda n: n.value)
+
 def build_recurrent_matrix(layer: list[Neurons]) -> torch.Tensor:
+    layer = sort_neuron_layer(layer)
     type_idx = torch.tensor([type_order.index(n) for n in layer], dtype=torch.long)
     return type_matrix[type_idx][:, type_idx]
 
@@ -92,3 +105,17 @@ def build_recurrent_and_pruned_matrices(neurons: list[list[Neurons]]) -> tuple[l
             assert (rec_matrix == v).sum() == (pruned_matrix == v).sum(), f"mismatch for value {v}"
         
     return rec_matrices, pruned_matrices
+
+def _filename(is_control: bool) -> str:
+    return "control_net_weight_masks.npz" if is_control else "net_weights_masks.npz"
+
+def save_matrices(output_dir: Path, matrices: list[torch.Tensor], names: list[str], is_control: bool = False) -> None:
+    if len(set(names)) != len(names):
+        raise ValueError("names must be unique")
+    
+    out_dict = {n: m.detach().cpu().numpy() for n, m in zip(names, matrices, strict=True)}
+    np.savez_compressed(output_dir / _filename(is_control), **out_dict)
+
+def load_matrices(work_dir: Path, is_control: bool = False) -> dict[str, np.ndarray]:
+    with np.load(work_dir / _filename(is_control)) as data:
+        return dict(data.items())

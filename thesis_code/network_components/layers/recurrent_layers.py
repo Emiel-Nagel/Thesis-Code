@@ -100,8 +100,9 @@ class StandardRecurrentLayer(RecurrentLayer):
         self.neurons.reset_recurrent_weights()
 
     def _step(self, x: torch.Tensor) -> torch.Tensor:
-        spk, mem = self.neurons(x, self.spk, self.mem)
-        self.spk, self.mem = self._compute_refractory_period(spk, mem)
+        self.spk, self.mem = self.neurons(x, self.spk, self.mem)
+        # spk, mem = self.neurons(x, self.spk, self.mem)
+        # self.spk, self.mem = self._compute_refractory_period(spk, mem)
         return self.spk
 
 class SynapticRecurrentLayer(RecurrentLayer):
