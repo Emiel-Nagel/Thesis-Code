@@ -98,3 +98,5 @@ def push_output(output_dir: Path, branch: str = "main") -> None:
     })
     call("PATCH", f"/git/refs/heads/{branch}", json={"sha": commit["sha"]})
     print(f"Pushed {len(files)} files to {REPO}@{branch}")
+    shutil.rmtree(output_dir)
+    print("Removed output directory after push")
