@@ -55,7 +55,7 @@ class RecurrentLayer(nn.Module):
 
         refractory = self.refractory_buffer > 0
         spk = spk.masked_fill(refractory, 0.0)                      # disable spiking for neurons in refractory periods
-        mem = torch.where(refractory, torch.zeros_like(mem), mem)   # clamp mems to 0 for neurons in refractory periods
+        # mem = torch.where(refractory, torch.zeros_like(mem), mem)   # clamp mems to 0 for neurons in refractory periods, disabled for now
 
         self.refractory_buffer = torch.where(
             spk > 0,
