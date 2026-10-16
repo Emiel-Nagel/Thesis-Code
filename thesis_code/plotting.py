@@ -145,3 +145,15 @@ class InteractiveSpikePlot:
 
         self.epoch_i = original_epoch
         self.draw()
+
+def plot_spikes(data: torch.Tensor, title: str) -> None:
+    fig = plt.figure(facecolor="w", figsize=(25, 5))
+    ax = fig.add_subplot(111)
+    splt.raster(data, ax, c="black")
+    ax.set_xticks(np.arange(int(0), int(data.shape[0]) + 1))
+    ax.tick_params(axis="x", labelsize=8)
+
+    plt.title(title)
+    plt.xlabel("Time Steps")
+    plt.ylabel("Neuron Number")
+    plt.show()
