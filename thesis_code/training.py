@@ -60,7 +60,7 @@ def test_net(net: SRNN, testloader: DataLoader, max_iters: int = None) -> float:
         net.eval()
 
         for i, (data, targets) in enumerate(testloader):           
-            _, mem_rec, _ = net(data)
+            _, mem_rec, _, _ = net(data)
             acc += measure_accuracy(mem_rec, targets)
             if max_iters is not None and i == max_iters:
                 break
@@ -85,7 +85,7 @@ def train_net(net: SRNN, logger: Logger, device: torch.device, trainloader: Data
         for i, (data, targets) in progress_bar:
 
             forward_fn = net.forward_sequence if separate_timesteps else net
-            spk_outs, mem_outs, hidden_spks = forward_fn(data)
+            spk_outs, mem_outs, hidden_spks, hidden_mems = forward_fn(data)
 
             loss_val = compute_loss(mem_outs, targets)
             

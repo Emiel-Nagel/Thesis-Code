@@ -88,6 +88,9 @@ def build_pruned_matrix(rec_matrix: torch.Tensor) -> torch.Tensor:
 
     return pruned_matrix.view_as(rec_matrix)
 
+def remove_self_connections(rec_matrix: torch.Tensor) -> torch.Tensor:
+    return rec_matrix.fill_diagonal_(0.0)
+
 def build_recurrent_and_pruned_matrices(neurons: list[list[Neurons]]) -> tuple[list[torch.Tensor], list[torch.Tensor]]:
     rec_matrices, pruned_matrices = [], []
     for layer in neurons:

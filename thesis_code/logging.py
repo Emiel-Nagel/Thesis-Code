@@ -47,5 +47,5 @@ class Logger:
         print(content)
 
     def write_to_file(self, output_dir: Path) -> None:
-        with open(output_dir / "logs.log", 'w') as f:
+        with open(output_dir / "logs.log", 'w', encoding="utf-8") as f:
             f.write(self.content)

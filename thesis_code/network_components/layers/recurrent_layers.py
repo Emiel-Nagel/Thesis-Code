@@ -65,15 +65,16 @@ class RecurrentLayer(nn.Module):
         )
         return spk, mem
 
-    def _step(self, x: torch.Tensor) -> torch.Tensor:
+    def _step(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
         raise NotImplementedError
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
         return self._step(self.weights(x))
 
-    def forward_sequence(self, x_seq: torch.Tensor) -> torch.Tensor:
+    def forward_sequence(self, x_seq: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
         x_seq = self.weights(x_seq)
-        return torch.stack([self._step(x) for x in x_seq.unbind(0)], dim=0)
+        spks, mems = zip(*[self._step(x) for x in x_seq.unbind(0)])
+        return torch.stack(spks, dim=0), torch.stack(mems, dim=0)
 
 class StandardRecurrentLayer(RecurrentLayer):
     def __init__(self,
@@ -93,6 +94,7 @@ class StandardRecurrentLayer(RecurrentLayer):
             learn_beta=fully_learnable,
             rec_matrix=recurrent_matrix,
             threshold=torch.ones(self.n_neurons),
+            reset_delay=False,
         )
         self.spk, self.mem = self.neurons.init_rleaky()
 
@@ -100,11 +102,10 @@ class StandardRecurrentLayer(RecurrentLayer):
         self.spk, self.mem = self.neurons.init_rleaky()
         self.neurons.reset_recurrent_weights()
 
-    def _step(self, x: torch.Tensor) -> torch.Tensor:
-        self.spk, self.mem = self.neurons(x, self.spk, self.mem)
-        # spk, mem = self.neurons(x, self.spk, self.mem)
-        # self.spk, self.mem = self._compute_refractory_period(spk, mem)
-        return self.spk
+    def _step(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+        spk, mem = self.neurons(x, self.spk, self.mem)
+        self.spk, self.mem = self._compute_refractory_period(spk, mem)
+        return self.spk, self.mem
 
 class SynapticRecurrentLayer(RecurrentLayer):
     def __init__(self,
@@ -127,6 +128,7 @@ class SynapticRecurrentLayer(RecurrentLayer):
             learn_beta=fully_learnable,
             rec_matrix=recurrent_matrix,
             threshold=torch.ones(self.n_neurons),
+            reset_delay=False,
         )
         self.spk, self.syn, self.mem = self.neurons.init_rsynaptic()
 
@@ -134,7 +136,7 @@ class SynapticRecurrentLayer(RecurrentLayer):
         self.spk, self.syn, self.mem = self.neurons.init_rsynaptic()
         self.neurons.reset_recurrent_weights()
 
-    def _step(self, x: torch.Tensor) -> torch.Tensor:
+    def _step(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
         spk, self.syn, mem = self.neurons(x, self.spk, self.syn, self.mem)
         self.spk, self.mem = self._compute_refractory_period(spk, mem)
-        return self.spk
+        return self.spk, self.mem

@@ -8,6 +8,10 @@ class MaskedLinear(nn.Module):
         self.register_buffer('con_matrix_t', con_matrix.T.contiguous())
         self._masked_weight = None
 
+    @torch.no_grad()
+    def zero_diagonal(self) -> None:
+        self.linear.weight.fill_diagonal_(0.0)
+
     def reset(self) -> None:
         self._masked_weight = None
 
