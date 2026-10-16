@@ -41,6 +41,7 @@ class RecurrentLayer(nn.Module):
         Sets a mask to mute all spiking activity for a neuron activity for n timesteps after this neuron has spiked has occurred.
         Also keeps membrane potential at 0 (in snntorch language. This corresponds with -70mV in real-life).
         It leaves the synapses of SynapticRecurrentLayer alone.
+        It also will not be considered in the backprop computation.
 
         Inspired by:
         Li, Yang, Xinyi Zeng, Zhe Xue, Pinxian Zeng, Zikai Zhang, and Yan Wang. 2025. 

@@ -3,8 +3,12 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
 from matplotlib.widgets import Button
 from matplotlib.backends.backend_pdf import PdfPages
+from matplotlib.ticker import FormatStrFormatter
+from matplotlib.animation import ArtistAnimation
+from IPython.display import HTML
 import snntorch.spikeplot as splt
 import numpy as np
+from pathlib import Path
 
 from . import analysis as a
 
@@ -146,14 +150,56 @@ class InteractiveSpikePlot:
         self.epoch_i = original_epoch
         self.draw()
 
-def plot_spikes(data: torch.Tensor, title: str) -> None:
+def plot_spikes(spike_matrix: np.ndarray, title: str) -> None:
     fig = plt.figure(facecolor="w", figsize=(25, 5))
     ax = fig.add_subplot(111)
-    splt.raster(data, ax, c="black")
-    ax.set_xticks(np.arange(int(0), int(data.shape[0]) + 1))
+    splt.raster(spike_matrix, ax, c="black")
+    ax.set_xticks(np.arange(int(0), int(spike_matrix.shape[0]) + 1))
     ax.tick_params(axis="x", labelsize=8)
 
     plt.title(title)
     plt.xlabel("Time Steps")
     plt.ylabel("Neuron Number")
-    plt.show()
+
+def plot_membrane_potentials(mem_data: np.ndarray, spike_matrix: np.ndarray, spike_threshold: float, title: str) -> None:
+    n_steps, n_neurons = mem_data.shape
+    fig, axes = plt.subplots(3 * n_neurons, 1, sharex=True, figsize=(25, 4 * n_neurons), squeeze=False, gridspec_kw={"height_ratios": [1, 3, 1] * n_neurons})
+    for i in range(n_neurons):
+        hide_ax = axes[3 * i, 0]
+        hide_ax.axis("off")
+
+        mem_ax = axes[3 * i + 1, 0]
+        mem_ax.plot(mem_data[:, i], lw=1, label=f"Membrane traces")
+        mem_ax.axhline(spike_threshold, c="red", ls="--", label=f"Spiking threshold = {spike_threshold}")
+        mem_ax.set_ylabel("Membrane potential (V)")
+        mem_ax.yaxis.set_major_formatter(FormatStrFormatter("%.1f"))
+        mem_ax.legend(loc="upper right")
+        mem_ax.set_title(f"Neuron {i + 1}")
+
+        spk_ax = axes[3 * i + 2, 0]
+        spike_times = np.nonzero(spike_matrix[:, i])[0]
+        spk_ax.eventplot(spike_times, lineoffsets=0.5, linelengths=0.3, colors="black")
+        spk_ax.set_ylim(0, 1)
+        spk_ax.set_yticks([])
+        spk_ax.set_ylabel("Spikes", rotation=0, labelpad=25)
+        spk_ax.tick_params(labelbottom=True)
+
+    bottom = axes[-1, 0]
+    bottom.set_xlim(-0.5, n_steps - 0.5)
+    bottom.set_xticks(np.arange(int(0), int(n_steps) + 1))
+    bottom.tick_params(axis="x", labelsize=8)
+        
+    fig.suptitle(title)
+    fig.supxlabel("Time Steps")
+    fig.tight_layout()
+
+def animate_spike_counts(spike_matrix: np.ndarray, title: str, save_dir: Path | None = None) -> ArtistAnimation:
+    n_steps, n_neurons = spike_matrix.shape
+    labels = [f"Neuron {i}" for i in range(1, n_neurons + 1)]
+
+    fig, ax = plt.subplots(facecolor='w', figsize=(12, 7))
+    fig.suptitle(title)
+    anim = splt.spike_count(torch.from_numpy(spike_matrix), fig, ax, labels, interpolate=5, num_steps=n_steps, time_step=1e-3, animate=True)
+    HTML(anim.to_html5_video())
+    if save_dir is not None:
+        anim.save(save_dir / f"{title}.gif")
