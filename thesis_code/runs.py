@@ -92,11 +92,15 @@ def push_output(output_dir: Path, branch: str = "main") -> None:
     if tree["sha"] == base_tree:
         print("Nothing new to commit")
         return
-
-    commit = call("POST", "/git/commits", json={
-        "message": message, "tree": tree["sha"], "parents": [head_sha],
-    })
-    call("PATCH", f"/git/refs/heads/{branch}", json={"sha": commit["sha"]})
-    print(f"Pushed {len(files)} files to {REPO}@{branch}")
-    shutil.rmtree(output_dir)
-    print("Removed output directory after push")
+    try:
+        commit = call("POST", "/git/commits", json={
+            "message": message, "tree": tree["sha"], "parents": [head_sha],
+        })
+        call("PATCH", f"/git/refs/heads/{branch}", json={"sha": commit["sha"]})
+        print(f"Pushed {len(files)} files to {REPO}@{branch}")
+        
+    except Exception as e:
+        print(f"Error pushing filed to {REPO}@{branch}: {e}")
+    finally:
+        shutil.rmtree(output_dir)
+        print("Removed output directory after push")

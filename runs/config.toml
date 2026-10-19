@@ -1,4 +1,4 @@
-run_name = "test_no_daleslaw_no_refractory_period"
+run_name = "test_no_daleslaw_no_refractory_period_no_clipping"
 
 [training]
 dt = 0.001  # timesteps are now in milliseconds
