@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
 from matplotlib.widgets import Button
 from matplotlib.backends.backend_pdf import PdfPages
-from matplotlib.ticker import FormatStrFormatter
+from matplotlib.ticker import FormatStrFormatter, MaxNLocator
 from matplotlib.animation import ArtistAnimation
 from IPython.display import HTML
 import snntorch.spikeplot as splt
@@ -21,6 +21,7 @@ def plot_performance(loss_rec: np.ndarray, acc_rec: np.ndarray) -> None:
     ax_loss.set_title(f"Train Set Loss for {loss_rec.shape[0]} trial(s)")
     ax_loss.set_xlabel("Epoch")
     ax_loss.set_ylabel("Loss")
+    ax_loss.xaxis.set_major_locator(MaxNLocator(integer=True))
     ax_loss.legend()
 
     ax_plot.plot(a.get_median_line(acc_rec), label="Median accuracy curve")
@@ -28,6 +29,7 @@ def plot_performance(loss_rec: np.ndarray, acc_rec: np.ndarray) -> None:
     ax_plot.set_title(f"Train Set Accuracy for {acc_rec.shape[0]} trial(s)")
     ax_plot.set_xlabel("Epoch")
     ax_plot.set_ylabel("Accuracy")
+    ax_plot.xaxis.set_major_locator(MaxNLocator(integer=True))
     ax_plot.legend()
 
 def plot_gradients(max_grad_rec: np.ndarray, avg_grad_rec: np.ndarray) -> None:
