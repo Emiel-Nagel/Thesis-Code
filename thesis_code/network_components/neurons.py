@@ -12,7 +12,7 @@ class MaskedRLeaky(snn.RLeaky):
         rec_matrix.fill_diagonal_(0.0)
 
         super().__init__(*args, **kwargs)
-        self.recurrent = MaskedKaimingLinear(rec_matrix)
+        self.recurrent = DaleslawLinear(rec_matrix)
         self.recurrent.zero_diagonal()
         if not self.learn_recurrent:
             for param in self.recurrent.parameters():

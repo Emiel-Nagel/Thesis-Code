@@ -1,12 +1,12 @@
-run_name = "test_no_daleslaw_no_refractory_period_no_clipping"
+run_name = "test_yes_daleslaw_no_refractory_period_no_clipping"
 
 [training]
 dt = 0.001  # timesteps are now in milliseconds
 batch_size = 128
-n_epochs = 1
+n_epochs = 20
 lr = 1e-3
 separate_timesteps = false
-n_trials = 3
+n_trials = 5
 
 [training.regularization]
 apply = true

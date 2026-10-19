@@ -13,7 +13,7 @@ from pathlib import Path
 from . import analysis as a
 
 def plot_performance(loss_rec: np.ndarray, acc_rec: np.ndarray) -> None:
-    fig, (ax_loss, ax_plot) = plt.subplots(nrows=1, ncols=2, facecolor='w', figsize=(18, 7))
+    fig, (ax_loss, ax_acc) = plt.subplots(nrows=1, ncols=2, facecolor='w', figsize=(18, 7))
     fig.suptitle(f"Training losses and accuracies per epoch")
 
     ax_loss.plot(a.get_median_line(loss_rec), label="Median loss curve")
@@ -24,13 +24,13 @@ def plot_performance(loss_rec: np.ndarray, acc_rec: np.ndarray) -> None:
     ax_loss.xaxis.set_major_locator(MaxNLocator(integer=True))
     ax_loss.legend()
 
-    ax_plot.plot(a.get_median_line(acc_rec), label="Median accuracy curve")
-    ax_loss.fill_between(np.arange(loss_rec.shape[-1]), *a.get_percentile_band(acc_rec), alpha=0.3, label="Percentile band between 25 and 75")
-    ax_plot.set_title(f"Train Set Accuracy for {acc_rec.shape[0]} trial(s)")
-    ax_plot.set_xlabel("Epoch")
-    ax_plot.set_ylabel("Accuracy")
-    ax_plot.xaxis.set_major_locator(MaxNLocator(integer=True))
-    ax_plot.legend()
+    ax_acc.plot(a.get_median_line(acc_rec), label="Median accuracy curve")
+    ax_acc.fill_between(np.arange(loss_rec.shape[-1]), *a.get_percentile_band(acc_rec), alpha=0.3, label="Percentile band between 25 and 75")
+    ax_acc.set_title(f"Train Set Accuracy for {acc_rec.shape[0]} trial(s)")
+    ax_acc.set_xlabel("Epoch")
+    ax_acc.set_ylabel("Accuracy")
+    ax_acc.xaxis.set_major_locator(MaxNLocator(integer=True))
+    ax_acc.legend()
 
 def plot_gradients(max_grad_rec: np.ndarray, avg_grad_rec: np.ndarray) -> None:
     fig, (ax_max, ax_avg) = plt.subplots(nrows=1, ncols=2, facecolor='w', figsize=(18, 7))
@@ -51,8 +51,8 @@ def plot_gradients(max_grad_rec: np.ndarray, avg_grad_rec: np.ndarray) -> None:
     ax_avg.legend()
 
 def plot_weight_matrices(weights: np.ndarray, name: str) -> None:
-    matrices = [np.asarray(w) for w in weights[0]]
-    n_epochs = weights.shape[1]
+    matrices = [np.asarray(w) for w in weights]
+    n_epochs = len(matrices)
     vmax = max(np.abs(m).max() for m in matrices)
 
     fig, axes = plt.subplots(nrows=1, ncols=n_epochs, squeeze=False, figsize=(8 * n_epochs, 8), constrained_layout=True)

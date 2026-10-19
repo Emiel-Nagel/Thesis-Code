@@ -105,9 +105,9 @@ def run(run_name: str, seed: int, cfg: dict, output_dir: Path) -> None:
     )
     save_neurons(output_dir, neurons)
     forw_matrices = [torch.ones(n_in, n_out) for n_in, n_out in zip(layers[:-1], layers[1:])]
-    # rec_matrices, pruned_matrices = build_recurrent_and_pruned_matrices(neurons)
-    rec_matrices = [torch.ones(n, n) for n in ns_hidden]
-    pruned_matrices = [torch.ones(n, n) for n in ns_hidden]
+    rec_matrices, pruned_matrices = build_recurrent_and_pruned_matrices(neurons)
+    # rec_matrices = [torch.ones(n, n) for n in ns_hidden]
+    # pruned_matrices = [torch.ones(n, n) for n in ns_hidden]
     save_matrices(output_dir, rec_matrices, 
         names=[f"recurrent_mask_{i}" for i, _ in enumerate(rec_matrices)], 
         is_control=False

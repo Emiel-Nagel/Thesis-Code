@@ -40,10 +40,11 @@ def sample_ee_pv_som_neurons(ns_hidden: list[int], percent_pv: float, percent_so
 
     choices = list(Neurons)
     probs = torch.tensor([percent_excitatory / 100.0, percent_pv / 100.0, percent_som / 100.0], dtype=torch.float)
-    return [
+    neurons = [
         [choices[i] for i in torch.multinomial(probs, num_samples=n, replacement=True).tolist()]
         for n in ns_hidden
     ]
+    return [sort_neuron_layer(l) for l in neurons]
 
 def save_neurons(output_dir: Path, neurons: list[list[Neurons]]) -> None:
     npy_array = np.array([[n.value for n in row] for row in neurons], dtype=np.int8)
@@ -54,10 +55,10 @@ def load_neurons(work_dir: Path) -> list[list[Neurons]]:
     return [[Neurons(v) for v in row] for row in npy_array]
 
 def sort_neuron_layer(layer: list[Neurons]) -> list[Neurons]:
-    return layer.sort(key=lambda n: n.value)
+    return sorted(layer, key=lambda n: n.value)
 
 def build_recurrent_matrix(layer: list[Neurons]) -> torch.Tensor:
-    layer = sort_neuron_layer(layer)
+    # layer = sort_neuron_layer(layer)
     type_idx = torch.tensor([type_order.index(n) for n in layer], dtype=torch.long)
     return type_matrix[type_idx][:, type_idx]
 

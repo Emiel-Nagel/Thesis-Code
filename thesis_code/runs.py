@@ -48,11 +48,15 @@ def save_net(net: SRNN, optimizer: torch.optim.Optimizer, epoch: int, save_path:
     except Exception as e:
         print(f"Failed to save net as {save_path.name}, caused by {e!r}")
 
-def push_output(output_dir: Path, branch: str = "main") -> None:
+def push_output(output_dir: Path) -> None:
+    """
+    Pushes the output to a new branch under 'outputs/'
+    """
     token = os.environ["GITHUB_TOKEN"]
     message = f"Successfully completed run, added results for run {output_dir.name}"
     repo_url = f"https://api.github.com/repos/{REPO}"
-    rel = output_dir.resolve().relative_to(CODE_DIR.resolve())
+    branch_name = f"outputs/{output_dir.name}"
+    # rel = output_dir.resolve().relative_to(CODE_DIR.resolve())
 
     s = requests.Session()
     s.headers.update({
@@ -68,16 +72,18 @@ def push_output(output_dir: Path, branch: str = "main") -> None:
         return r.json()
 
     files = [p for p in output_dir.rglob("*") if p.is_file()]
-    too_big = [p for p in files if p.stat().st_size > 95 * 1024**2]
-    if too_big:
-        raise RuntimeError(f"Files too large for GitHub: {too_big}")
     if not files:
         print("Nothing to push")
         return
+    too_big = [p for p in files if p.stat().st_size > 95 * 1024**2]
+    if too_big:
+        raise RuntimeError(f"Files too large for GitHub: {too_big}")
 
-    # Current head of the branch
-    head_sha = call("GET", f"/git/ref/heads/{branch}")["object"]["sha"]
-    base_tree = call("GET", f"/git/commits/{head_sha}")["tree"]["sha"]
+    r = s.get(f"{repo_url}/git/ref/heads/{branch_name}", timeout=120)
+    if r.status_code == 200:
+        raise RuntimeError(f"Branch {branch_name} already exists")
+    if r.status_code != 404:
+        raise RuntimeError(f"Could not check branch: {r.status_code}: {r.text}")
 
     # One blob per file
     entries = []
@@ -90,23 +96,22 @@ def push_output(output_dir: Path, branch: str = "main") -> None:
             })
         except RuntimeError as e:
             raise RuntimeError(f"Failed on {p} ({size / 1024**2:.1f} MB): {e}") from e
-        repo_path = (rel / p.relative_to(output_dir)).as_posix()
+        repo_path = p.relative_to(output_dir).as_posix()
         entries.append({"path": repo_path, "mode": "100644", "type": "blob", "sha": blob["sha"]})
 
-    # New tree layered on top of the existing one (other repo files untouched)
-    tree = call("POST", "/git/trees", json={"base_tree": base_tree, "tree": entries})
-    if tree["sha"] == base_tree:
-        print("Nothing new to commit")
-        return
+    # Tree with NO base_tree -> contains only these files
+    tree = call("POST", "/git/trees", json={"tree": entries})
+
     try:
         commit = call("POST", "/git/commits", json={
-            "message": message, "tree": tree["sha"], "parents": [head_sha],
+            "message": message, "tree": tree["sha"], "parents": [],
         })
-        call("PATCH", f"/git/refs/heads/{branch}", json={"sha": commit["sha"]})
-        print(f"Pushed {len(files)} files to {REPO}@{branch}")
-        
+        call("POST", "/git/refs", json={"ref": f"refs/heads/{branch_name}", "sha": commit["sha"]})
     except Exception as e:
-        print(f"Error pushing filed to {REPO}@{branch}: {e}")
-    finally:
-        shutil.rmtree(output_dir)
-        print("Removed output directory after push")
+        print(f"Error pushing outputs to new branch {REPO}@{branch_name}: {e}")
+        print(f"Keeping {output_dir} since the push failed")
+        raise
+
+    print(f"Created {REPO}@{branch_name} with {len(files)} files")
+    shutil.rmtree(output_dir)
+    print("Removed output directory after push")
