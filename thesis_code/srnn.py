@@ -29,31 +29,35 @@ class SRNN(nn.Module):
 
         spk_outs, mem_outs = [], []
         hidden_spks = [[] for _ in range(len(self.rec_layers))]
+        hidden_mems = [[] for _ in range(len(self.rec_layers))]
 
         for step in range(data.size(0)):
             x = data[step]
             for i, layer in enumerate(self.rec_layers):
-                x = layer(x)
+                x, m = layer(x)
                 hidden_spks[i].append(x)
+                hidden_mems[i].append(m)
 
             spk_out, mem_out = self.out_layer(x)
             spk_outs.append(spk_out)
             mem_outs.append(mem_out)
 
-        return torch.stack(spk_outs, dim=0), torch.stack(mem_outs, dim=0), [torch.stack(spks_h, dim=0) for spks_h in hidden_spks]
+        return torch.stack(spk_outs, dim=0), torch.stack(mem_outs, dim=0), [torch.stack(spks_h, dim=0) for spks_h in hidden_spks], [torch.stack(mem_h, dim=0) for mem_h in hidden_mems]
 
     def forward_sequence(self, data: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, list[torch.Tensor]]:
         self.reset()
         
         hidden_spks = []
+        hidden_mems = []
 
         x_seq = data
         for layer in self.rec_layers:
-            x_seq = layer.forward_sequence(x_seq)
+            x_seq, m_seq = layer.forward_sequence(x_seq)
             hidden_spks.append(x_seq)
+            hidden_mems.append(m_seq)
         spk_outs, mem_outs = self.out_layer.forward_sequence(x_seq)
 
-        return spk_outs, mem_outs, hidden_spks
+        return spk_outs, mem_outs, hidden_spks, hidden_mems
 
     def apply_daleslaw(self) -> None:
         for m in self.modules():

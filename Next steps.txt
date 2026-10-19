@@ -5,7 +5,7 @@ fix connectivity
 
 plot individual neurons
 - quantify firing rates                         
-- plot membrane potentials next to spikes
+- plot membrane potentials next to spikes       DONE
 - really get what's going on!!
 
 plot loss-variance                              DONE

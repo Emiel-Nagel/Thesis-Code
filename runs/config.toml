@@ -3,10 +3,10 @@ run_name = "test_no_daleslaw_no_refractory_period_no_clipping"
 [training]
 dt = 0.001  # timesteps are now in milliseconds
 batch_size = 128
-n_epochs = 20
+n_epochs = 1
 lr = 1e-3
 separate_timesteps = false
-n_trials = 5
+n_trials = 3
 
 [training.regularization]
 apply = true

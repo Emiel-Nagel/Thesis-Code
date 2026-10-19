@@ -8,8 +8,12 @@ class MaskedRLeaky(snn.RLeaky):
         assert rec_matrix.shape[0] == rec_matrix.shape[1], \
             f"expected a square matrix, got shape {tuple(rec_matrix.shape)}"
 
+        rec_matrix = rec_matrix.clone()
+        rec_matrix.fill_diagonal_(0.0)
+
         super().__init__(*args, **kwargs)
         self.recurrent = MaskedKaimingLinear(rec_matrix)
+        self.recurrent.zero_diagonal()
         if not self.learn_recurrent:
             for param in self.recurrent.parameters():
                 param.requires_grad = False
@@ -25,8 +29,12 @@ class MaskedRSynaptic(snn.RSynaptic):
         assert rec_matrix.shape[0] == rec_matrix.shape[1], \
             f"expected a square matrix, got shape {tuple(rec_matrix.shape)}"
 
+        rec_matrix = rec_matrix.clone()
+        rec_matrix.fill_diagonal_(0.0)
+
         super().__init__(*args, **kwargs)
         self.recurrent = DaleslawLinear(rec_matrix)
+        self.recurrent.zero_diagonal()
         if not self.learn_recurrent:
             for param in self.recurrent.parameters():
                 param.requires_grad = False
