@@ -29,6 +29,12 @@ def create_output_dir(run_name: str) -> Path:
     output_dir.mkdir(parents=True, exist_ok=True)
     shutil.copy2(CONFIG_PATH, output_dir / "config.toml")
     shutil.copy2(CODE_DIR / "scripts" / "analysis.ipynb", output_dir / "analysis.ipynb")
+
+    helpers_dir = output_dir / "helpers"
+    helpers_dir.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(CODE_DIR / "thesis_code" / "plotting.py", helpers_dir / "plotting.py")
+    shutil.copy2(CODE_DIR / "thesis_code" / "analysis.py", helpers_dir / "analysis.py")
+    (helpers_dir / "__init__.py").touch()
     return output_dir
 
 def save_net(net: SRNN, optimizer: torch.optim.Optimizer, epoch: int, save_path: Path) -> None:

@@ -1,4 +1,4 @@
-run_name = "test_weights_saving"
+run_name = "small_copy_plotting_test"
 
 [training]
 dt = 0.001  # timesteps are now in milliseconds
