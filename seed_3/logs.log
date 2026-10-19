@@ -1,0 +1,3911 @@
+Output logs for run=2026-10-19_14-20-02-test_yes_daleslaw_no_refractory_period_no_clipping, seed=3:
+
+Floating point flushing is set to True
+Using device: cuda
+
+
+---------------
+Now testing net
+Using neuron class <class 'thesis_code.network_components.layers.recurrent_layers.StandardRecurrentLayer'>
+Test Accuracy before training is: 0.05997474739948908
+
+
+
+Now evaluating epoch 0:
+
+
+0/63 [00:03<?, ?it/s]           
+loss=3.00, acc=6.25%, time_elapsed=3.2s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+1/63 [00:07<03:20,  3.23s/it] ▏         
+loss=3.03, acc=4.69%, time_elapsed=7.2s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+2/63 [00:10<03:45,  3.70s/it] ▎         
+loss=3.01, acc=4.69%, time_elapsed=11.0s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+3/63 [00:15<03:43,  3.73s/it] ▍         
+loss=3.00, acc=7.03%, time_elapsed=15.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+4/63 [00:19<03:47,  3.86s/it] ▋         
+loss=3.02, acc=4.69%, time_elapsed=19.3s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+5/63 [00:23<03:52,  4.01s/it] ▊         
+loss=3.05, acc=4.69%, time_elapsed=23.3s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+6/63 [00:27<03:48,  4.01s/it] ▉         
+loss=3.25, acc=3.91%, time_elapsed=27.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+7/63 [00:31<03:45,  4.02s/it] █         
+loss=3.02, acc=2.34%, time_elapsed=31.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+8/63 [00:34<03:36,  3.93s/it] █▎        
+loss=2.99, acc=7.03%, time_elapsed=34.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+9/63 [00:38<03:29,  3.88s/it] █▍        
+loss=2.99, acc=6.25%, time_elapsed=39.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+10/63 [00:42<03:29,  3.95s/it] █▌        
+loss=2.98, acc=8.59%, time_elapsed=42.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+11/63 [00:46<03:22,  3.90s/it] █▋        
+loss=2.99, acc=4.69%, time_elapsed=46.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+12/63 [00:50<03:17,  3.88s/it] █▉        
+loss=2.97, acc=7.03%, time_elapsed=50.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+13/63 [00:54<03:13,  3.88s/it] ██        
+loss=2.97, acc=6.25%, time_elapsed=54.8s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+14/63 [00:59<03:17,  4.02s/it] ██▏       
+loss=2.98, acc=4.69%, time_elapsed=59.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+15/63 [01:03<03:19,  4.16s/it] ██▍       
+loss=2.97, acc=6.25%, time_elapsed=63.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+16/63 [01:07<03:10,  4.05s/it] ██▌       
+loss=3.00, acc=2.34%, time_elapsed=67.7s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+17/63 [01:11<03:14,  4.22s/it] ██▋       
+loss=2.97, acc=6.25%, time_elapsed=71.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+18/63 [01:14<03:03,  4.09s/it] ██▊       
+loss=2.97, acc=3.91%, time_elapsed=74.2s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+19/63 [01:16<02:41,  3.67s/it] ███       
+loss=2.99, acc=4.69%, time_elapsed=76.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+20/63 [01:19<02:25,  3.39s/it] ███▏      
+loss=2.96, acc=7.03%, time_elapsed=79.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+21/63 [01:22<02:11,  3.14s/it] ███▎      
+loss=2.97, acc=8.59%, time_elapsed=82.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+22/63 [01:24<02:01,  2.96s/it] ███▍      
+loss=2.97, acc=9.38%, time_elapsed=84.8s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+23/63 [01:27<01:56,  2.92s/it] ███▋      
+loss=2.95, acc=10.16%, time_elapsed=87.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+24/63 [01:29<01:49,  2.81s/it] ███▊      
+loss=2.96, acc=7.81%, time_elapsed=89.9s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+25/63 [01:32<01:43,  2.73s/it] ███▉      
+loss=2.97, acc=10.16%, time_elapsed=92.5s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+26/63 [01:35<01:39,  2.69s/it] ████▏     
+loss=2.98, acc=9.38%, time_elapsed=95.1s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+27/63 [01:37<01:35,  2.64s/it] ████▎     
+loss=2.92, acc=6.25%, time_elapsed=97.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+28/63 [01:40<01:32,  2.63s/it] ████▍     
+loss=2.95, acc=5.47%, time_elapsed=100.2s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+29/63 [01:42<01:28,  2.60s/it] ████▌     
+loss=2.91, acc=7.81%, time_elapsed=102.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+30/63 [01:45<01:25,  2.59s/it] ████▊     
+loss=3.01, acc=4.69%, time_elapsed=105.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+31/63 [01:47<01:23,  2.60s/it] ████▉     
+loss=2.92, acc=9.38%, time_elapsed=107.8s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+32/63 [01:50<01:18,  2.55s/it] █████     
+loss=2.93, acc=6.25%, time_elapsed=110.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+33/63 [01:52<01:16,  2.55s/it] █████▏    
+loss=2.98, acc=3.91%, time_elapsed=112.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+34/63 [01:55<01:13,  2.52s/it] █████▍    
+loss=2.96, acc=10.94%, time_elapsed=115.2s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+35/63 [01:57<01:09,  2.47s/it] █████▌    
+loss=2.97, acc=6.25%, time_elapsed=117.8s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+36/63 [02:00<01:08,  2.52s/it] █████▋    
+loss=2.95, acc=10.94%, time_elapsed=120.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+37/63 [02:02<01:05,  2.54s/it] █████▊    
+loss=2.93, acc=9.38%, time_elapsed=122.9s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+38/63 [02:05<01:03,  2.53s/it] ██████    
+loss=2.96, acc=7.03%, time_elapsed=125.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+39/63 [02:08<01:01,  2.56s/it] ██████▏   
+loss=2.93, acc=3.91%, time_elapsed=128.2s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+40/63 [02:10<00:59,  2.59s/it] ██████▎   
+loss=2.95, acc=7.03%, time_elapsed=131.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+41/63 [02:13<00:58,  2.65s/it] ██████▌   
+loss=2.95, acc=10.94%, time_elapsed=133.5s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+42/63 [02:16<00:54,  2.61s/it] ██████▋   
+loss=2.93, acc=12.50%, time_elapsed=136.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+43/63 [02:18<00:52,  2.62s/it] ██████▊   
+loss=2.92, acc=7.81%, time_elapsed=138.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+44/63 [02:21<00:50,  2.65s/it] ██████▉   
+loss=2.93, acc=7.03%, time_elapsed=141.6s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+45/63 [02:24<00:48,  2.67s/it] ███████▏  
+loss=2.95, acc=6.25%, time_elapsed=144.1s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+46/63 [02:26<00:44,  2.61s/it] ███████▎  
+loss=2.87, acc=17.97%, time_elapsed=146.6s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+47/63 [02:29<00:41,  2.58s/it] ███████▍  
+loss=2.90, acc=17.97%, time_elapsed=149.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+48/63 [02:31<00:38,  2.55s/it] ███████▌  
+loss=2.91, acc=15.62%, time_elapsed=151.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+49/63 [02:34<00:36,  2.64s/it] ███████▊  
+loss=2.96, acc=14.84%, time_elapsed=154.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+50/63 [02:37<00:34,  2.64s/it] ███████▉  
+loss=2.92, acc=12.50%, time_elapsed=157.2s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+51/63 [02:39<00:31,  2.65s/it] ████████  
+loss=2.90, acc=7.81%, time_elapsed=159.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+52/63 [02:42<00:28,  2.61s/it] ████████▎ 
+loss=2.91, acc=10.94%, time_elapsed=162.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+53/63 [02:45<00:26,  2.66s/it] ████████▍ 
+loss=2.92, acc=10.94%, time_elapsed=165.1s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+54/63 [02:47<00:23,  2.63s/it] ████████▌ 
+loss=2.95, acc=5.47%, time_elapsed=167.7s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+55/63 [02:50<00:20,  2.62s/it] ████████▋ 
+loss=2.93, acc=5.47%, time_elapsed=170.2s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+56/63 [02:52<00:18,  2.60s/it] ████████▉ 
+loss=2.93, acc=6.25%, time_elapsed=172.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+57/63 [02:55<00:15,  2.62s/it] █████████ 
+loss=2.88, acc=18.75%, time_elapsed=175.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+58/63 [02:58<00:13,  2.64s/it] █████████▏
+loss=2.93, acc=10.16%, time_elapsed=178.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+59/63 [03:01<00:10,  2.75s/it] █████████▎
+loss=2.97, acc=6.25%, time_elapsed=181.2s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+60/63 [03:03<00:08,  2.72s/it] █████████▌
+loss=2.94, acc=11.72%, time_elapsed=184.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+61/63 [03:06<00:05,  2.73s/it] █████████▋
+loss=2.93, acc=6.25%, time_elapsed=186.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+62/63 [03:09<00:02,  2.77s/it] █████████▊
+loss=2.88, acc=10.94%, time_elapsed=189.9s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+
+
+
+Now evaluating epoch 1:
+
+
+0/63 [00:02<?, ?it/s]           
+loss=2.90, acc=13.28%, time_elapsed=2.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+1/63 [00:05<02:55,  2.83s/it] ▏         
+loss=2.89, acc=12.50%, time_elapsed=5.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+2/63 [00:08<02:47,  2.75s/it] ▎         
+loss=2.91, acc=8.59%, time_elapsed=8.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+3/63 [00:11<02:46,  2.77s/it] ▍         
+loss=2.87, acc=17.19%, time_elapsed=11.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+4/63 [00:13<02:43,  2.76s/it] ▋         
+loss=2.90, acc=10.94%, time_elapsed=13.8s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+5/63 [00:16<02:40,  2.78s/it] ▊         
+loss=2.88, acc=11.72%, time_elapsed=16.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+6/63 [00:19<02:40,  2.82s/it] ▉         
+loss=2.88, acc=12.50%, time_elapsed=19.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+7/63 [00:22<02:36,  2.80s/it] █         
+loss=2.87, acc=15.62%, time_elapsed=22.2s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+8/63 [00:24<02:31,  2.76s/it] █▎        
+loss=2.91, acc=8.59%, time_elapsed=24.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+9/63 [00:27<02:28,  2.75s/it] █▍        
+loss=2.89, acc=8.59%, time_elapsed=27.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+10/63 [00:30<02:26,  2.77s/it] █▌        
+loss=2.88, acc=15.62%, time_elapsed=30.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+11/63 [00:33<02:21,  2.71s/it] █▋        
+loss=2.85, acc=14.06%, time_elapsed=33.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+12/63 [00:35<02:19,  2.74s/it] █▉        
+loss=2.88, acc=8.59%, time_elapsed=35.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+13/63 [00:38<02:14,  2.69s/it] ██        
+loss=2.90, acc=10.16%, time_elapsed=38.4s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+14/63 [00:40<02:11,  2.69s/it] ██▏       
+loss=2.91, acc=7.03%, time_elapsed=40.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+15/63 [00:43<02:07,  2.65s/it] ██▍       
+loss=2.86, acc=10.94%, time_elapsed=43.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+16/63 [00:46<02:01,  2.59s/it] ██▌       
+loss=2.90, acc=10.94%, time_elapsed=46.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+17/63 [00:48<02:00,  2.61s/it] ██▋       
+loss=2.85, acc=12.50%, time_elapsed=48.7s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+18/63 [00:51<01:59,  2.65s/it] ██▊       
+loss=2.87, acc=10.16%, time_elapsed=51.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+19/63 [00:54<01:57,  2.67s/it] ███       
+loss=2.88, acc=18.75%, time_elapsed=54.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+20/63 [00:57<02:00,  2.80s/it] ███▏      
+loss=2.88, acc=17.19%, time_elapsed=57.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+21/63 [00:59<01:55,  2.76s/it] ███▎      
+loss=2.88, acc=12.50%, time_elapsed=59.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+22/63 [01:02<01:52,  2.74s/it] ███▍      
+loss=2.85, acc=17.19%, time_elapsed=62.4s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+23/63 [01:05<01:46,  2.66s/it] ███▋      
+loss=2.85, acc=16.41%, time_elapsed=65.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+24/63 [01:07<01:47,  2.75s/it] ███▊      
+loss=2.85, acc=16.41%, time_elapsed=67.8s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+25/63 [01:10<01:40,  2.65s/it] ███▉      
+loss=2.82, acc=18.75%, time_elapsed=70.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+26/63 [01:13<01:38,  2.67s/it] ████▏     
+loss=2.81, acc=14.84%, time_elapsed=73.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+27/63 [01:15<01:35,  2.64s/it] ████▎     
+loss=2.82, acc=13.28%, time_elapsed=75.6s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+28/63 [01:18<01:31,  2.61s/it] ████▍     
+loss=2.86, acc=13.28%, time_elapsed=78.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+29/63 [01:21<01:30,  2.66s/it] ████▌     
+loss=2.82, acc=15.62%, time_elapsed=81.2s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+30/63 [01:24<01:29,  2.72s/it] ████▊     
+loss=2.86, acc=17.97%, time_elapsed=84.0s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+31/63 [01:26<01:27,  2.74s/it] ████▉     
+loss=2.83, acc=11.72%, time_elapsed=86.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+32/63 [01:29<01:24,  2.73s/it] █████     
+loss=2.80, acc=17.97%, time_elapsed=89.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+33/63 [01:32<01:19,  2.67s/it] █████▏    
+loss=2.85, acc=12.50%, time_elapsed=92.2s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+34/63 [01:35<01:19,  2.75s/it] █████▍    
+loss=2.85, acc=17.97%, time_elapsed=95.1s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+35/63 [01:37<01:18,  2.79s/it] █████▌    
+loss=2.81, acc=25.00%, time_elapsed=97.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+36/63 [01:40<01:13,  2.72s/it] █████▋    
+loss=2.86, acc=14.06%, time_elapsed=100.4s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+37/63 [01:43<01:11,  2.74s/it] █████▊    
+loss=2.82, acc=12.50%, time_elapsed=103.2s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+38/63 [01:45<01:08,  2.76s/it] ██████    
+loss=2.78, acc=15.62%, time_elapsed=105.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+39/63 [01:48<01:04,  2.69s/it] ██████▏   
+loss=2.79, acc=17.19%, time_elapsed=108.4s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+40/63 [01:51<01:01,  2.69s/it] ██████▎   
+loss=2.76, acc=21.09%, time_elapsed=111.2s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+41/63 [01:53<00:59,  2.72s/it] ██████▌   
+loss=2.77, acc=18.75%, time_elapsed=113.8s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+42/63 [01:56<00:56,  2.67s/it] ██████▋   
+loss=2.87, acc=15.62%, time_elapsed=116.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+43/63 [01:59<00:54,  2.71s/it] ██████▊   
+loss=2.84, acc=12.50%, time_elapsed=119.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+44/63 [02:02<00:52,  2.74s/it] ██████▉   
+loss=2.80, acc=17.97%, time_elapsed=122.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+45/63 [02:05<00:49,  2.77s/it] ███████▏  
+loss=2.84, acc=10.94%, time_elapsed=125.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+46/63 [02:07<00:47,  2.77s/it] ███████▎  
+loss=2.75, acc=20.31%, time_elapsed=127.8s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+47/63 [02:10<00:44,  2.76s/it] ███████▍  
+loss=2.81, acc=14.06%, time_elapsed=130.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+48/63 [02:12<00:40,  2.71s/it] ███████▌  
+loss=2.75, acc=15.62%, time_elapsed=132.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+49/63 [02:15<00:37,  2.67s/it] ███████▊  
+loss=2.79, acc=21.88%, time_elapsed=135.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+50/63 [02:18<00:34,  2.66s/it] ███████▉  
+loss=2.80, acc=20.31%, time_elapsed=138.2s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+51/63 [02:20<00:31,  2.66s/it] ████████  
+loss=2.73, acc=19.53%, time_elapsed=140.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+52/63 [02:23<00:28,  2.59s/it] ████████▎ 
+loss=2.77, acc=22.66%, time_elapsed=143.3s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+53/63 [02:25<00:26,  2.61s/it] ████████▍ 
+loss=2.75, acc=18.75%, time_elapsed=145.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+54/63 [02:28<00:23,  2.58s/it] ████████▌ 
+loss=2.73, acc=15.62%, time_elapsed=148.5s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+55/63 [02:31<00:20,  2.61s/it] ████████▋ 
+loss=2.76, acc=22.66%, time_elapsed=151.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+56/63 [02:33<00:18,  2.58s/it] ████████▉ 
+loss=2.76, acc=13.28%, time_elapsed=153.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+57/63 [02:36<00:15,  2.52s/it] █████████ 
+loss=2.83, acc=15.62%, time_elapsed=156.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+58/63 [02:39<00:13,  2.62s/it] █████████▏
+loss=2.75, acc=26.56%, time_elapsed=159.2s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+59/63 [02:41<00:10,  2.72s/it] █████████▎
+loss=2.80, acc=17.97%, time_elapsed=161.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+60/63 [02:44<00:08,  2.69s/it] █████████▌
+loss=2.77, acc=18.75%, time_elapsed=164.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+61/63 [02:47<00:05,  2.68s/it] █████████▋
+loss=2.82, acc=14.84%, time_elapsed=167.2s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+62/63 [02:49<00:02,  2.67s/it] █████████▊
+loss=2.68, acc=28.91%, time_elapsed=169.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+
+
+
+Now evaluating epoch 2:
+
+
+0/63 [00:02<?, ?it/s]           
+loss=2.75, acc=22.66%, time_elapsed=2.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+1/63 [00:05<02:34,  2.50s/it] ▏         
+loss=2.68, acc=32.81%, time_elapsed=5.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+2/63 [00:07<02:35,  2.56s/it] ▎         
+loss=2.69, acc=22.66%, time_elapsed=7.4s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+3/63 [00:10<02:29,  2.49s/it] ▍         
+loss=2.69, acc=25.78%, time_elapsed=10.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+4/63 [00:12<02:30,  2.55s/it] ▋         
+loss=2.71, acc=23.44%, time_elapsed=12.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+5/63 [00:15<02:25,  2.51s/it] ▊         
+loss=2.74, acc=18.75%, time_elapsed=15.2s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+6/63 [00:17<02:26,  2.56s/it] ▉         
+loss=2.71, acc=21.88%, time_elapsed=17.7s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+7/63 [00:20<02:21,  2.53s/it] █         
+loss=2.73, acc=21.09%, time_elapsed=20.0s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+8/63 [00:22<02:16,  2.48s/it] █▎        
+loss=2.73, acc=20.31%, time_elapsed=22.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+9/63 [00:25<02:18,  2.57s/it] █▍        
+loss=2.64, acc=31.25%, time_elapsed=25.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+10/63 [00:28<02:17,  2.59s/it] █▌        
+loss=2.73, acc=25.78%, time_elapsed=28.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+11/63 [00:30<02:16,  2.62s/it] █▋        
+loss=2.67, acc=26.56%, time_elapsed=30.5s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+12/63 [00:33<02:10,  2.55s/it] █▉        
+loss=2.67, acc=32.03%, time_elapsed=33.1s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+13/63 [00:35<02:07,  2.55s/it] ██        
+loss=2.72, acc=29.69%, time_elapsed=35.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+14/63 [00:38<02:05,  2.56s/it] ██▏       
+loss=2.76, acc=20.31%, time_elapsed=38.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+15/63 [00:40<02:01,  2.53s/it] ██▍       
+loss=2.74, acc=21.09%, time_elapsed=40.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+16/63 [00:43<02:00,  2.56s/it] ██▌       
+loss=2.68, acc=23.44%, time_elapsed=43.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+17/63 [00:46<02:03,  2.67s/it] ██▋       
+loss=2.70, acc=25.00%, time_elapsed=46.1s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+18/63 [00:48<01:57,  2.60s/it] ██▊       
+loss=2.65, acc=25.78%, time_elapsed=48.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+19/63 [00:51<01:55,  2.63s/it] ███       
+loss=2.69, acc=23.44%, time_elapsed=51.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+20/63 [00:53<01:50,  2.58s/it] ███▏      
+loss=2.63, acc=25.78%, time_elapsed=53.6s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+21/63 [00:56<01:45,  2.50s/it] ███▎      
+loss=2.63, acc=27.34%, time_elapsed=56.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+22/63 [00:58<01:43,  2.52s/it] ███▍      
+loss=2.63, acc=31.25%, time_elapsed=58.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+23/63 [01:01<01:40,  2.51s/it] ███▋      
+loss=2.65, acc=17.97%, time_elapsed=61.0s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+24/63 [01:03<01:36,  2.48s/it] ███▊      
+loss=2.66, acc=26.56%, time_elapsed=63.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+25/63 [01:06<01:35,  2.50s/it] ███▉      
+loss=2.70, acc=21.88%, time_elapsed=66.2s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+26/63 [01:08<01:33,  2.53s/it] ████▏     
+loss=2.69, acc=20.31%, time_elapsed=68.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+27/63 [01:11<01:30,  2.51s/it] ████▎     
+loss=2.69, acc=19.53%, time_elapsed=71.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+28/63 [01:13<01:29,  2.55s/it] ████▍     
+loss=2.66, acc=22.66%, time_elapsed=73.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+29/63 [01:16<01:26,  2.56s/it] ████▌     
+loss=2.65, acc=31.25%, time_elapsed=76.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+30/63 [01:18<01:25,  2.59s/it] ████▊     
+loss=2.62, acc=26.56%, time_elapsed=78.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+31/63 [01:21<01:20,  2.52s/it] ████▉     
+loss=2.66, acc=20.31%, time_elapsed=81.4s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+32/63 [01:23<01:17,  2.50s/it] █████     
+loss=2.65, acc=24.22%, time_elapsed=83.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+33/63 [01:26<01:15,  2.52s/it] █████▏    
+loss=2.71, acc=14.06%, time_elapsed=86.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+34/63 [01:29<01:14,  2.56s/it] █████▍    
+loss=2.66, acc=24.22%, time_elapsed=89.3s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+35/63 [01:31<01:12,  2.60s/it] █████▌    
+loss=2.58, acc=29.69%, time_elapsed=92.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+36/63 [01:34<01:11,  2.65s/it] █████▋    
+loss=2.55, acc=30.47%, time_elapsed=94.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+37/63 [01:37<01:07,  2.61s/it] █████▊    
+loss=2.60, acc=25.78%, time_elapsed=97.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+38/63 [01:40<01:06,  2.64s/it] ██████    
+loss=2.67, acc=25.00%, time_elapsed=100.1s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+39/63 [01:42<01:04,  2.70s/it] ██████▏   
+loss=2.70, acc=24.22%, time_elapsed=103.0s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+40/63 [01:45<01:03,  2.75s/it] ██████▎   
+loss=2.57, acc=25.00%, time_elapsed=105.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+41/63 [01:48<01:00,  2.75s/it] ██████▌   
+loss=2.63, acc=28.12%, time_elapsed=108.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+42/63 [01:51<00:58,  2.79s/it] ██████▋   
+loss=2.66, acc=25.00%, time_elapsed=111.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+43/63 [01:54<00:55,  2.75s/it] ██████▊   
+loss=2.56, acc=31.25%, time_elapsed=114.2s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+44/63 [01:56<00:53,  2.80s/it] ██████▉   
+loss=2.61, acc=23.44%, time_elapsed=116.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+45/63 [01:59<00:50,  2.79s/it] ███████▏  
+loss=2.60, acc=25.00%, time_elapsed=119.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+46/63 [02:02<00:47,  2.77s/it] ███████▎  
+loss=2.53, acc=27.34%, time_elapsed=122.2s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+47/63 [02:04<00:43,  2.71s/it] ███████▍  
+loss=2.52, acc=32.03%, time_elapsed=124.8s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+48/63 [02:07<00:40,  2.67s/it] ███████▌  
+loss=2.56, acc=22.66%, time_elapsed=127.5s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+49/63 [02:09<00:37,  2.66s/it] ███████▊  
+loss=2.56, acc=21.09%, time_elapsed=130.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+50/63 [02:13<00:33,  2.61s/it] ███████▉  
+loss=2.76, acc=18.75%, time_elapsed=133.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+51/63 [02:15<00:32,  2.75s/it] ████████  
+loss=2.55, acc=27.34%, time_elapsed=135.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+52/63 [02:18<00:29,  2.71s/it] ████████▎ 
+loss=2.59, acc=25.78%, time_elapsed=138.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+53/63 [02:20<00:26,  2.62s/it] ████████▍ 
+loss=2.51, acc=25.00%, time_elapsed=140.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+54/63 [02:23<00:23,  2.61s/it] ████████▌ 
+loss=2.62, acc=21.09%, time_elapsed=143.3s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+55/63 [02:26<00:21,  2.64s/it] ████████▋ 
+loss=2.59, acc=30.47%, time_elapsed=146.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+56/63 [02:29<00:19,  2.78s/it] ████████▉ 
+loss=2.48, acc=32.03%, time_elapsed=149.2s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+57/63 [02:31<00:16,  2.76s/it] █████████ 
+loss=2.58, acc=35.94%, time_elapsed=151.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+58/63 [02:34<00:13,  2.75s/it] █████████▏
+loss=2.62, acc=28.91%, time_elapsed=154.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+59/63 [02:37<00:11,  2.80s/it] █████████▎
+loss=2.56, acc=27.34%, time_elapsed=157.7s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+60/63 [02:40<00:08,  2.82s/it] █████████▌
+loss=2.58, acc=25.78%, time_elapsed=160.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+61/63 [02:42<00:05,  2.77s/it] █████████▋
+loss=2.66, acc=22.66%, time_elapsed=162.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+62/63 [02:45<00:02,  2.70s/it] █████████▊
+loss=2.55, acc=23.44%, time_elapsed=165.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+
+
+
+Now evaluating epoch 3:
+
+
+0/63 [00:02<?, ?it/s]           
+loss=2.59, acc=20.31%, time_elapsed=2.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+1/63 [00:05<02:35,  2.51s/it] ▏         
+loss=2.54, acc=25.78%, time_elapsed=5.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+2/63 [00:07<02:35,  2.54s/it] ▎         
+loss=2.53, acc=32.81%, time_elapsed=7.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+3/63 [00:10<02:32,  2.55s/it] ▍         
+loss=2.61, acc=25.00%, time_elapsed=10.0s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+4/63 [00:12<02:27,  2.51s/it] ▋         
+loss=2.57, acc=27.34%, time_elapsed=12.4s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+5/63 [00:15<02:23,  2.47s/it] ▊         
+loss=2.46, acc=30.47%, time_elapsed=15.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+6/63 [00:17<02:26,  2.58s/it] ▉         
+loss=2.49, acc=35.16%, time_elapsed=17.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+7/63 [00:20<02:26,  2.62s/it] █         
+loss=2.55, acc=26.56%, time_elapsed=20.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+8/63 [00:22<02:24,  2.62s/it] █▎        
+loss=2.53, acc=25.00%, time_elapsed=23.0s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+9/63 [00:25<02:18,  2.57s/it] █▍        
+loss=2.49, acc=32.03%, time_elapsed=25.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+10/63 [00:28<02:16,  2.58s/it] █▌        
+loss=2.53, acc=28.12%, time_elapsed=28.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+11/63 [00:30<02:16,  2.63s/it] █▋        
+loss=2.45, acc=32.03%, time_elapsed=30.7s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+12/63 [00:33<02:09,  2.55s/it] █▉        
+loss=2.70, acc=27.34%, time_elapsed=33.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+13/63 [00:35<02:10,  2.61s/it] ██        
+loss=2.54, acc=26.56%, time_elapsed=35.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+14/63 [00:38<02:04,  2.54s/it] ██▏       
+loss=2.52, acc=33.59%, time_elapsed=38.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+15/63 [00:41<02:03,  2.58s/it] ██▍       
+loss=2.49, acc=34.38%, time_elapsed=41.1s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+16/63 [00:43<02:00,  2.57s/it] ██▌       
+loss=2.41, acc=35.94%, time_elapsed=43.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+17/63 [00:46<01:59,  2.59s/it] ██▋       
+loss=2.40, acc=37.50%, time_elapsed=46.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+18/63 [00:48<01:56,  2.59s/it] ██▊       
+loss=2.52, acc=27.34%, time_elapsed=48.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+19/63 [00:51<01:54,  2.60s/it] ███       
+loss=2.56, acc=19.53%, time_elapsed=51.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+20/63 [00:54<01:55,  2.69s/it] ███▏      
+loss=2.57, acc=17.19%, time_elapsed=54.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+21/63 [00:57<01:53,  2.70s/it] ███▎      
+loss=2.63, acc=21.88%, time_elapsed=57.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+22/63 [00:59<01:48,  2.65s/it] ███▍      
+loss=2.47, acc=29.69%, time_elapsed=59.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+23/63 [01:02<01:45,  2.63s/it] ███▋      
+loss=2.60, acc=29.69%, time_elapsed=62.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+24/63 [01:05<01:47,  2.76s/it] ███▊      
+loss=2.56, acc=25.00%, time_elapsed=65.4s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+25/63 [01:08<01:44,  2.75s/it] ███▉      
+loss=2.57, acc=29.69%, time_elapsed=68.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+26/63 [01:10<01:40,  2.71s/it] ████▏     
+loss=2.56, acc=25.78%, time_elapsed=70.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+27/63 [01:13<01:36,  2.68s/it] ████▎     
+loss=2.56, acc=27.34%, time_elapsed=73.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+28/63 [01:15<01:32,  2.66s/it] ████▍     
+loss=2.54, acc=26.56%, time_elapsed=75.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+29/63 [01:18<01:28,  2.60s/it] ████▌     
+loss=2.48, acc=25.00%, time_elapsed=78.2s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+30/63 [01:20<01:24,  2.57s/it] ████▊     
+loss=2.58, acc=22.66%, time_elapsed=80.8s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+31/63 [01:23<01:22,  2.56s/it] ████▉     
+loss=2.55, acc=28.12%, time_elapsed=83.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+32/63 [01:25<01:19,  2.57s/it] █████     
+loss=2.56, acc=31.25%, time_elapsed=85.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+33/63 [01:28<01:17,  2.57s/it] █████▏    
+loss=2.55, acc=25.00%, time_elapsed=88.4s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+34/63 [01:31<01:13,  2.53s/it] █████▍    
+loss=2.53, acc=31.25%, time_elapsed=91.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+35/63 [01:33<01:11,  2.57s/it] █████▌    
+loss=2.59, acc=30.47%, time_elapsed=93.7s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+36/63 [01:36<01:09,  2.58s/it] █████▋    
+loss=2.53, acc=32.81%, time_elapsed=96.1s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+37/63 [01:38<01:05,  2.54s/it] █████▊    
+loss=2.46, acc=29.69%, time_elapsed=98.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+38/63 [01:41<01:04,  2.58s/it] ██████    
+loss=2.56, acc=29.69%, time_elapsed=101.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+39/63 [01:43<01:02,  2.62s/it] ██████▏   
+loss=2.48, acc=31.25%, time_elapsed=103.9s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+40/63 [01:46<00:58,  2.55s/it] ██████▎   
+loss=2.50, acc=34.38%, time_elapsed=106.4s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+41/63 [01:48<00:56,  2.56s/it] ██████▌   
+loss=2.42, acc=35.16%, time_elapsed=108.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+42/63 [01:51<00:52,  2.49s/it] ██████▋   
+loss=2.42, acc=39.06%, time_elapsed=111.4s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+43/63 [01:53<00:50,  2.53s/it] ██████▊   
+loss=2.53, acc=32.81%, time_elapsed=113.9s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+44/63 [01:56<00:48,  2.53s/it] ██████▉   
+loss=2.37, acc=33.59%, time_elapsed=116.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+45/63 [01:58<00:44,  2.48s/it] ███████▏  
+loss=2.40, acc=30.47%, time_elapsed=118.8s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+46/63 [02:01<00:42,  2.49s/it] ███████▎  
+loss=2.40, acc=31.25%, time_elapsed=121.2s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+47/63 [02:03<00:39,  2.47s/it] ███████▍  
+loss=2.40, acc=35.94%, time_elapsed=124.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+48/63 [02:06<00:38,  2.56s/it] ███████▌  
+loss=2.40, acc=30.47%, time_elapsed=126.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+49/63 [02:09<00:35,  2.55s/it] ███████▊  
+loss=2.40, acc=33.59%, time_elapsed=129.1s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+50/63 [02:11<00:33,  2.57s/it] ███████▉  
+loss=2.46, acc=20.31%, time_elapsed=131.7s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+51/63 [02:14<00:30,  2.55s/it] ████████  
+loss=2.39, acc=34.38%, time_elapsed=134.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+52/63 [02:16<00:28,  2.62s/it] ████████▎ 
+loss=2.42, acc=35.16%, time_elapsed=136.9s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+53/63 [02:19<00:25,  2.59s/it] ████████▍ 
+loss=2.42, acc=34.38%, time_elapsed=139.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+54/63 [02:22<00:23,  2.66s/it] ████████▌ 
+loss=2.40, acc=33.59%, time_elapsed=142.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+55/63 [02:24<00:21,  2.68s/it] ████████▋ 
+loss=2.37, acc=31.25%, time_elapsed=144.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+56/63 [02:27<00:18,  2.60s/it] ████████▉ 
+loss=2.47, acc=28.91%, time_elapsed=147.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+57/63 [02:30<00:15,  2.63s/it] █████████ 
+loss=2.43, acc=27.34%, time_elapsed=150.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+58/63 [02:33<00:12,  2.58s/it] █████████▏
+loss=2.45, acc=38.28%, time_elapsed=153.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+59/63 [02:35<00:10,  2.72s/it] █████████▎
+loss=2.34, acc=39.84%, time_elapsed=155.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+60/63 [02:38<00:08,  2.69s/it] █████████▌
+loss=2.40, acc=37.50%, time_elapsed=158.3s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+61/63 [02:40<00:05,  2.66s/it] █████████▋
+loss=2.44, acc=31.25%, time_elapsed=160.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+62/63 [02:43<00:02,  2.64s/it] █████████▊
+loss=2.44, acc=30.47%, time_elapsed=163.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+
+
+
+Now evaluating epoch 4:
+
+
+0/63 [00:02<?, ?it/s]           
+loss=2.36, acc=39.84%, time_elapsed=2.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+1/63 [00:05<02:49,  2.74s/it] ▏         
+loss=2.36, acc=42.97%, time_elapsed=5.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+2/63 [00:08<02:47,  2.74s/it] ▎         
+loss=2.39, acc=39.06%, time_elapsed=8.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+3/63 [00:11<02:54,  2.91s/it] ▍         
+loss=2.31, acc=39.06%, time_elapsed=11.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+4/63 [00:13<02:47,  2.83s/it] ▋         
+loss=2.33, acc=32.81%, time_elapsed=13.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+5/63 [00:16<02:37,  2.72s/it] ▊         
+loss=2.44, acc=32.03%, time_elapsed=16.3s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+6/63 [00:18<02:31,  2.66s/it] ▉         
+loss=2.34, acc=35.16%, time_elapsed=18.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+7/63 [00:20<02:21,  2.53s/it] █         
+loss=2.34, acc=31.25%, time_elapsed=21.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+8/63 [00:23<02:16,  2.49s/it] █▎        
+loss=2.36, acc=36.72%, time_elapsed=23.5s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+9/63 [00:26<02:15,  2.51s/it] █▍        
+loss=2.35, acc=32.03%, time_elapsed=26.2s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+10/63 [00:28<02:15,  2.55s/it] █▌        
+loss=2.33, acc=37.50%, time_elapsed=28.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+11/63 [00:31<02:13,  2.57s/it] █▋        
+loss=2.32, acc=37.50%, time_elapsed=31.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+12/63 [00:34<02:14,  2.63s/it] █▉        
+loss=2.38, acc=28.12%, time_elapsed=34.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+13/63 [00:37<02:15,  2.71s/it] ██        
+loss=2.38, acc=32.81%, time_elapsed=37.2s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+14/63 [00:40<02:13,  2.73s/it] ██▏       
+loss=2.39, acc=32.03%, time_elapsed=40.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+15/63 [00:42<02:12,  2.76s/it] ██▍       
+loss=2.30, acc=42.19%, time_elapsed=42.6s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+16/63 [00:45<02:07,  2.72s/it] ██▌       
+loss=2.33, acc=39.84%, time_elapsed=45.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+17/63 [00:47<02:05,  2.74s/it] ██▋       
+loss=2.44, acc=28.91%, time_elapsed=48.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+18/63 [00:50<01:59,  2.66s/it] ██▊       
+loss=2.30, acc=39.84%, time_elapsed=50.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+19/63 [00:53<01:57,  2.67s/it] ███       
+loss=2.40, acc=35.16%, time_elapsed=53.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+20/63 [00:55<01:52,  2.61s/it] ███▏      
+loss=2.30, acc=36.72%, time_elapsed=55.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+21/63 [00:58<01:52,  2.67s/it] ███▎      
+loss=2.32, acc=33.59%, time_elapsed=58.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+22/63 [01:01<01:47,  2.62s/it] ███▍      
+loss=2.28, acc=39.84%, time_elapsed=61.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+23/63 [01:03<01:45,  2.63s/it] ███▋      
+loss=2.26, acc=38.28%, time_elapsed=63.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+24/63 [01:06<01:39,  2.55s/it] ███▊      
+loss=2.37, acc=32.03%, time_elapsed=66.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+25/63 [01:08<01:38,  2.58s/it] ███▉      
+loss=2.64, acc=24.22%, time_elapsed=69.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+26/63 [01:11<01:39,  2.68s/it] ████▏     
+loss=2.29, acc=41.41%, time_elapsed=71.5s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+27/63 [01:13<01:34,  2.61s/it] ████▎     
+loss=2.25, acc=37.50%, time_elapsed=73.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+28/63 [01:16<01:29,  2.55s/it] ████▍     
+loss=2.38, acc=33.59%, time_elapsed=76.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+29/63 [01:19<01:31,  2.68s/it] ████▌     
+loss=2.40, acc=35.16%, time_elapsed=79.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+30/63 [01:22<01:28,  2.68s/it] ████▊     
+loss=2.34, acc=35.16%, time_elapsed=82.1s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+31/63 [01:24<01:25,  2.66s/it] ████▉     
+loss=2.31, acc=37.50%, time_elapsed=84.6s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+32/63 [01:27<01:20,  2.61s/it] █████     
+loss=2.35, acc=41.41%, time_elapsed=87.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+33/63 [01:29<01:19,  2.64s/it] █████▏    
+loss=2.21, acc=44.53%, time_elapsed=89.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+34/63 [01:32<01:13,  2.54s/it] █████▍    
+loss=2.42, acc=28.12%, time_elapsed=92.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+35/63 [01:34<01:11,  2.57s/it] █████▌    
+loss=2.31, acc=32.03%, time_elapsed=94.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+36/63 [01:37<01:10,  2.60s/it] █████▋    
+loss=2.32, acc=34.38%, time_elapsed=97.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+37/63 [01:40<01:07,  2.60s/it] █████▊    
+loss=2.20, acc=39.06%, time_elapsed=100.1s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+38/63 [01:42<01:04,  2.59s/it] ██████    
+loss=2.24, acc=34.38%, time_elapsed=102.5s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+39/63 [01:45<01:00,  2.52s/it] ██████▏   
+loss=2.33, acc=31.25%, time_elapsed=105.2s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+40/63 [01:47<00:59,  2.61s/it] ██████▎   
+loss=2.28, acc=38.28%, time_elapsed=107.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+41/63 [01:50<00:56,  2.58s/it] ██████▌   
+loss=2.21, acc=37.50%, time_elapsed=110.1s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+42/63 [01:52<00:52,  2.49s/it] ██████▋   
+loss=2.31, acc=34.38%, time_elapsed=112.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+43/63 [01:55<00:49,  2.48s/it] ██████▊   
+loss=2.37, acc=32.03%, time_elapsed=115.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+44/63 [01:57<00:47,  2.52s/it] ██████▉   
+loss=2.32, acc=37.50%, time_elapsed=117.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+45/63 [02:00<00:45,  2.54s/it] ███████▏  
+loss=2.37, acc=35.16%, time_elapsed=120.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+46/63 [02:02<00:43,  2.56s/it] ███████▎  
+loss=2.23, acc=36.72%, time_elapsed=122.7s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+47/63 [02:05<00:40,  2.50s/it] ███████▍  
+loss=2.31, acc=41.41%, time_elapsed=125.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+48/63 [02:08<00:38,  2.54s/it] ███████▌  
+loss=2.35, acc=35.16%, time_elapsed=128.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+49/63 [02:10<00:36,  2.59s/it] ███████▊  
+loss=2.24, acc=32.03%, time_elapsed=130.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+50/63 [02:13<00:34,  2.67s/it] ███████▉  
+loss=2.28, acc=39.06%, time_elapsed=133.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+51/63 [02:15<00:31,  2.66s/it] ████████  
+loss=2.20, acc=43.75%, time_elapsed=136.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+52/63 [02:18<00:28,  2.60s/it] ████████▎ 
+loss=2.30, acc=32.81%, time_elapsed=138.6s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+53/63 [02:21<00:25,  2.59s/it] ████████▍ 
+loss=2.25, acc=41.41%, time_elapsed=141.0s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+54/63 [02:23<00:22,  2.55s/it] ████████▌ 
+loss=2.30, acc=39.06%, time_elapsed=143.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+55/63 [02:26<00:20,  2.58s/it] ████████▋ 
+loss=2.19, acc=45.31%, time_elapsed=146.2s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+56/63 [02:28<00:17,  2.57s/it] ████████▉ 
+loss=2.31, acc=32.03%, time_elapsed=148.8s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+57/63 [02:30<00:15,  2.56s/it] █████████ 
+loss=2.14, acc=43.75%, time_elapsed=151.0s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+58/63 [02:33<00:12,  2.45s/it] █████████▏
+loss=2.12, acc=43.75%, time_elapsed=153.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+59/63 [02:36<00:09,  2.48s/it] █████████▎
+loss=2.22, acc=45.31%, time_elapsed=156.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+60/63 [02:38<00:07,  2.49s/it] █████████▌
+loss=2.40, acc=41.41%, time_elapsed=158.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+61/63 [02:40<00:04,  2.47s/it] █████████▋
+loss=2.16, acc=42.19%, time_elapsed=160.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+62/63 [02:43<00:02,  2.39s/it] █████████▊
+loss=2.16, acc=46.09%, time_elapsed=163.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+
+
+
+Now evaluating epoch 5:
+
+
+0/63 [00:02<?, ?it/s]           
+loss=2.25, acc=46.88%, time_elapsed=2.6s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+1/63 [00:05<02:47,  2.70s/it] ▏         
+loss=2.19, acc=44.53%, time_elapsed=5.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+2/63 [00:07<02:47,  2.75s/it] ▎         
+loss=2.22, acc=46.09%, time_elapsed=7.8s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+3/63 [00:11<02:44,  2.75s/it] ▍         
+loss=2.30, acc=42.97%, time_elapsed=11.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+4/63 [00:13<02:45,  2.81s/it] ▋         
+loss=2.70, acc=39.84%, time_elapsed=13.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+5/63 [00:16<02:42,  2.80s/it] ▊         
+loss=2.18, acc=42.97%, time_elapsed=16.5s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+6/63 [00:19<02:36,  2.75s/it] ▉         
+loss=2.29, acc=37.50%, time_elapsed=19.2s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+7/63 [00:21<02:33,  2.73s/it] █         
+loss=2.26, acc=41.41%, time_elapsed=21.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+8/63 [00:25<02:30,  2.73s/it] █▎        
+loss=2.24, acc=46.88%, time_elapsed=25.1s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+9/63 [00:27<02:35,  2.87s/it] █▍        
+loss=2.12, acc=43.75%, time_elapsed=27.6s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+10/63 [00:30<02:25,  2.75s/it] █▌        
+loss=2.26, acc=39.84%, time_elapsed=30.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+11/63 [00:32<02:21,  2.72s/it] █▋        
+loss=2.16, acc=48.44%, time_elapsed=32.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+12/63 [00:35<02:16,  2.67s/it] █▉        
+loss=2.13, acc=52.34%, time_elapsed=35.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+13/63 [00:38<02:15,  2.70s/it] ██        
+loss=2.17, acc=47.66%, time_elapsed=38.2s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+14/63 [00:40<02:10,  2.67s/it] ██▏       
+loss=2.14, acc=53.91%, time_elapsed=40.7s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+15/63 [00:43<02:05,  2.62s/it] ██▍       
+loss=2.17, acc=47.66%, time_elapsed=43.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+16/63 [00:45<02:03,  2.63s/it] ██▌       
+loss=2.18, acc=39.84%, time_elapsed=45.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+17/63 [00:48<01:58,  2.58s/it] ██▋       
+loss=2.12, acc=46.09%, time_elapsed=48.2s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+18/63 [00:51<01:54,  2.54s/it] ██▊       
+loss=2.16, acc=44.53%, time_elapsed=51.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+19/63 [00:54<01:58,  2.69s/it] ███       
+loss=2.18, acc=46.09%, time_elapsed=54.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+20/63 [00:56<01:57,  2.73s/it] ███▏      
+loss=2.18, acc=40.62%, time_elapsed=56.9s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+21/63 [00:59<01:55,  2.75s/it] ███▎      
+loss=2.10, acc=53.91%, time_elapsed=59.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+22/63 [01:02<01:52,  2.74s/it] ███▍      
+loss=2.15, acc=48.44%, time_elapsed=62.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+23/63 [01:05<01:50,  2.76s/it] ███▋      
+loss=2.05, acc=52.34%, time_elapsed=65.1s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+24/63 [01:07<01:46,  2.73s/it] ███▊      
+loss=2.20, acc=45.31%, time_elapsed=67.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+25/63 [01:10<01:44,  2.75s/it] ███▉      
+loss=2.32, acc=41.41%, time_elapsed=70.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+26/63 [01:13<01:42,  2.76s/it] ████▏     
+loss=2.07, acc=45.31%, time_elapsed=73.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+27/63 [01:16<01:38,  2.73s/it] ████▎     
+loss=2.07, acc=40.62%, time_elapsed=76.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+28/63 [01:18<01:36,  2.75s/it] ████▍     
+loss=2.14, acc=39.84%, time_elapsed=78.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+29/63 [01:21<01:33,  2.74s/it] ████▌     
+loss=2.20, acc=35.16%, time_elapsed=81.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+30/63 [01:24<01:31,  2.78s/it] ████▊     
+loss=2.10, acc=38.28%, time_elapsed=84.4s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+31/63 [01:27<01:28,  2.75s/it] ████▉     
+loss=2.26, acc=38.28%, time_elapsed=87.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+32/63 [01:30<01:27,  2.81s/it] █████     
+loss=2.16, acc=40.62%, time_elapsed=90.1s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+33/63 [01:32<01:24,  2.80s/it] █████▏    
+loss=2.13, acc=45.31%, time_elapsed=92.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+34/63 [01:35<01:20,  2.79s/it] █████▍    
+loss=2.17, acc=42.97%, time_elapsed=95.9s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+35/63 [01:38<01:19,  2.84s/it] █████▌    
+loss=2.15, acc=46.09%, time_elapsed=98.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+36/63 [01:41<01:17,  2.86s/it] █████▋    
+loss=2.05, acc=41.41%, time_elapsed=101.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+37/63 [01:43<01:11,  2.77s/it] █████▊    
+loss=2.13, acc=39.84%, time_elapsed=103.9s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+38/63 [01:46<01:08,  2.72s/it] ██████    
+loss=2.14, acc=40.62%, time_elapsed=106.6s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+39/63 [01:49<01:05,  2.71s/it] ██████▏   
+loss=2.12, acc=44.53%, time_elapsed=109.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+40/63 [01:51<01:02,  2.70s/it] ██████▎   
+loss=2.15, acc=40.62%, time_elapsed=112.0s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+41/63 [01:54<00:59,  2.69s/it] ██████▌   
+loss=2.09, acc=48.44%, time_elapsed=114.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+42/63 [01:57<00:57,  2.73s/it] ██████▋   
+loss=2.24, acc=40.62%, time_elapsed=117.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+43/63 [02:00<00:54,  2.74s/it] ██████▊   
+loss=2.13, acc=41.41%, time_elapsed=120.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+44/63 [02:03<00:52,  2.76s/it] ██████▉   
+loss=2.14, acc=42.19%, time_elapsed=123.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+45/63 [02:05<00:49,  2.75s/it] ███████▏  
+loss=2.07, acc=51.56%, time_elapsed=125.8s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+46/63 [02:08<00:46,  2.73s/it] ███████▎  
+loss=2.10, acc=41.41%, time_elapsed=128.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+47/63 [02:10<00:41,  2.62s/it] ███████▍  
+loss=2.00, acc=42.19%, time_elapsed=130.8s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+48/63 [02:13<00:39,  2.63s/it] ███████▌  
+loss=2.05, acc=42.19%, time_elapsed=133.2s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+49/63 [02:15<00:35,  2.56s/it] ███████▊  
+loss=2.13, acc=42.19%, time_elapsed=135.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+50/63 [02:18<00:33,  2.58s/it] ███████▉  
+loss=1.99, acc=42.19%, time_elapsed=138.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+51/63 [02:20<00:29,  2.50s/it] ████████  
+loss=2.22, acc=29.69%, time_elapsed=140.8s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+52/63 [02:23<00:27,  2.54s/it] ████████▎ 
+loss=2.11, acc=35.94%, time_elapsed=143.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+53/63 [02:25<00:25,  2.55s/it] ████████▍ 
+loss=1.99, acc=39.84%, time_elapsed=145.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+54/63 [02:28<00:22,  2.50s/it] ████████▌ 
+loss=2.06, acc=42.19%, time_elapsed=148.2s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+55/63 [02:30<00:19,  2.50s/it] ████████▋ 
+loss=2.11, acc=36.72%, time_elapsed=150.9s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+56/63 [02:33<00:17,  2.57s/it] ████████▉ 
+loss=2.10, acc=40.62%, time_elapsed=153.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+57/63 [02:36<00:15,  2.63s/it] █████████ 
+loss=2.03, acc=43.75%, time_elapsed=156.3s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+58/63 [02:38<00:13,  2.62s/it] █████████▏
+loss=2.05, acc=39.84%, time_elapsed=158.6s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+59/63 [02:41<00:10,  2.52s/it] █████████▎
+loss=1.99, acc=39.06%, time_elapsed=161.2s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+60/63 [02:43<00:07,  2.56s/it] █████████▌
+loss=2.07, acc=42.19%, time_elapsed=163.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+61/63 [02:46<00:05,  2.55s/it] █████████▋
+loss=2.00, acc=42.19%, time_elapsed=166.5s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+62/63 [02:48<00:02,  2.60s/it] █████████▊
+loss=2.05, acc=37.50%, time_elapsed=168.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+
+
+
+Now evaluating epoch 6:
+
+
+0/63 [00:02<?, ?it/s]           
+loss=1.90, acc=47.66%, time_elapsed=2.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+1/63 [00:05<02:38,  2.56s/it] ▏         
+loss=1.96, acc=40.62%, time_elapsed=5.2s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+2/63 [00:07<02:38,  2.60s/it] ▎         
+loss=2.11, acc=39.84%, time_elapsed=7.8s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+3/63 [00:10<02:37,  2.63s/it] ▍         
+loss=2.03, acc=36.72%, time_elapsed=10.4s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+4/63 [00:12<02:34,  2.62s/it] ▋         
+loss=1.97, acc=41.41%, time_elapsed=13.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+5/63 [00:15<02:30,  2.59s/it] ▊         
+loss=2.01, acc=32.81%, time_elapsed=15.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+6/63 [00:18<02:26,  2.57s/it] ▉         
+loss=2.09, acc=32.03%, time_elapsed=18.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+7/63 [00:20<02:25,  2.60s/it] █         
+loss=1.97, acc=37.50%, time_elapsed=20.8s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+8/63 [00:23<02:23,  2.62s/it] █▎        
+loss=2.00, acc=32.81%, time_elapsed=23.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+9/63 [00:26<02:25,  2.70s/it] █▍        
+loss=2.23, acc=27.34%, time_elapsed=26.3s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+10/63 [00:29<02:21,  2.67s/it] █▌        
+loss=2.26, acc=22.66%, time_elapsed=29.0s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+11/63 [00:31<02:20,  2.70s/it] █▋        
+loss=2.30, acc=21.09%, time_elapsed=31.8s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+12/63 [00:34<02:17,  2.70s/it] █▉        
+loss=2.03, acc=28.12%, time_elapsed=34.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+13/63 [00:37<02:15,  2.71s/it] ██        
+loss=2.06, acc=24.22%, time_elapsed=37.2s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+14/63 [00:39<02:12,  2.70s/it] ██▏       
+loss=2.03, acc=30.47%, time_elapsed=39.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+15/63 [00:42<02:10,  2.71s/it] ██▍       
+loss=2.05, acc=32.03%, time_elapsed=42.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+16/63 [00:45<02:05,  2.66s/it] ██▌       
+loss=2.10, acc=29.69%, time_elapsed=45.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+17/63 [00:47<02:04,  2.71s/it] ██▋       
+loss=2.02, acc=39.84%, time_elapsed=48.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+18/63 [00:50<02:01,  2.70s/it] ██▊       
+loss=2.10, acc=28.91%, time_elapsed=50.8s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+19/63 [00:53<02:00,  2.73s/it] ███       
+loss=2.27, acc=25.00%, time_elapsed=53.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+20/63 [00:55<01:55,  2.68s/it] ███▏      
+loss=2.42, acc=21.88%, time_elapsed=55.9s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+21/63 [00:58<01:51,  2.65s/it] ███▎      
+loss=2.21, acc=28.12%, time_elapsed=58.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+22/63 [01:01<01:49,  2.67s/it] ███▍      
+loss=2.17, acc=38.28%, time_elapsed=61.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+23/63 [01:03<01:50,  2.75s/it] ███▋      
+loss=2.16, acc=36.72%, time_elapsed=64.0s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+24/63 [01:06<01:43,  2.66s/it] ███▊      
+loss=2.23, acc=28.12%, time_elapsed=66.6s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+25/63 [01:09<01:40,  2.64s/it] ███▉      
+loss=2.25, acc=24.22%, time_elapsed=69.3s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+26/63 [01:11<01:38,  2.66s/it] ████▏     
+loss=2.21, acc=33.59%, time_elapsed=71.7s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+27/63 [01:14<01:33,  2.59s/it] ████▎     
+loss=2.16, acc=39.84%, time_elapsed=74.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+28/63 [01:17<01:32,  2.64s/it] ████▍     
+loss=2.13, acc=35.16%, time_elapsed=77.2s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+29/63 [01:19<01:30,  2.66s/it] ████▌     
+loss=2.66, acc=23.44%, time_elapsed=79.8s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+30/63 [01:22<01:27,  2.65s/it] ████▊     
+loss=2.30, acc=25.78%, time_elapsed=82.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+31/63 [01:25<01:25,  2.68s/it] ████▉     
+loss=2.21, acc=24.22%, time_elapsed=85.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+32/63 [01:27<01:23,  2.71s/it] █████     
+loss=2.20, acc=25.78%, time_elapsed=88.0s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+33/63 [01:30<01:20,  2.70s/it] █████▏    
+loss=2.21, acc=28.91%, time_elapsed=90.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+34/63 [01:33<01:20,  2.77s/it] █████▍    
+loss=2.19, acc=35.94%, time_elapsed=93.5s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+35/63 [01:36<01:16,  2.72s/it] █████▌    
+loss=2.32, acc=23.44%, time_elapsed=96.2s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+36/63 [01:38<01:13,  2.71s/it] █████▋    
+loss=2.34, acc=31.25%, time_elapsed=98.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+37/63 [01:41<01:07,  2.61s/it] █████▊    
+loss=2.31, acc=28.12%, time_elapsed=101.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+38/63 [01:43<01:06,  2.67s/it] ██████    
+loss=2.24, acc=33.59%, time_elapsed=104.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+39/63 [01:46<01:03,  2.63s/it] ██████▏   
+loss=2.22, acc=32.03%, time_elapsed=106.4s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+40/63 [01:48<00:59,  2.58s/it] ██████▎   
+loss=2.22, acc=35.94%, time_elapsed=109.0s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+41/63 [01:51<00:56,  2.57s/it] ██████▌   
+loss=2.27, acc=28.91%, time_elapsed=111.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+42/63 [01:54<00:54,  2.60s/it] ██████▋   
+loss=2.42, acc=26.56%, time_elapsed=114.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+43/63 [01:57<00:54,  2.72s/it] ██████▊   
+loss=2.45, acc=23.44%, time_elapsed=117.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+44/63 [02:00<00:52,  2.76s/it] ██████▉   
+loss=2.57, acc=26.56%, time_elapsed=120.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+45/63 [02:02<00:49,  2.73s/it] ███████▏  
+loss=2.53, acc=22.66%, time_elapsed=122.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+46/63 [02:05<00:45,  2.70s/it] ███████▎  
+loss=2.72, acc=19.53%, time_elapsed=125.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+47/63 [02:07<00:42,  2.67s/it] ███████▍  
+loss=2.56, acc=21.88%, time_elapsed=127.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+48/63 [02:10<00:39,  2.64s/it] ███████▌  
+loss=2.81, acc=16.41%, time_elapsed=130.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+49/63 [02:13<00:37,  2.70s/it] ███████▊  
+loss=2.55, acc=29.69%, time_elapsed=133.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+50/63 [02:15<00:35,  2.69s/it] ███████▉  
+loss=2.51, acc=27.34%, time_elapsed=135.9s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+51/63 [02:18<00:31,  2.60s/it] ████████  
+loss=2.40, acc=25.00%, time_elapsed=138.2s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+52/63 [02:20<00:27,  2.53s/it] ████████▎ 
+loss=2.30, acc=34.38%, time_elapsed=140.8s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+53/63 [02:23<00:25,  2.56s/it] ████████▍ 
+loss=2.31, acc=36.72%, time_elapsed=143.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+54/63 [02:25<00:23,  2.56s/it] ████████▌ 
+loss=2.43, acc=27.34%, time_elapsed=146.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+55/63 [02:28<00:20,  2.56s/it] ████████▋ 
+loss=2.38, acc=31.25%, time_elapsed=148.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+56/63 [02:31<00:18,  2.59s/it] ████████▉ 
+loss=2.40, acc=32.81%, time_elapsed=151.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+57/63 [02:33<00:15,  2.61s/it] █████████ 
+loss=2.48, acc=28.91%, time_elapsed=154.0s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+58/63 [02:36<00:13,  2.63s/it] █████████▏
+loss=2.45, acc=33.59%, time_elapsed=156.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+59/63 [02:38<00:10,  2.57s/it] █████████▎
+loss=2.46, acc=30.47%, time_elapsed=158.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+60/63 [02:41<00:07,  2.54s/it] █████████▌
+loss=2.47, acc=30.47%, time_elapsed=161.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+61/63 [02:44<00:05,  2.57s/it] █████████▋
+loss=2.42, acc=35.94%, time_elapsed=164.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+62/63 [02:46<00:02,  2.56s/it] █████████▊
+loss=2.54, acc=24.22%, time_elapsed=166.5s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+
+
+
+Now evaluating epoch 7:
+
+
+0/63 [00:02<?, ?it/s]           
+loss=2.58, acc=27.34%, time_elapsed=2.6s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+1/63 [00:05<02:44,  2.65s/it] ▏         
+loss=2.51, acc=21.88%, time_elapsed=5.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+2/63 [00:07<02:36,  2.57s/it] ▎         
+loss=2.57, acc=22.66%, time_elapsed=7.7s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+3/63 [00:10<02:33,  2.55s/it] ▍         
+loss=2.54, acc=21.09%, time_elapsed=10.1s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+4/63 [00:12<02:28,  2.52s/it] ▋         
+loss=2.43, acc=29.69%, time_elapsed=12.4s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+5/63 [00:15<02:21,  2.43s/it] ▊         
+loss=2.55, acc=27.34%, time_elapsed=15.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+6/63 [00:17<02:28,  2.60s/it] ▉         
+loss=2.49, acc=34.38%, time_elapsed=17.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+7/63 [00:20<02:21,  2.53s/it] █         
+loss=2.47, acc=30.47%, time_elapsed=20.2s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+8/63 [00:22<02:19,  2.53s/it] █▎        
+loss=2.50, acc=35.16%, time_elapsed=22.8s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+9/63 [00:25<02:16,  2.53s/it] █▍        
+loss=2.35, acc=38.28%, time_elapsed=25.2s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+10/63 [00:27<02:11,  2.48s/it] █▌        
+loss=2.35, acc=42.97%, time_elapsed=27.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+11/63 [00:30<02:10,  2.51s/it] █▋        
+loss=2.39, acc=39.06%, time_elapsed=30.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+12/63 [00:33<02:08,  2.52s/it] █▉        
+loss=2.49, acc=31.25%, time_elapsed=33.1s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+13/63 [00:35<02:09,  2.60s/it] ██        
+loss=2.36, acc=41.41%, time_elapsed=35.6s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+14/63 [00:38<02:06,  2.58s/it] ██▏       
+loss=2.35, acc=35.16%, time_elapsed=38.1s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+15/63 [00:40<02:02,  2.55s/it] ██▍       
+loss=2.42, acc=42.19%, time_elapsed=40.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+16/63 [00:43<02:00,  2.57s/it] ██▌       
+loss=2.33, acc=40.62%, time_elapsed=43.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+17/63 [00:46<01:58,  2.57s/it] ██▋       
+loss=2.43, acc=34.38%, time_elapsed=46.2s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+18/63 [00:48<02:00,  2.67s/it] ██▊       
+loss=2.31, acc=41.41%, time_elapsed=48.7s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+19/63 [00:51<01:55,  2.63s/it] ███       
+loss=2.37, acc=34.38%, time_elapsed=51.3s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+20/63 [00:54<01:52,  2.61s/it] ███▏      
+loss=2.38, acc=35.94%, time_elapsed=54.1s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+21/63 [00:56<01:52,  2.68s/it] ███▎      
+loss=2.31, acc=40.62%, time_elapsed=56.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+22/63 [00:59<01:48,  2.64s/it] ███▍      
+loss=2.26, acc=42.19%, time_elapsed=59.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+23/63 [01:01<01:43,  2.58s/it] ███▋      
+loss=2.38, acc=34.38%, time_elapsed=61.7s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+24/63 [01:04<01:41,  2.60s/it] ███▊      
+loss=2.25, acc=46.09%, time_elapsed=64.3s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+25/63 [01:06<01:37,  2.58s/it] ███▉      
+loss=2.29, acc=38.28%, time_elapsed=66.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+26/63 [01:09<01:35,  2.59s/it] ████▏     
+loss=2.28, acc=39.84%, time_elapsed=69.4s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+27/63 [01:11<01:32,  2.57s/it] ████▎     
+loss=2.27, acc=43.75%, time_elapsed=71.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+28/63 [01:14<01:29,  2.56s/it] ████▍     
+loss=2.32, acc=37.50%, time_elapsed=74.9s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+29/63 [01:17<01:31,  2.68s/it] ████▌     
+loss=2.27, acc=42.97%, time_elapsed=77.4s, used_memory=3.00 GB, cuda_memory_peak=2.20 GiB
+
+30/63 [01:20<01:26,  2.61s/it] ████▊     
+loss=2.24, acc=49.22%, time_elapsed=80.1s, used_memory=3.01 GB, cuda_memory_peak=2.20 GiB
+
+31/63 [01:23<01:24,  2.65s/it] ████▉     
+loss=2.31, acc=48.44%, time_elapsed=83.1s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+32/63 [01:25<01:25,  2.76s/it] █████     
+loss=2.22, acc=42.19%, time_elapsed=85.7s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+33/63 [01:28<01:21,  2.72s/it] █████▏    
+loss=2.25, acc=46.88%, time_elapsed=88.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+34/63 [01:30<01:18,  2.69s/it] █████▍    
+loss=2.20, acc=42.97%, time_elapsed=90.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+35/63 [01:33<01:13,  2.63s/it] █████▌    
+loss=2.20, acc=46.09%, time_elapsed=93.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+36/63 [01:36<01:10,  2.61s/it] █████▋    
+loss=2.25, acc=39.06%, time_elapsed=96.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+37/63 [01:38<01:08,  2.64s/it] █████▊    
+loss=2.26, acc=36.72%, time_elapsed=98.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+38/63 [01:41<01:04,  2.56s/it] ██████    
+loss=2.20, acc=50.00%, time_elapsed=101.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+39/63 [01:43<01:01,  2.57s/it] ██████▏   
+loss=2.31, acc=32.81%, time_elapsed=103.6s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+40/63 [01:46<00:58,  2.56s/it] ██████▎   
+loss=2.30, acc=39.84%, time_elapsed=106.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+41/63 [01:48<00:56,  2.59s/it] ██████▌   
+loss=2.21, acc=42.19%, time_elapsed=108.8s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+42/63 [01:51<00:54,  2.58s/it] ██████▋   
+loss=2.20, acc=43.75%, time_elapsed=111.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+43/63 [01:53<00:50,  2.54s/it] ██████▊   
+loss=2.23, acc=42.97%, time_elapsed=113.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+44/63 [01:56<00:48,  2.55s/it] ██████▉   
+loss=2.19, acc=49.22%, time_elapsed=116.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+45/63 [01:59<00:46,  2.59s/it] ███████▏  
+loss=2.28, acc=48.44%, time_elapsed=119.1s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+46/63 [02:01<00:43,  2.58s/it] ███████▎  
+loss=2.25, acc=46.88%, time_elapsed=121.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+47/63 [02:04<00:40,  2.55s/it] ███████▍  
+loss=2.19, acc=50.00%, time_elapsed=124.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+48/63 [02:06<00:38,  2.56s/it] ███████▌  
+loss=2.17, acc=48.44%, time_elapsed=126.4s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+49/63 [02:09<00:34,  2.47s/it] ███████▊  
+loss=2.23, acc=51.56%, time_elapsed=129.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+50/63 [02:11<00:32,  2.51s/it] ███████▉  
+loss=2.10, acc=57.03%, time_elapsed=131.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+51/63 [02:13<00:29,  2.43s/it] ████████  
+loss=2.21, acc=50.78%, time_elapsed=133.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+52/63 [02:16<00:27,  2.47s/it] ████████▎ 
+loss=2.17, acc=46.88%, time_elapsed=136.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+53/63 [02:18<00:25,  2.51s/it] ████████▍ 
+loss=2.16, acc=53.12%, time_elapsed=138.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+54/63 [02:21<00:22,  2.47s/it] ████████▌ 
+loss=2.21, acc=46.09%, time_elapsed=141.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+55/63 [02:23<00:19,  2.45s/it] ████████▋ 
+loss=2.22, acc=48.44%, time_elapsed=144.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+56/63 [02:26<00:17,  2.55s/it] ████████▉ 
+loss=2.18, acc=47.66%, time_elapsed=146.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+57/63 [02:29<00:15,  2.56s/it] █████████ 
+loss=2.13, acc=50.78%, time_elapsed=149.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+58/63 [02:31<00:12,  2.57s/it] █████████▏
+loss=2.11, acc=49.22%, time_elapsed=151.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+59/63 [02:34<00:10,  2.54s/it] █████████▎
+loss=2.18, acc=46.88%, time_elapsed=154.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+60/63 [02:36<00:07,  2.53s/it] █████████▌
+loss=2.21, acc=49.22%, time_elapsed=156.9s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+61/63 [02:39<00:05,  2.59s/it] █████████▋
+loss=2.17, acc=48.44%, time_elapsed=159.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+62/63 [02:42<00:02,  2.57s/it] █████████▊
+loss=2.15, acc=56.25%, time_elapsed=162.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+
+
+
+Now evaluating epoch 8:
+
+
+0/63 [00:02<?, ?it/s]           
+loss=2.29, acc=42.97%, time_elapsed=2.9s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+1/63 [00:05<02:59,  2.89s/it] ▏         
+loss=2.21, acc=46.09%, time_elapsed=5.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+2/63 [00:07<02:44,  2.69s/it] ▎         
+loss=2.21, acc=43.75%, time_elapsed=8.0s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+3/63 [00:10<02:38,  2.64s/it] ▍         
+loss=2.10, acc=52.34%, time_elapsed=10.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+4/63 [00:13<02:29,  2.53s/it] ▋         
+loss=2.18, acc=42.19%, time_elapsed=13.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+5/63 [00:15<02:29,  2.58s/it] ▊         
+loss=2.16, acc=49.22%, time_elapsed=15.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+6/63 [00:18<02:25,  2.56s/it] ▉         
+loss=2.17, acc=50.78%, time_elapsed=18.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+7/63 [00:20<02:25,  2.59s/it] █         
+loss=2.14, acc=50.78%, time_elapsed=20.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+8/63 [00:23<02:20,  2.55s/it] █▎        
+loss=2.21, acc=41.41%, time_elapsed=23.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+9/63 [00:25<02:18,  2.57s/it] █▍        
+loss=2.18, acc=47.66%, time_elapsed=25.9s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+10/63 [00:28<02:18,  2.61s/it] █▌        
+loss=2.11, acc=55.47%, time_elapsed=28.6s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+11/63 [00:31<02:16,  2.63s/it] █▋        
+loss=2.17, acc=50.78%, time_elapsed=31.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+12/63 [00:33<02:12,  2.60s/it] █▉        
+loss=2.06, acc=53.12%, time_elapsed=33.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+13/63 [00:36<02:06,  2.53s/it] ██        
+loss=2.22, acc=42.97%, time_elapsed=36.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+14/63 [00:38<02:07,  2.60s/it] ██▏       
+loss=2.08, acc=56.25%, time_elapsed=38.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+15/63 [00:41<02:03,  2.58s/it] ██▍       
+loss=2.15, acc=50.78%, time_elapsed=41.2s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+16/63 [00:43<01:58,  2.52s/it] ██▌       
+loss=2.23, acc=39.06%, time_elapsed=44.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+17/63 [00:46<01:59,  2.60s/it] ██▋       
+loss=2.16, acc=39.84%, time_elapsed=46.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+18/63 [00:48<01:56,  2.60s/it] ██▊       
+loss=2.10, acc=52.34%, time_elapsed=49.0s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+19/63 [00:51<01:52,  2.55s/it] ███       
+loss=2.17, acc=55.47%, time_elapsed=51.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+20/63 [00:54<01:50,  2.57s/it] ███▏      
+loss=2.10, acc=48.44%, time_elapsed=54.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+21/63 [00:56<01:46,  2.55s/it] ███▎      
+loss=2.12, acc=50.00%, time_elapsed=56.5s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+22/63 [00:59<01:42,  2.50s/it] ███▍      
+loss=2.11, acc=56.25%, time_elapsed=59.0s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+23/63 [01:01<01:40,  2.51s/it] ███▋      
+loss=2.06, acc=53.12%, time_elapsed=61.5s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+24/63 [01:03<01:37,  2.51s/it] ███▊      
+loss=2.13, acc=46.88%, time_elapsed=63.8s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+25/63 [01:06<01:32,  2.44s/it] ███▉      
+loss=2.05, acc=50.78%, time_elapsed=66.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+26/63 [01:08<01:27,  2.37s/it] ████▏     
+loss=2.06, acc=61.72%, time_elapsed=68.6s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+27/63 [01:11<01:27,  2.44s/it] ████▎     
+loss=2.16, acc=50.00%, time_elapsed=71.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+28/63 [01:13<01:26,  2.46s/it] ████▍     
+loss=2.01, acc=55.47%, time_elapsed=73.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+29/63 [01:16<01:23,  2.45s/it] ████▌     
+loss=2.17, acc=47.66%, time_elapsed=76.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+30/63 [01:18<01:22,  2.50s/it] ████▊     
+loss=2.09, acc=52.34%, time_elapsed=78.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+31/63 [01:21<01:19,  2.50s/it] ████▉     
+loss=2.12, acc=47.66%, time_elapsed=81.3s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+32/63 [01:23<01:19,  2.55s/it] █████     
+loss=1.97, acc=57.81%, time_elapsed=83.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+33/63 [01:26<01:15,  2.52s/it] █████▏    
+loss=2.19, acc=46.88%, time_elapsed=86.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+34/63 [01:28<01:13,  2.55s/it] █████▍    
+loss=2.04, acc=48.44%, time_elapsed=88.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+35/63 [01:31<01:09,  2.49s/it] █████▌    
+loss=2.02, acc=60.16%, time_elapsed=91.5s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+36/63 [01:33<01:09,  2.56s/it] █████▋    
+loss=2.08, acc=50.00%, time_elapsed=93.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+37/63 [01:36<01:05,  2.51s/it] █████▊    
+loss=2.13, acc=44.53%, time_elapsed=96.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+38/63 [01:38<01:02,  2.52s/it] ██████    
+loss=2.10, acc=50.00%, time_elapsed=99.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+39/63 [01:41<01:00,  2.53s/it] ██████▏   
+loss=2.10, acc=48.44%, time_elapsed=101.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+40/63 [01:44<00:57,  2.51s/it] ██████▎   
+loss=2.07, acc=52.34%, time_elapsed=104.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+41/63 [01:46<00:56,  2.57s/it] ██████▌   
+loss=2.14, acc=44.53%, time_elapsed=106.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+42/63 [01:49<00:54,  2.58s/it] ██████▋   
+loss=2.10, acc=46.88%, time_elapsed=109.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+43/63 [01:52<00:51,  2.58s/it] ██████▊   
+loss=2.09, acc=44.53%, time_elapsed=112.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+44/63 [01:54<00:49,  2.63s/it] ██████▉   
+loss=2.06, acc=49.22%, time_elapsed=114.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+45/63 [01:56<00:46,  2.60s/it] ███████▏  
+loss=2.01, acc=55.47%, time_elapsed=116.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+46/63 [01:59<00:42,  2.51s/it] ███████▎  
+loss=2.16, acc=50.78%, time_elapsed=119.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+47/63 [02:02<00:41,  2.62s/it] ███████▍  
+loss=2.17, acc=53.12%, time_elapsed=122.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+48/63 [02:05<00:41,  2.74s/it] ███████▌  
+loss=2.08, acc=46.88%, time_elapsed=125.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+49/63 [02:07<00:37,  2.66s/it] ███████▊  
+loss=2.10, acc=42.97%, time_elapsed=127.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+50/63 [02:10<00:33,  2.57s/it] ███████▉  
+loss=2.07, acc=47.66%, time_elapsed=130.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+51/63 [02:12<00:30,  2.54s/it] ████████  
+loss=2.15, acc=42.19%, time_elapsed=132.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+52/63 [02:15<00:28,  2.61s/it] ████████▎ 
+loss=2.12, acc=46.88%, time_elapsed=135.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+53/63 [02:18<00:25,  2.60s/it] ████████▍ 
+loss=2.07, acc=50.78%, time_elapsed=138.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+54/63 [02:20<00:23,  2.59s/it] ████████▌ 
+loss=2.04, acc=55.47%, time_elapsed=140.7s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+55/63 [02:23<00:21,  2.63s/it] ████████▋ 
+loss=2.06, acc=51.56%, time_elapsed=143.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+56/63 [02:25<00:18,  2.60s/it] ████████▉ 
+loss=2.12, acc=48.44%, time_elapsed=146.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+57/63 [02:28<00:15,  2.62s/it] █████████ 
+loss=2.12, acc=46.88%, time_elapsed=148.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+58/63 [02:30<00:12,  2.56s/it] █████████▏
+loss=2.06, acc=50.00%, time_elapsed=150.7s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+59/63 [02:33<00:10,  2.51s/it] █████████▎
+loss=2.13, acc=49.22%, time_elapsed=153.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+60/63 [02:35<00:07,  2.51s/it] █████████▌
+loss=2.12, acc=43.75%, time_elapsed=155.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+61/63 [02:38<00:05,  2.55s/it] █████████▋
+loss=2.06, acc=53.12%, time_elapsed=158.3s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+62/63 [02:40<00:02,  2.50s/it] █████████▊
+loss=2.11, acc=47.66%, time_elapsed=160.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+
+
+
+Now evaluating epoch 9:
+
+
+0/63 [00:02<?, ?it/s]           
+loss=1.99, acc=52.34%, time_elapsed=2.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+1/63 [00:04<02:38,  2.55s/it] ▏         
+loss=2.04, acc=49.22%, time_elapsed=4.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+2/63 [00:07<02:27,  2.42s/it] ▎         
+loss=2.01, acc=51.56%, time_elapsed=7.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+3/63 [00:09<02:25,  2.43s/it] ▍         
+loss=1.99, acc=52.34%, time_elapsed=9.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+4/63 [00:12<02:18,  2.35s/it] ▋         
+loss=2.09, acc=46.09%, time_elapsed=12.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+5/63 [00:14<02:23,  2.47s/it] ▊         
+loss=2.08, acc=48.44%, time_elapsed=14.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+6/63 [00:17<02:18,  2.43s/it] ▉         
+loss=2.00, acc=57.03%, time_elapsed=17.1s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+7/63 [00:19<02:17,  2.46s/it] █         
+loss=2.06, acc=48.44%, time_elapsed=19.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+8/63 [00:22<02:15,  2.46s/it] █▎        
+loss=2.04, acc=52.34%, time_elapsed=22.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+9/63 [00:24<02:15,  2.50s/it] █▍        
+loss=2.13, acc=47.66%, time_elapsed=24.8s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+10/63 [00:27<02:15,  2.55s/it] █▌        
+loss=2.04, acc=50.00%, time_elapsed=27.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+11/63 [00:29<02:12,  2.54s/it] █▋        
+loss=2.09, acc=47.66%, time_elapsed=30.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+12/63 [00:32<02:11,  2.58s/it] █▉        
+loss=2.05, acc=49.22%, time_elapsed=32.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+13/63 [00:35<02:09,  2.59s/it] ██        
+loss=1.97, acc=59.38%, time_elapsed=35.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+14/63 [00:37<02:05,  2.56s/it] ██▏       
+loss=2.01, acc=57.03%, time_elapsed=37.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+15/63 [00:40<02:03,  2.57s/it] ██▍       
+loss=2.08, acc=55.47%, time_elapsed=40.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+16/63 [00:42<02:04,  2.64s/it] ██▌       
+loss=1.93, acc=56.25%, time_elapsed=42.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+17/63 [00:45<01:57,  2.55s/it] ██▋       
+loss=2.08, acc=47.66%, time_elapsed=45.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+18/63 [00:47<01:54,  2.53s/it] ██▊       
+loss=1.97, acc=53.91%, time_elapsed=47.8s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+19/63 [00:50<01:50,  2.52s/it] ███       
+loss=1.99, acc=50.00%, time_elapsed=50.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+20/63 [00:52<01:49,  2.55s/it] ███▏      
+loss=2.02, acc=49.22%, time_elapsed=53.0s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+21/63 [00:55<01:47,  2.55s/it] ███▎      
+loss=2.10, acc=47.66%, time_elapsed=55.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+22/63 [00:58<01:44,  2.56s/it] ███▍      
+loss=2.05, acc=41.41%, time_elapsed=58.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+23/63 [01:00<01:43,  2.58s/it] ███▋      
+loss=2.12, acc=48.44%, time_elapsed=60.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+24/63 [01:03<01:40,  2.58s/it] ███▊      
+loss=2.04, acc=50.78%, time_elapsed=63.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+25/63 [01:06<01:39,  2.62s/it] ███▉      
+loss=2.06, acc=38.28%, time_elapsed=66.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+26/63 [01:08<01:36,  2.62s/it] ████▏     
+loss=2.07, acc=39.84%, time_elapsed=68.7s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+27/63 [01:11<01:33,  2.60s/it] ████▎     
+loss=2.03, acc=50.00%, time_elapsed=71.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+28/63 [01:13<01:30,  2.57s/it] ████▍     
+loss=2.06, acc=47.66%, time_elapsed=73.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+29/63 [01:16<01:28,  2.59s/it] ████▌     
+loss=2.15, acc=44.53%, time_elapsed=76.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+30/63 [01:19<01:26,  2.62s/it] ████▊     
+loss=2.01, acc=54.69%, time_elapsed=79.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+31/63 [01:22<01:24,  2.64s/it] ████▉     
+loss=2.55, acc=38.28%, time_elapsed=82.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+32/63 [01:24<01:24,  2.73s/it] █████     
+loss=1.98, acc=46.88%, time_elapsed=84.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+33/63 [01:26<01:20,  2.68s/it] █████▏    
+loss=1.95, acc=46.88%, time_elapsed=87.0s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+34/63 [01:29<01:14,  2.56s/it] █████▍    
+loss=2.73, acc=42.97%, time_elapsed=89.8s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+35/63 [01:32<01:14,  2.64s/it] █████▌    
+loss=2.07, acc=42.19%, time_elapsed=92.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+36/63 [01:34<01:08,  2.55s/it] █████▋    
+loss=2.04, acc=43.75%, time_elapsed=94.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+37/63 [01:36<01:04,  2.50s/it] █████▊    
+loss=2.02, acc=51.56%, time_elapsed=96.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+38/63 [01:39<01:01,  2.47s/it] ██████    
+loss=2.09, acc=38.28%, time_elapsed=99.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+39/63 [01:41<00:58,  2.45s/it] ██████▏   
+loss=2.13, acc=42.19%, time_elapsed=101.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+40/63 [01:44<00:56,  2.45s/it] ██████▎   
+loss=2.08, acc=42.19%, time_elapsed=104.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+41/63 [01:47<00:55,  2.52s/it] ██████▌   
+loss=2.19, acc=32.03%, time_elapsed=107.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+42/63 [01:49<00:53,  2.54s/it] ██████▋   
+loss=2.19, acc=39.06%, time_elapsed=109.8s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+43/63 [01:52<00:52,  2.61s/it] ██████▊   
+loss=2.29, acc=41.41%, time_elapsed=112.4s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+44/63 [01:54<00:49,  2.61s/it] ██████▉   
+loss=2.13, acc=40.62%, time_elapsed=115.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+45/63 [01:57<00:46,  2.61s/it] ███████▏  
+loss=2.07, acc=44.53%, time_elapsed=117.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+46/63 [02:00<00:43,  2.59s/it] ███████▎  
+loss=2.05, acc=42.97%, time_elapsed=120.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+47/63 [02:03<00:41,  2.57s/it] ███████▍  
+loss=2.80, acc=42.97%, time_elapsed=123.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+48/63 [02:05<00:41,  2.74s/it] ███████▌  
+loss=2.04, acc=47.66%, time_elapsed=125.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+49/63 [02:07<00:36,  2.64s/it] ███████▊  
+loss=1.99, acc=45.31%, time_elapsed=127.9s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+50/63 [02:10<00:33,  2.54s/it] ███████▉  
+loss=2.20, acc=41.41%, time_elapsed=130.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+51/63 [02:12<00:30,  2.52s/it] ████████  
+loss=2.09, acc=38.28%, time_elapsed=132.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+52/63 [02:15<00:27,  2.49s/it] ████████▎ 
+loss=2.40, acc=32.81%, time_elapsed=135.3s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+53/63 [02:17<00:24,  2.49s/it] ████████▍ 
+loss=2.46, acc=34.38%, time_elapsed=137.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+54/63 [02:20<00:22,  2.53s/it] ████████▌ 
+loss=2.46, acc=33.59%, time_elapsed=140.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+55/63 [02:23<00:20,  2.58s/it] ████████▋ 
+loss=2.06, acc=42.97%, time_elapsed=143.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+56/63 [02:25<00:17,  2.56s/it] ████████▉ 
+loss=2.26, acc=35.16%, time_elapsed=145.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+57/63 [02:28<00:15,  2.58s/it] █████████ 
+loss=2.48, acc=28.91%, time_elapsed=148.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+58/63 [02:31<00:13,  2.65s/it] █████████▏
+loss=2.07, acc=47.66%, time_elapsed=151.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+59/63 [02:33<00:10,  2.62s/it] █████████▎
+loss=2.14, acc=37.50%, time_elapsed=153.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+60/63 [02:35<00:07,  2.55s/it] █████████▌
+loss=1.96, acc=49.22%, time_elapsed=155.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+61/63 [02:38<00:04,  2.47s/it] █████████▋
+loss=2.07, acc=45.31%, time_elapsed=158.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+62/63 [02:40<00:02,  2.48s/it] █████████▊
+loss=2.20, acc=39.84%, time_elapsed=161.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+
+
+
+Now evaluating epoch 10:
+
+
+0/63 [00:02<?, ?it/s]           
+loss=2.23, acc=33.59%, time_elapsed=2.3s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+1/63 [00:04<02:27,  2.38s/it] ▏         
+loss=2.10, acc=43.75%, time_elapsed=4.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+2/63 [00:07<02:30,  2.47s/it] ▎         
+loss=2.27, acc=39.84%, time_elapsed=7.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+3/63 [00:10<02:29,  2.50s/it] ▍         
+loss=2.26, acc=35.94%, time_elapsed=10.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+4/63 [00:12<02:32,  2.58s/it] ▋         
+loss=2.28, acc=35.94%, time_elapsed=12.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+5/63 [00:15<02:32,  2.62s/it] ▊         
+loss=2.31, acc=32.81%, time_elapsed=15.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+6/63 [00:18<02:27,  2.59s/it] ▉         
+loss=2.37, acc=29.69%, time_elapsed=18.0s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+7/63 [00:20<02:26,  2.62s/it] █         
+loss=2.34, acc=21.09%, time_elapsed=20.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+8/63 [00:23<02:23,  2.60s/it] █▎        
+loss=2.43, acc=23.44%, time_elapsed=23.1s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+9/63 [00:25<02:18,  2.57s/it] █▍        
+loss=2.29, acc=33.59%, time_elapsed=25.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+10/63 [00:28<02:17,  2.59s/it] █▌        
+loss=2.34, acc=35.16%, time_elapsed=28.0s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+11/63 [00:30<02:10,  2.51s/it] █▋        
+loss=2.27, acc=42.97%, time_elapsed=30.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+12/63 [00:33<02:11,  2.58s/it] █▉        
+loss=2.33, acc=33.59%, time_elapsed=33.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+13/63 [00:36<02:11,  2.62s/it] ██        
+loss=2.35, acc=32.03%, time_elapsed=36.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+14/63 [00:38<02:08,  2.63s/it] ██▏       
+loss=2.30, acc=37.50%, time_elapsed=38.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+15/63 [00:41<02:04,  2.60s/it] ██▍       
+loss=2.34, acc=33.59%, time_elapsed=41.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+16/63 [00:43<02:02,  2.61s/it] ██▌       
+loss=2.27, acc=32.03%, time_elapsed=43.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+17/63 [00:46<01:59,  2.60s/it] ██▋       
+loss=2.29, acc=40.62%, time_elapsed=46.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+18/63 [00:49<01:57,  2.62s/it] ██▊       
+loss=2.27, acc=39.84%, time_elapsed=49.2s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+19/63 [00:51<01:56,  2.64s/it] ███       
+loss=2.27, acc=37.50%, time_elapsed=51.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+20/63 [00:54<01:53,  2.65s/it] ███▏      
+loss=2.27, acc=37.50%, time_elapsed=54.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+21/63 [00:57<01:49,  2.60s/it] ███▎      
+loss=2.29, acc=37.50%, time_elapsed=57.2s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+22/63 [00:59<01:49,  2.67s/it] ███▍      
+loss=2.24, acc=39.84%, time_elapsed=59.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+23/63 [01:02<01:46,  2.67s/it] ███▋      
+loss=2.20, acc=41.41%, time_elapsed=62.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+24/63 [01:05<01:44,  2.68s/it] ███▊      
+loss=2.20, acc=47.66%, time_elapsed=65.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+25/63 [01:07<01:41,  2.67s/it] ███▉      
+loss=2.31, acc=37.50%, time_elapsed=67.8s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+26/63 [01:10<01:38,  2.65s/it] ████▏     
+loss=2.12, acc=41.41%, time_elapsed=70.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+27/63 [01:13<01:35,  2.66s/it] ████▎     
+loss=2.20, acc=42.19%, time_elapsed=73.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+28/63 [01:15<01:32,  2.63s/it] ████▍     
+loss=2.18, acc=39.84%, time_elapsed=75.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+29/63 [01:17<01:26,  2.55s/it] ████▌     
+loss=2.15, acc=40.62%, time_elapsed=77.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+30/63 [01:20<01:22,  2.49s/it] ████▊     
+loss=2.21, acc=32.03%, time_elapsed=80.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+31/63 [01:22<01:18,  2.46s/it] ████▉     
+loss=2.24, acc=37.50%, time_elapsed=82.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+32/63 [01:25<01:18,  2.53s/it] █████     
+loss=2.24, acc=41.41%, time_elapsed=85.6s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+33/63 [01:28<01:17,  2.57s/it] █████▏    
+loss=2.19, acc=40.62%, time_elapsed=88.1s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+34/63 [01:30<01:14,  2.56s/it] █████▍    
+loss=2.17, acc=42.97%, time_elapsed=90.7s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+35/63 [01:33<01:11,  2.57s/it] █████▌    
+loss=2.20, acc=38.28%, time_elapsed=93.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+36/63 [01:35<01:09,  2.56s/it] █████▋    
+loss=2.07, acc=47.66%, time_elapsed=95.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+37/63 [01:38<01:05,  2.50s/it] █████▊    
+loss=2.34, acc=35.94%, time_elapsed=98.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+38/63 [01:41<01:06,  2.64s/it] ██████    
+loss=2.09, acc=53.91%, time_elapsed=101.0s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+39/63 [01:43<01:02,  2.59s/it] ██████▏   
+loss=2.17, acc=46.09%, time_elapsed=103.4s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+40/63 [01:46<00:58,  2.54s/it] ██████▎   
+loss=2.17, acc=50.00%, time_elapsed=106.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+41/63 [01:48<00:56,  2.59s/it] ██████▌   
+loss=2.10, acc=51.56%, time_elapsed=108.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+42/63 [01:51<00:53,  2.55s/it] ██████▋   
+loss=2.20, acc=43.75%, time_elapsed=111.1s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+43/63 [01:53<00:50,  2.54s/it] ██████▊   
+loss=2.19, acc=48.44%, time_elapsed=113.5s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+44/63 [01:56<00:47,  2.50s/it] ██████▉   
+loss=2.19, acc=50.00%, time_elapsed=116.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+45/63 [01:58<00:45,  2.53s/it] ███████▏  
+loss=2.14, acc=49.22%, time_elapsed=118.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+46/63 [02:01<00:43,  2.57s/it] ███████▎  
+loss=2.14, acc=43.75%, time_elapsed=121.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+47/63 [02:03<00:41,  2.56s/it] ███████▍  
+loss=2.07, acc=46.09%, time_elapsed=123.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+48/63 [02:06<00:38,  2.55s/it] ███████▌  
+loss=2.09, acc=46.88%, time_elapsed=126.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+49/63 [02:09<00:35,  2.52s/it] ███████▊  
+loss=2.24, acc=39.84%, time_elapsed=129.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+50/63 [02:11<00:33,  2.61s/it] ███████▉  
+loss=2.02, acc=50.78%, time_elapsed=131.6s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+51/63 [02:14<00:31,  2.59s/it] ████████  
+loss=2.18, acc=47.66%, time_elapsed=134.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+52/63 [02:17<00:29,  2.64s/it] ████████▎ 
+loss=2.19, acc=37.50%, time_elapsed=137.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+53/63 [02:19<00:26,  2.67s/it] ████████▍ 
+loss=2.05, acc=53.91%, time_elapsed=139.7s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+54/63 [02:22<00:23,  2.63s/it] ████████▌ 
+loss=2.03, acc=50.78%, time_elapsed=142.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+55/63 [02:24<00:20,  2.58s/it] ████████▋ 
+loss=2.13, acc=50.00%, time_elapsed=145.0s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+56/63 [02:27<00:18,  2.64s/it] ████████▉ 
+loss=2.14, acc=49.22%, time_elapsed=147.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+57/63 [02:30<00:16,  2.67s/it] █████████ 
+loss=2.20, acc=45.31%, time_elapsed=150.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+58/63 [02:33<00:13,  2.78s/it] █████████▏
+loss=2.08, acc=50.00%, time_elapsed=153.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+59/63 [02:35<00:10,  2.66s/it] █████████▎
+loss=2.12, acc=53.12%, time_elapsed=155.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+60/63 [02:38<00:07,  2.66s/it] █████████▌
+loss=2.02, acc=52.34%, time_elapsed=158.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+61/63 [02:41<00:05,  2.65s/it] █████████▋
+loss=2.08, acc=54.69%, time_elapsed=161.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+62/63 [02:43<00:02,  2.64s/it] █████████▊
+loss=2.17, acc=48.44%, time_elapsed=163.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+
+
+
+Now evaluating epoch 11:
+
+
+0/63 [00:02<?, ?it/s]           
+loss=2.05, acc=58.59%, time_elapsed=2.4s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+1/63 [00:05<02:40,  2.60s/it] ▏         
+loss=2.12, acc=45.31%, time_elapsed=5.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+2/63 [00:07<02:39,  2.62s/it] ▎         
+loss=2.12, acc=48.44%, time_elapsed=7.8s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+3/63 [00:10<02:36,  2.61s/it] ▍         
+loss=2.04, acc=46.09%, time_elapsed=10.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+4/63 [00:13<02:32,  2.59s/it] ▋         
+loss=2.17, acc=45.31%, time_elapsed=13.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+5/63 [00:15<02:35,  2.68s/it] ▊         
+loss=2.05, acc=50.00%, time_elapsed=15.9s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+6/63 [00:18<02:33,  2.70s/it] ▉         
+loss=2.07, acc=46.88%, time_elapsed=18.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+7/63 [00:21<02:28,  2.65s/it] █         
+loss=2.10, acc=42.19%, time_elapsed=21.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+8/63 [00:23<02:27,  2.68s/it] █▎        
+loss=2.15, acc=45.31%, time_elapsed=23.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+9/63 [00:26<02:25,  2.69s/it] █▍        
+loss=2.09, acc=57.81%, time_elapsed=26.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+10/63 [00:29<02:22,  2.69s/it] █▌        
+loss=2.05, acc=57.03%, time_elapsed=29.1s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+11/63 [00:32<02:17,  2.64s/it] █▋        
+loss=2.08, acc=52.34%, time_elapsed=32.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+12/63 [00:35<02:19,  2.73s/it] █▉        
+loss=2.17, acc=50.78%, time_elapsed=35.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+13/63 [00:37<02:22,  2.84s/it] ██        
+loss=2.03, acc=52.34%, time_elapsed=37.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+14/63 [00:40<02:15,  2.77s/it] ██▏       
+loss=2.04, acc=55.47%, time_elapsed=40.5s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+15/63 [00:43<02:13,  2.77s/it] ██▍       
+loss=2.13, acc=52.34%, time_elapsed=43.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+16/63 [00:46<02:13,  2.84s/it] ██▌       
+loss=1.99, acc=55.47%, time_elapsed=46.1s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+17/63 [00:48<02:07,  2.76s/it] ██▋       
+loss=2.08, acc=53.91%, time_elapsed=48.9s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+18/63 [00:51<02:04,  2.76s/it] ██▊       
+loss=2.04, acc=49.22%, time_elapsed=51.6s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+19/63 [00:54<02:00,  2.73s/it] ███       
+loss=2.01, acc=56.25%, time_elapsed=54.2s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+20/63 [00:56<01:56,  2.71s/it] ███▏      
+loss=1.99, acc=50.00%, time_elapsed=56.6s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+21/63 [00:59<01:49,  2.62s/it] ███▎      
+loss=2.11, acc=51.56%, time_elapsed=59.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+22/63 [01:01<01:47,  2.61s/it] ███▍      
+loss=2.02, acc=46.88%, time_elapsed=61.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+23/63 [01:04<01:43,  2.60s/it] ███▋      
+loss=1.98, acc=51.56%, time_elapsed=64.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+24/63 [01:06<01:40,  2.59s/it] ███▊      
+loss=1.98, acc=55.47%, time_elapsed=66.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+25/63 [01:09<01:38,  2.59s/it] ███▉      
+loss=2.15, acc=46.88%, time_elapsed=69.6s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+26/63 [01:12<01:36,  2.60s/it] ████▏     
+loss=2.02, acc=50.78%, time_elapsed=72.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+27/63 [01:14<01:33,  2.60s/it] ████▎     
+loss=1.98, acc=50.00%, time_elapsed=74.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+28/63 [01:17<01:30,  2.60s/it] ████▍     
+loss=2.06, acc=48.44%, time_elapsed=77.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+29/63 [01:19<01:28,  2.61s/it] ████▌     
+loss=2.10, acc=49.22%, time_elapsed=79.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+30/63 [01:22<01:25,  2.59s/it] ████▊     
+loss=2.14, acc=46.88%, time_elapsed=82.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+31/63 [01:25<01:24,  2.63s/it] ████▉     
+loss=2.06, acc=46.88%, time_elapsed=85.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+32/63 [01:28<01:24,  2.74s/it] █████     
+loss=2.18, acc=49.22%, time_elapsed=88.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+33/63 [01:31<01:22,  2.77s/it] █████▏    
+loss=2.02, acc=54.69%, time_elapsed=91.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+34/63 [01:34<01:20,  2.78s/it] █████▍    
+loss=2.05, acc=49.22%, time_elapsed=94.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+35/63 [01:36<01:17,  2.78s/it] █████▌    
+loss=1.99, acc=51.56%, time_elapsed=96.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+36/63 [01:39<01:13,  2.74s/it] █████▋    
+loss=1.94, acc=48.44%, time_elapsed=99.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+37/63 [01:41<01:08,  2.64s/it] █████▊    
+loss=2.07, acc=47.66%, time_elapsed=101.9s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+38/63 [01:44<01:06,  2.67s/it] ██████    
+loss=1.96, acc=51.56%, time_elapsed=104.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+39/63 [01:47<01:03,  2.63s/it] ██████▏   
+loss=2.07, acc=53.12%, time_elapsed=107.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+40/63 [01:49<01:00,  2.63s/it] ██████▎   
+loss=1.92, acc=50.00%, time_elapsed=109.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+41/63 [01:51<00:56,  2.56s/it] ██████▌   
+loss=2.03, acc=42.19%, time_elapsed=111.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+42/63 [01:54<00:52,  2.51s/it] ██████▋   
+loss=2.02, acc=47.66%, time_elapsed=114.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+43/63 [01:56<00:50,  2.51s/it] ██████▊   
+loss=1.88, acc=55.47%, time_elapsed=116.8s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+44/63 [01:59<00:47,  2.49s/it] ██████▉   
+loss=2.06, acc=54.69%, time_elapsed=119.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+45/63 [02:01<00:44,  2.49s/it] ███████▏  
+loss=1.99, acc=53.12%, time_elapsed=121.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+46/63 [02:04<00:42,  2.50s/it] ███████▎  
+loss=1.94, acc=50.78%, time_elapsed=124.2s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+47/63 [02:06<00:39,  2.48s/it] ███████▍  
+loss=2.00, acc=54.69%, time_elapsed=126.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+48/63 [02:09<00:36,  2.47s/it] ███████▌  
+loss=1.97, acc=47.66%, time_elapsed=129.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+49/63 [02:11<00:34,  2.48s/it] ███████▊  
+loss=2.02, acc=46.88%, time_elapsed=131.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+50/63 [02:14<00:32,  2.46s/it] ███████▉  
+loss=2.02, acc=48.44%, time_elapsed=134.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+51/63 [02:16<00:29,  2.48s/it] ████████  
+loss=1.97, acc=53.12%, time_elapsed=136.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+52/63 [02:19<00:27,  2.48s/it] ████████▎ 
+loss=2.07, acc=45.31%, time_elapsed=139.2s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+53/63 [02:21<00:25,  2.51s/it] ████████▍ 
+loss=2.03, acc=51.56%, time_elapsed=141.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+54/63 [02:24<00:22,  2.53s/it] ████████▌ 
+loss=2.00, acc=58.59%, time_elapsed=144.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+55/63 [02:26<00:20,  2.59s/it] ████████▋ 
+loss=1.94, acc=60.16%, time_elapsed=146.9s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+56/63 [02:29<00:17,  2.54s/it] ████████▉ 
+loss=1.93, acc=46.88%, time_elapsed=149.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+57/63 [02:31<00:14,  2.49s/it] █████████ 
+loss=1.93, acc=50.78%, time_elapsed=151.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+58/63 [02:34<00:12,  2.50s/it] █████████▏
+loss=2.01, acc=47.66%, time_elapsed=154.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+59/63 [02:36<00:10,  2.51s/it] █████████▎
+loss=1.93, acc=54.69%, time_elapsed=156.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+60/63 [02:39<00:07,  2.54s/it] █████████▌
+loss=1.97, acc=50.00%, time_elapsed=159.5s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+61/63 [02:41<00:05,  2.56s/it] █████████▋
+loss=1.97, acc=46.88%, time_elapsed=161.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+62/63 [02:44<00:02,  2.51s/it] █████████▊
+loss=2.00, acc=50.78%, time_elapsed=164.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+
+
+
+Now evaluating epoch 12:
+
+
+0/63 [00:02<?, ?it/s]           
+loss=1.88, acc=47.66%, time_elapsed=2.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+1/63 [00:04<02:33,  2.48s/it] ▏         
+loss=1.97, acc=43.75%, time_elapsed=4.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+2/63 [00:07<02:28,  2.44s/it] ▎         
+loss=1.90, acc=50.00%, time_elapsed=7.4s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+3/63 [00:09<02:28,  2.48s/it] ▍         
+loss=2.00, acc=38.28%, time_elapsed=9.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+4/63 [00:12<02:27,  2.50s/it] ▋         
+loss=1.96, acc=44.53%, time_elapsed=12.7s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+5/63 [00:15<02:30,  2.59s/it] ▊         
+loss=1.93, acc=48.44%, time_elapsed=15.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+6/63 [00:17<02:28,  2.60s/it] ▉         
+loss=1.90, acc=44.53%, time_elapsed=17.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+7/63 [00:20<02:20,  2.50s/it] █         
+loss=1.92, acc=45.31%, time_elapsed=20.1s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+8/63 [00:22<02:18,  2.51s/it] █▎        
+loss=2.03, acc=44.53%, time_elapsed=22.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+9/63 [00:25<02:16,  2.54s/it] █▍        
+loss=1.95, acc=41.41%, time_elapsed=25.2s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+10/63 [00:27<02:13,  2.52s/it] █▌        
+loss=2.00, acc=46.09%, time_elapsed=27.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+11/63 [00:30<02:12,  2.56s/it] █▋        
+loss=1.95, acc=43.75%, time_elapsed=30.4s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+12/63 [00:32<02:10,  2.57s/it] █▉        
+loss=1.95, acc=50.00%, time_elapsed=32.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+13/63 [00:35<02:05,  2.51s/it] ██        
+loss=2.01, acc=49.22%, time_elapsed=35.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+14/63 [00:38<02:04,  2.55s/it] ██▏       
+loss=2.12, acc=44.53%, time_elapsed=38.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+15/63 [00:40<02:04,  2.59s/it] ██▍       
+loss=2.17, acc=43.75%, time_elapsed=40.5s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+16/63 [00:43<01:59,  2.53s/it] ██▌       
+loss=2.21, acc=32.81%, time_elapsed=43.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+17/63 [00:45<01:56,  2.53s/it] ██▋       
+loss=2.23, acc=39.06%, time_elapsed=45.6s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+18/63 [00:48<01:54,  2.55s/it] ██▊       
+loss=2.15, acc=32.03%, time_elapsed=48.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+19/63 [00:50<01:50,  2.52s/it] ███       
+loss=2.21, acc=39.84%, time_elapsed=50.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+20/63 [00:53<01:49,  2.55s/it] ███▏      
+loss=2.29, acc=39.84%, time_elapsed=53.6s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+21/63 [00:56<01:51,  2.66s/it] ███▎      
+loss=2.29, acc=34.38%, time_elapsed=56.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+22/63 [00:58<01:48,  2.65s/it] ███▍      
+loss=2.24, acc=37.50%, time_elapsed=58.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+23/63 [01:00<01:43,  2.60s/it] ███▋      
+loss=2.14, acc=41.41%, time_elapsed=61.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+24/63 [01:03<01:37,  2.50s/it] ███▊      
+loss=2.31, acc=38.28%, time_elapsed=64.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+25/63 [01:06<01:40,  2.66s/it] ███▉      
+loss=2.19, acc=36.72%, time_elapsed=66.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+26/63 [01:09<01:36,  2.60s/it] ████▏     
+loss=2.20, acc=35.94%, time_elapsed=69.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+27/63 [01:11<01:33,  2.61s/it] ████▎     
+loss=2.24, acc=34.38%, time_elapsed=71.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+28/63 [01:14<01:29,  2.56s/it] ████▍     
+loss=2.31, acc=35.16%, time_elapsed=74.5s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+29/63 [01:17<01:30,  2.67s/it] ████▌     
+loss=2.25, acc=29.69%, time_elapsed=77.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+30/63 [01:19<01:27,  2.65s/it] ████▊     
+loss=2.26, acc=25.00%, time_elapsed=79.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+31/63 [01:21<01:23,  2.61s/it] ████▉     
+loss=2.16, acc=37.50%, time_elapsed=82.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+32/63 [01:24<01:19,  2.55s/it] █████     
+loss=2.14, acc=39.06%, time_elapsed=84.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+33/63 [01:26<01:14,  2.50s/it] █████▏    
+loss=2.18, acc=36.72%, time_elapsed=86.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+34/63 [01:29<01:11,  2.45s/it] █████▍    
+loss=2.19, acc=40.62%, time_elapsed=89.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+35/63 [01:32<01:10,  2.53s/it] █████▌    
+loss=2.24, acc=31.25%, time_elapsed=92.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+36/63 [01:34<01:09,  2.58s/it] █████▋    
+loss=2.11, acc=40.62%, time_elapsed=94.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+37/63 [01:37<01:06,  2.55s/it] █████▊    
+loss=2.25, acc=32.03%, time_elapsed=97.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+38/63 [01:40<01:05,  2.60s/it] ██████    
+loss=2.27, acc=30.47%, time_elapsed=100.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+39/63 [01:42<01:04,  2.67s/it] ██████▏   
+loss=2.16, acc=39.84%, time_elapsed=102.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+40/63 [01:45<01:00,  2.62s/it] ██████▎   
+loss=2.19, acc=41.41%, time_elapsed=105.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+41/63 [01:47<00:56,  2.57s/it] ██████▌   
+loss=2.11, acc=44.53%, time_elapsed=107.5s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+42/63 [01:50<00:52,  2.52s/it] ██████▋   
+loss=2.15, acc=39.84%, time_elapsed=110.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+43/63 [01:52<00:50,  2.55s/it] ██████▊   
+loss=2.14, acc=38.28%, time_elapsed=112.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+44/63 [01:55<00:48,  2.54s/it] ██████▉   
+loss=2.17, acc=35.94%, time_elapsed=115.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+45/63 [01:57<00:45,  2.55s/it] ███████▏  
+loss=2.16, acc=41.41%, time_elapsed=117.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+46/63 [02:00<00:43,  2.58s/it] ███████▎  
+loss=2.25, acc=35.94%, time_elapsed=120.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+47/63 [02:03<00:41,  2.61s/it] ███████▍  
+loss=2.17, acc=33.59%, time_elapsed=123.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+48/63 [02:05<00:38,  2.59s/it] ███████▌  
+loss=2.13, acc=39.06%, time_elapsed=125.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+49/63 [02:08<00:36,  2.57s/it] ███████▊  
+loss=2.20, acc=39.06%, time_elapsed=128.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+50/63 [02:10<00:34,  2.63s/it] ███████▉  
+loss=2.18, acc=39.06%, time_elapsed=130.7s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+51/63 [02:13<00:30,  2.55s/it] ████████  
+loss=2.17, acc=48.44%, time_elapsed=133.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+52/63 [02:15<00:27,  2.48s/it] ████████▎ 
+loss=2.15, acc=46.88%, time_elapsed=135.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+53/63 [02:18<00:25,  2.52s/it] ████████▍ 
+loss=2.22, acc=39.84%, time_elapsed=138.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+54/63 [02:21<00:23,  2.57s/it] ████████▌ 
+loss=2.16, acc=44.53%, time_elapsed=141.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+55/63 [02:23<00:20,  2.61s/it] ████████▋ 
+loss=2.15, acc=39.84%, time_elapsed=143.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+56/63 [02:26<00:18,  2.60s/it] ████████▉ 
+loss=2.12, acc=50.00%, time_elapsed=146.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+57/63 [02:29<00:15,  2.62s/it] █████████ 
+loss=2.17, acc=48.44%, time_elapsed=149.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+58/63 [02:31<00:13,  2.68s/it] █████████▏
+loss=2.14, acc=36.72%, time_elapsed=151.7s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+59/63 [02:34<00:10,  2.64s/it] █████████▎
+loss=2.17, acc=39.06%, time_elapsed=154.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+60/63 [02:37<00:08,  2.69s/it] █████████▌
+loss=2.10, acc=48.44%, time_elapsed=157.3s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+61/63 [02:39<00:05,  2.72s/it] █████████▋
+loss=2.16, acc=50.78%, time_elapsed=160.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+62/63 [02:42<00:02,  2.71s/it] █████████▊
+loss=2.16, acc=50.78%, time_elapsed=162.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+
+
+
+Now evaluating epoch 13:
+
+
+0/63 [00:02<?, ?it/s]           
+loss=2.16, acc=52.34%, time_elapsed=2.7s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+1/63 [00:05<02:49,  2.74s/it] ▏         
+loss=2.12, acc=48.44%, time_elapsed=5.2s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+2/63 [00:07<02:40,  2.63s/it] ▎         
+loss=2.06, acc=50.78%, time_elapsed=7.7s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+3/63 [00:10<02:32,  2.54s/it] ▍         
+loss=1.99, acc=60.94%, time_elapsed=10.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+4/63 [00:12<02:28,  2.51s/it] ▋         
+loss=2.11, acc=48.44%, time_elapsed=12.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+5/63 [00:15<02:26,  2.52s/it] ▊         
+loss=2.15, acc=46.09%, time_elapsed=15.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+6/63 [00:18<02:30,  2.64s/it] ▉         
+loss=2.15, acc=41.41%, time_elapsed=18.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+7/63 [00:20<02:26,  2.62s/it] █         
+loss=2.09, acc=52.34%, time_elapsed=20.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+8/63 [00:22<02:17,  2.50s/it] █▎        
+loss=2.16, acc=44.53%, time_elapsed=22.9s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+9/63 [00:25<02:14,  2.49s/it] █▍        
+loss=2.05, acc=45.31%, time_elapsed=25.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+10/63 [00:27<02:10,  2.46s/it] █▌        
+loss=2.21, acc=43.75%, time_elapsed=27.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+11/63 [00:30<02:09,  2.50s/it] █▋        
+loss=2.10, acc=48.44%, time_elapsed=30.5s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+12/63 [00:33<02:10,  2.56s/it] █▉        
+loss=2.00, acc=57.81%, time_elapsed=33.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+13/63 [00:35<02:06,  2.54s/it] ██        
+loss=2.02, acc=50.00%, time_elapsed=35.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+14/63 [00:38<02:04,  2.53s/it] ██▏       
+loss=2.09, acc=47.66%, time_elapsed=38.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+15/63 [00:40<02:05,  2.61s/it] ██▍       
+loss=2.07, acc=45.31%, time_elapsed=40.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+16/63 [00:43<02:00,  2.56s/it] ██▌       
+loss=2.21, acc=39.84%, time_elapsed=43.7s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+17/63 [00:46<02:03,  2.69s/it] ██▋       
+loss=2.05, acc=50.78%, time_elapsed=46.4s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+18/63 [00:48<02:00,  2.69s/it] ██▊       
+loss=2.13, acc=46.88%, time_elapsed=49.0s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+19/63 [00:51<01:56,  2.65s/it] ███       
+loss=2.05, acc=52.34%, time_elapsed=51.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+20/63 [00:54<01:54,  2.67s/it] ███▏      
+loss=2.00, acc=50.00%, time_elapsed=54.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+21/63 [00:56<01:49,  2.62s/it] ███▎      
+loss=2.05, acc=47.66%, time_elapsed=56.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+22/63 [00:59<01:45,  2.56s/it] ███▍      
+loss=2.10, acc=47.66%, time_elapsed=59.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+23/63 [01:01<01:43,  2.60s/it] ███▋      
+loss=2.09, acc=53.12%, time_elapsed=61.8s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+24/63 [01:04<01:40,  2.57s/it] ███▊      
+loss=2.04, acc=53.12%, time_elapsed=64.2s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+25/63 [01:06<01:35,  2.52s/it] ███▉      
+loss=2.07, acc=49.22%, time_elapsed=67.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+26/63 [01:09<01:35,  2.59s/it] ████▏     
+loss=2.12, acc=53.12%, time_elapsed=69.7s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+27/63 [01:12<01:34,  2.62s/it] ████▎     
+loss=2.04, acc=42.19%, time_elapsed=72.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+28/63 [01:14<01:28,  2.54s/it] ████▍     
+loss=2.05, acc=47.66%, time_elapsed=74.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+29/63 [01:16<01:26,  2.53s/it] ████▌     
+loss=2.06, acc=47.66%, time_elapsed=77.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+30/63 [01:19<01:22,  2.51s/it] ████▊     
+loss=2.04, acc=58.59%, time_elapsed=79.6s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+31/63 [01:22<01:21,  2.55s/it] ████▉     
+loss=2.11, acc=53.12%, time_elapsed=82.1s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+32/63 [01:24<01:18,  2.53s/it] █████     
+loss=2.06, acc=53.91%, time_elapsed=84.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+33/63 [01:27<01:17,  2.57s/it] █████▏    
+loss=2.03, acc=50.78%, time_elapsed=87.4s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+34/63 [01:29<01:14,  2.57s/it] █████▍    
+loss=2.02, acc=53.12%, time_elapsed=89.8s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+35/63 [01:32<01:11,  2.55s/it] █████▌    
+loss=2.09, acc=40.62%, time_elapsed=92.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+36/63 [01:34<01:09,  2.56s/it] █████▋    
+loss=2.04, acc=51.56%, time_elapsed=94.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+37/63 [01:37<01:06,  2.54s/it] █████▊    
+loss=2.11, acc=44.53%, time_elapsed=97.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+38/63 [01:39<01:03,  2.53s/it] ██████    
+loss=2.06, acc=45.31%, time_elapsed=99.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+39/63 [01:42<01:00,  2.52s/it] ██████▏   
+loss=2.00, acc=60.94%, time_elapsed=102.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+40/63 [01:45<00:58,  2.56s/it] ██████▎   
+loss=2.14, acc=42.97%, time_elapsed=105.2s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+41/63 [01:47<00:56,  2.56s/it] ██████▌   
+loss=2.05, acc=50.78%, time_elapsed=107.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+42/63 [01:50<00:53,  2.56s/it] ██████▋   
+loss=2.14, acc=47.66%, time_elapsed=110.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+43/63 [01:53<00:53,  2.66s/it] ██████▊   
+loss=2.02, acc=46.09%, time_elapsed=113.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+44/63 [01:55<00:49,  2.63s/it] ██████▉   
+loss=2.04, acc=52.34%, time_elapsed=116.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+45/63 [01:58<00:48,  2.68s/it] ███████▏  
+loss=1.97, acc=57.81%, time_elapsed=118.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+46/63 [02:00<00:43,  2.57s/it] ███████▎  
+loss=1.98, acc=52.34%, time_elapsed=120.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+47/63 [02:03<00:41,  2.59s/it] ███████▍  
+loss=2.00, acc=50.78%, time_elapsed=123.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+48/63 [02:06<00:39,  2.62s/it] ███████▌  
+loss=1.95, acc=64.06%, time_elapsed=126.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+49/63 [02:08<00:36,  2.61s/it] ███████▊  
+loss=2.02, acc=46.09%, time_elapsed=128.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+50/63 [02:11<00:33,  2.56s/it] ███████▉  
+loss=2.03, acc=52.34%, time_elapsed=131.3s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+51/63 [02:13<00:30,  2.58s/it] ████████  
+loss=2.01, acc=53.12%, time_elapsed=133.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+52/63 [02:16<00:28,  2.56s/it] ████████▎ 
+loss=2.04, acc=47.66%, time_elapsed=136.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+53/63 [02:19<00:26,  2.62s/it] ████████▍ 
+loss=2.08, acc=46.88%, time_elapsed=139.0s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+54/63 [02:21<00:23,  2.59s/it] ████████▌ 
+loss=2.11, acc=43.75%, time_elapsed=141.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+55/63 [02:24<00:20,  2.60s/it] ████████▋ 
+loss=2.01, acc=54.69%, time_elapsed=144.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+56/63 [02:26<00:18,  2.60s/it] ████████▉ 
+loss=2.10, acc=46.09%, time_elapsed=146.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+57/63 [02:29<00:15,  2.60s/it] █████████ 
+loss=2.00, acc=54.69%, time_elapsed=149.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+58/63 [02:31<00:12,  2.54s/it] █████████▏
+loss=2.00, acc=50.00%, time_elapsed=151.5s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+59/63 [02:34<00:09,  2.48s/it] █████████▎
+loss=1.98, acc=57.81%, time_elapsed=154.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+60/63 [02:36<00:07,  2.47s/it] █████████▌
+loss=2.05, acc=54.69%, time_elapsed=156.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+61/63 [02:39<00:04,  2.44s/it] █████████▋
+loss=2.10, acc=46.88%, time_elapsed=159.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+62/63 [02:41<00:02,  2.49s/it] █████████▊
+loss=1.98, acc=60.94%, time_elapsed=161.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+
+
+
+Now evaluating epoch 14:
+
+
+0/63 [00:02<?, ?it/s]           
+loss=1.95, acc=57.03%, time_elapsed=2.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+1/63 [00:04<02:38,  2.56s/it] ▏         
+loss=1.98, acc=57.81%, time_elapsed=4.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+2/63 [00:07<02:31,  2.49s/it] ▎         
+loss=2.09, acc=52.34%, time_elapsed=7.7s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+3/63 [00:10<02:35,  2.59s/it] ▍         
+loss=2.09, acc=48.44%, time_elapsed=10.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+4/63 [00:13<02:42,  2.75s/it] ▋         
+loss=2.00, acc=56.25%, time_elapsed=13.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+5/63 [00:15<02:37,  2.71s/it] ▊         
+loss=2.08, acc=47.66%, time_elapsed=15.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+6/63 [00:18<02:33,  2.69s/it] ▉         
+loss=1.96, acc=53.91%, time_elapsed=18.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+7/63 [00:20<02:25,  2.60s/it] █         
+loss=2.03, acc=49.22%, time_elapsed=20.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+8/63 [00:23<02:20,  2.56s/it] █▎        
+loss=2.05, acc=48.44%, time_elapsed=23.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+9/63 [00:25<02:17,  2.55s/it] █▍        
+loss=1.99, acc=57.81%, time_elapsed=25.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+10/63 [00:28<02:15,  2.56s/it] █▌        
+loss=2.08, acc=46.88%, time_elapsed=28.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+11/63 [00:31<02:15,  2.61s/it] █▋        
+loss=2.03, acc=51.56%, time_elapsed=31.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+12/63 [00:33<02:11,  2.57s/it] █▉        
+loss=2.04, acc=50.78%, time_elapsed=33.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+13/63 [00:36<02:07,  2.55s/it] ██        
+loss=1.97, acc=51.56%, time_elapsed=36.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+14/63 [00:38<02:04,  2.54s/it] ██▏       
+loss=1.97, acc=53.12%, time_elapsed=38.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+15/63 [00:41<02:02,  2.55s/it] ██▍       
+loss=2.04, acc=50.00%, time_elapsed=41.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+16/63 [00:43<01:59,  2.54s/it] ██▌       
+loss=1.97, acc=58.59%, time_elapsed=43.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+17/63 [00:46<01:55,  2.52s/it] ██▋       
+loss=1.96, acc=55.47%, time_elapsed=46.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+18/63 [00:48<01:54,  2.54s/it] ██▊       
+loss=1.97, acc=57.03%, time_elapsed=48.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+19/63 [00:51<01:52,  2.56s/it] ███       
+loss=1.99, acc=54.69%, time_elapsed=51.6s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+20/63 [00:54<01:52,  2.61s/it] ███▏      
+loss=1.99, acc=57.03%, time_elapsed=54.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+21/63 [00:57<01:54,  2.73s/it] ███▎      
+loss=1.98, acc=56.25%, time_elapsed=57.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+22/63 [00:59<01:52,  2.74s/it] ███▍      
+loss=1.92, acc=58.59%, time_elapsed=59.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+23/63 [01:02<01:46,  2.67s/it] ███▋      
+loss=2.01, acc=49.22%, time_elapsed=62.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+24/63 [01:05<01:44,  2.67s/it] ███▊      
+loss=1.99, acc=55.47%, time_elapsed=65.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+25/63 [01:07<01:40,  2.65s/it] ███▉      
+loss=2.07, acc=43.75%, time_elapsed=67.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+26/63 [01:10<01:37,  2.63s/it] ████▏     
+loss=1.96, acc=52.34%, time_elapsed=70.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+27/63 [01:12<01:32,  2.56s/it] ████▎     
+loss=2.09, acc=46.88%, time_elapsed=72.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+28/63 [01:15<01:30,  2.58s/it] ████▍     
+loss=1.96, acc=50.78%, time_elapsed=75.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+29/63 [01:17<01:27,  2.58s/it] ████▌     
+loss=1.97, acc=54.69%, time_elapsed=78.0s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+30/63 [01:20<01:25,  2.59s/it] ████▊     
+loss=2.03, acc=52.34%, time_elapsed=80.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+31/63 [01:23<01:23,  2.60s/it] ████▉     
+loss=2.07, acc=46.88%, time_elapsed=83.3s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+32/63 [01:26<01:21,  2.63s/it] █████     
+loss=2.01, acc=50.78%, time_elapsed=86.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+33/63 [01:28<01:20,  2.68s/it] █████▏    
+loss=1.94, acc=56.25%, time_elapsed=88.6s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+34/63 [01:31<01:15,  2.61s/it] █████▍    
+loss=1.98, acc=55.47%, time_elapsed=91.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+35/63 [01:33<01:12,  2.60s/it] █████▌    
+loss=1.96, acc=57.81%, time_elapsed=93.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+36/63 [01:36<01:10,  2.59s/it] █████▋    
+loss=1.95, acc=53.91%, time_elapsed=96.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+37/63 [01:38<01:05,  2.53s/it] █████▊    
+loss=1.90, acc=53.91%, time_elapsed=98.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+38/63 [01:40<01:02,  2.50s/it] ██████    
+loss=1.95, acc=49.22%, time_elapsed=100.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+39/63 [01:43<00:58,  2.44s/it] ██████▏   
+loss=1.92, acc=51.56%, time_elapsed=103.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+40/63 [01:45<00:55,  2.42s/it] ██████▎   
+loss=1.97, acc=55.47%, time_elapsed=105.6s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+41/63 [01:48<00:53,  2.41s/it] ██████▌   
+loss=2.07, acc=50.78%, time_elapsed=108.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+42/63 [01:50<00:52,  2.51s/it] ██████▋   
+loss=1.94, acc=52.34%, time_elapsed=110.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+43/63 [01:53<00:50,  2.51s/it] ██████▊   
+loss=1.99, acc=55.47%, time_elapsed=113.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+44/63 [01:55<00:47,  2.49s/it] ██████▉   
+loss=1.95, acc=57.03%, time_elapsed=116.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+45/63 [01:58<00:45,  2.55s/it] ███████▏  
+loss=1.99, acc=52.34%, time_elapsed=118.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+46/63 [02:00<00:42,  2.53s/it] ███████▎  
+loss=1.97, acc=53.12%, time_elapsed=120.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+47/63 [02:03<00:39,  2.49s/it] ███████▍  
+loss=2.07, acc=47.66%, time_elapsed=123.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+48/63 [02:06<00:39,  2.61s/it] ███████▌  
+loss=1.90, acc=55.47%, time_elapsed=126.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+49/63 [02:09<00:35,  2.55s/it] ███████▊  
+loss=2.06, acc=49.22%, time_elapsed=129.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+50/63 [02:11<00:34,  2.66s/it] ███████▉  
+loss=1.96, acc=53.91%, time_elapsed=131.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+51/63 [02:14<00:31,  2.67s/it] ████████  
+loss=1.93, acc=57.81%, time_elapsed=134.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+52/63 [02:16<00:28,  2.61s/it] ████████▎ 
+loss=1.86, acc=58.59%, time_elapsed=136.6s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+53/63 [02:19<00:25,  2.53s/it] ████████▍ 
+loss=1.96, acc=58.59%, time_elapsed=139.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+54/63 [02:21<00:22,  2.52s/it] ████████▌ 
+loss=1.95, acc=53.12%, time_elapsed=141.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+55/63 [02:23<00:19,  2.49s/it] ████████▋ 
+loss=2.05, acc=52.34%, time_elapsed=143.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+56/63 [02:26<00:17,  2.47s/it] ████████▉ 
+loss=1.92, acc=62.50%, time_elapsed=146.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+57/63 [02:28<00:14,  2.48s/it] █████████ 
+loss=1.92, acc=52.34%, time_elapsed=148.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+58/63 [02:31<00:12,  2.47s/it] █████████▏
+loss=1.96, acc=54.69%, time_elapsed=151.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+59/63 [02:33<00:09,  2.47s/it] █████████▎
+loss=1.91, acc=61.72%, time_elapsed=153.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+60/63 [02:36<00:07,  2.50s/it] █████████▌
+loss=2.02, acc=57.81%, time_elapsed=156.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+61/63 [02:39<00:05,  2.59s/it] █████████▋
+loss=1.97, acc=53.91%, time_elapsed=159.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+62/63 [02:42<00:02,  2.62s/it] █████████▊
+loss=2.00, acc=50.78%, time_elapsed=162.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+
+
+
+Now evaluating epoch 15:
+
+
+0/63 [00:02<?, ?it/s]           
+loss=1.92, acc=53.91%, time_elapsed=2.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+1/63 [00:04<02:36,  2.53s/it] ▏         
+loss=1.93, acc=57.81%, time_elapsed=4.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+2/63 [00:07<02:30,  2.46s/it] ▎         
+loss=1.93, acc=54.69%, time_elapsed=7.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+3/63 [00:09<02:25,  2.42s/it] ▍         
+loss=1.86, acc=59.38%, time_elapsed=9.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+4/63 [00:12<02:26,  2.48s/it] ▋         
+loss=1.96, acc=53.12%, time_elapsed=12.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+5/63 [00:14<02:21,  2.44s/it] ▊         
+loss=1.89, acc=57.03%, time_elapsed=14.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+6/63 [00:17<02:20,  2.47s/it] ▉         
+loss=1.96, acc=56.25%, time_elapsed=17.3s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+7/63 [00:19<02:20,  2.50s/it] █         
+loss=1.93, acc=48.44%, time_elapsed=20.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+8/63 [00:22<02:20,  2.55s/it] █▎        
+loss=1.91, acc=60.94%, time_elapsed=22.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+9/63 [00:25<02:19,  2.59s/it] █▍        
+loss=2.05, acc=46.88%, time_elapsed=25.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+10/63 [00:28<02:19,  2.63s/it] █▌        
+loss=1.97, acc=60.16%, time_elapsed=28.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+11/63 [00:31<02:18,  2.66s/it] █▋        
+loss=2.12, acc=46.09%, time_elapsed=31.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+12/63 [00:33<02:21,  2.78s/it] █▉        
+loss=1.93, acc=59.38%, time_elapsed=33.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+13/63 [00:36<02:19,  2.78s/it] ██        
+loss=1.94, acc=50.78%, time_elapsed=36.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+14/63 [00:39<02:13,  2.73s/it] ██▏       
+loss=1.98, acc=50.00%, time_elapsed=39.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+15/63 [00:41<02:10,  2.72s/it] ██▍       
+loss=1.92, acc=52.34%, time_elapsed=41.9s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+16/63 [00:44<02:06,  2.69s/it] ██▌       
+loss=1.98, acc=50.00%, time_elapsed=44.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+17/63 [00:47<02:03,  2.69s/it] ██▋       
+loss=1.98, acc=51.56%, time_elapsed=47.2s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+18/63 [00:49<01:59,  2.66s/it] ██▊       
+loss=1.95, acc=57.81%, time_elapsed=49.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+19/63 [00:51<01:54,  2.60s/it] ███       
+loss=1.95, acc=50.78%, time_elapsed=52.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+20/63 [00:54<01:49,  2.54s/it] ███▏      
+loss=1.99, acc=54.69%, time_elapsed=54.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+21/63 [00:57<01:45,  2.50s/it] ███▎      
+loss=2.00, acc=53.91%, time_elapsed=57.1s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+22/63 [00:59<01:45,  2.56s/it] ███▍      
+loss=1.92, acc=58.59%, time_elapsed=59.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+23/63 [01:02<01:40,  2.51s/it] ███▋      
+loss=1.94, acc=54.69%, time_elapsed=62.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+24/63 [01:04<01:38,  2.53s/it] ███▊      
+loss=1.88, acc=56.25%, time_elapsed=64.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+25/63 [01:07<01:36,  2.54s/it] ███▉      
+loss=1.95, acc=47.66%, time_elapsed=67.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+26/63 [01:09<01:32,  2.50s/it] ████▏     
+loss=1.95, acc=52.34%, time_elapsed=69.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+27/63 [01:12<01:30,  2.51s/it] ████▎     
+loss=1.98, acc=57.81%, time_elapsed=72.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+28/63 [01:14<01:27,  2.51s/it] ████▍     
+loss=1.92, acc=60.94%, time_elapsed=74.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+29/63 [01:17<01:27,  2.58s/it] ████▌     
+loss=1.92, acc=59.38%, time_elapsed=77.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+30/63 [01:20<01:26,  2.62s/it] ████▊     
+loss=1.98, acc=54.69%, time_elapsed=80.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+31/63 [01:22<01:24,  2.63s/it] ████▉     
+loss=1.90, acc=53.12%, time_elapsed=82.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+32/63 [01:25<01:20,  2.60s/it] █████     
+loss=2.00, acc=49.22%, time_elapsed=85.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+33/63 [01:27<01:17,  2.59s/it] █████▏    
+loss=1.97, acc=51.56%, time_elapsed=87.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+34/63 [01:30<01:15,  2.60s/it] █████▍    
+loss=1.95, acc=57.81%, time_elapsed=90.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+35/63 [01:33<01:11,  2.56s/it] █████▌    
+loss=1.90, acc=57.81%, time_elapsed=93.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+36/63 [01:35<01:09,  2.58s/it] █████▋    
+loss=1.84, acc=60.16%, time_elapsed=95.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+37/63 [01:38<01:06,  2.57s/it] █████▊    
+loss=1.88, acc=67.19%, time_elapsed=98.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+38/63 [01:40<01:04,  2.59s/it] ██████    
+loss=1.90, acc=52.34%, time_elapsed=100.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+39/63 [01:42<01:00,  2.52s/it] ██████▏   
+loss=1.91, acc=58.59%, time_elapsed=102.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+40/63 [01:45<00:56,  2.48s/it] ██████▎   
+loss=1.96, acc=55.47%, time_elapsed=105.7s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+41/63 [01:48<00:56,  2.56s/it] ██████▌   
+loss=1.87, acc=59.38%, time_elapsed=108.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+42/63 [01:50<00:52,  2.52s/it] ██████▋   
+loss=1.88, acc=60.16%, time_elapsed=110.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+43/63 [01:53<00:50,  2.53s/it] ██████▊   
+loss=1.99, acc=49.22%, time_elapsed=113.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+44/63 [01:55<00:48,  2.58s/it] ██████▉   
+loss=1.91, acc=53.91%, time_elapsed=115.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+45/63 [01:58<00:45,  2.54s/it] ███████▏  
+loss=1.89, acc=53.12%, time_elapsed=118.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+46/63 [02:00<00:42,  2.52s/it] ███████▎  
+loss=1.92, acc=56.25%, time_elapsed=120.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+47/63 [02:03<00:40,  2.55s/it] ███████▍  
+loss=2.02, acc=53.91%, time_elapsed=123.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+48/63 [02:06<00:39,  2.61s/it] ███████▌  
+loss=1.86, acc=61.72%, time_elapsed=126.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+49/63 [02:08<00:35,  2.54s/it] ███████▊  
+loss=1.99, acc=59.38%, time_elapsed=128.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+50/63 [02:11<00:34,  2.65s/it] ███████▉  
+loss=1.86, acc=59.38%, time_elapsed=131.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+51/63 [02:14<00:31,  2.62s/it] ████████  
+loss=1.89, acc=60.94%, time_elapsed=134.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+52/63 [02:16<00:28,  2.60s/it] ████████▎ 
+loss=1.95, acc=43.75%, time_elapsed=136.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+53/63 [02:18<00:25,  2.57s/it] ████████▍ 
+loss=1.86, acc=59.38%, time_elapsed=138.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+54/63 [02:21<00:22,  2.50s/it] ████████▌ 
+loss=1.91, acc=60.16%, time_elapsed=141.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+55/63 [02:24<00:20,  2.55s/it] ████████▋ 
+loss=1.90, acc=57.81%, time_elapsed=144.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+56/63 [02:27<00:18,  2.60s/it] ████████▉ 
+loss=2.00, acc=50.78%, time_elapsed=147.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+57/63 [02:29<00:16,  2.68s/it] █████████ 
+loss=1.93, acc=56.25%, time_elapsed=149.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+58/63 [02:32<00:13,  2.68s/it] █████████▏
+loss=1.89, acc=55.47%, time_elapsed=152.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+59/63 [02:34<00:10,  2.63s/it] █████████▎
+loss=1.89, acc=51.56%, time_elapsed=154.8s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+60/63 [02:37<00:07,  2.59s/it] █████████▌
+loss=1.95, acc=52.34%, time_elapsed=157.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+61/63 [02:39<00:05,  2.54s/it] █████████▋
+loss=1.89, acc=53.12%, time_elapsed=159.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+62/63 [02:42<00:02,  2.53s/it] █████████▊
+loss=1.83, acc=57.81%, time_elapsed=162.2s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+
+
+
+Now evaluating epoch 16:
+
+
+0/63 [00:02<?, ?it/s]           
+loss=1.92, acc=57.03%, time_elapsed=2.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+1/63 [00:05<02:30,  2.43s/it] ▏         
+loss=1.94, acc=48.44%, time_elapsed=5.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+2/63 [00:07<02:38,  2.60s/it] ▎         
+loss=1.86, acc=61.72%, time_elapsed=7.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+3/63 [00:09<02:31,  2.53s/it] ▍         
+loss=1.88, acc=57.03%, time_elapsed=9.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+4/63 [00:12<02:26,  2.48s/it] ▋         
+loss=1.88, acc=56.25%, time_elapsed=12.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+5/63 [00:14<02:21,  2.44s/it] ▊         
+loss=1.92, acc=57.81%, time_elapsed=14.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+6/63 [00:17<02:21,  2.48s/it] ▉         
+loss=1.92, acc=53.91%, time_elapsed=17.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+7/63 [00:19<02:20,  2.50s/it] █         
+loss=1.87, acc=54.69%, time_elapsed=19.9s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+8/63 [00:22<02:16,  2.49s/it] █▎        
+loss=1.89, acc=57.81%, time_elapsed=22.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+9/63 [00:25<02:11,  2.44s/it] █▍        
+loss=2.00, acc=51.56%, time_elapsed=25.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+10/63 [00:27<02:18,  2.61s/it] █▌        
+loss=1.87, acc=58.59%, time_elapsed=27.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+11/63 [00:30<02:15,  2.61s/it] █▋        
+loss=1.84, acc=61.72%, time_elapsed=30.3s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+12/63 [00:32<02:11,  2.57s/it] █▉        
+loss=1.87, acc=59.38%, time_elapsed=32.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+13/63 [00:35<02:08,  2.56s/it] ██        
+loss=1.90, acc=54.69%, time_elapsed=35.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+14/63 [00:38<02:04,  2.54s/it] ██▏       
+loss=1.93, acc=57.03%, time_elapsed=38.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+15/63 [00:40<02:05,  2.62s/it] ██▍       
+loss=1.86, acc=62.50%, time_elapsed=40.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+16/63 [00:43<02:03,  2.62s/it] ██▌       
+loss=1.91, acc=57.81%, time_elapsed=43.3s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+17/63 [00:45<02:00,  2.61s/it] ██▋       
+loss=1.79, acc=60.16%, time_elapsed=45.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+18/63 [00:48<01:54,  2.55s/it] ██▊       
+loss=1.90, acc=50.78%, time_elapsed=48.3s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+19/63 [00:50<01:52,  2.55s/it] ███       
+loss=1.81, acc=61.72%, time_elapsed=50.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+20/63 [00:53<01:46,  2.48s/it] ███▏      
+loss=1.88, acc=64.06%, time_elapsed=53.3s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+21/63 [00:55<01:47,  2.56s/it] ███▎      
+loss=1.86, acc=60.94%, time_elapsed=55.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+22/63 [00:58<01:45,  2.56s/it] ███▍      
+loss=1.80, acc=61.72%, time_elapsed=58.3s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+23/63 [01:00<01:40,  2.50s/it] ███▋      
+loss=1.92, acc=53.12%, time_elapsed=60.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+24/63 [01:03<01:38,  2.52s/it] ███▊      
+loss=1.88, acc=57.81%, time_elapsed=63.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+25/63 [01:05<01:35,  2.52s/it] ███▉      
+loss=1.83, acc=59.38%, time_elapsed=65.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+26/63 [01:08<01:33,  2.52s/it] ████▏     
+loss=1.95, acc=50.78%, time_elapsed=68.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+27/63 [01:11<01:32,  2.58s/it] ████▎     
+loss=1.91, acc=56.25%, time_elapsed=71.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+28/63 [01:13<01:31,  2.62s/it] ████▍     
+loss=1.84, acc=58.59%, time_elapsed=73.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+29/63 [01:16<01:28,  2.61s/it] ████▌     
+loss=1.83, acc=63.28%, time_elapsed=76.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+30/63 [01:18<01:24,  2.56s/it] ████▊     
+loss=1.85, acc=59.38%, time_elapsed=78.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+31/63 [01:21<01:21,  2.55s/it] ████▉     
+loss=1.85, acc=59.38%, time_elapsed=81.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+32/63 [01:24<01:19,  2.58s/it] █████     
+loss=1.90, acc=59.38%, time_elapsed=84.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+33/63 [01:27<01:17,  2.59s/it] █████▏    
+loss=1.94, acc=57.81%, time_elapsed=87.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+34/63 [01:29<01:19,  2.73s/it] █████▍    
+loss=1.89, acc=55.47%, time_elapsed=89.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+35/63 [01:32<01:16,  2.73s/it] █████▌    
+loss=1.92, acc=53.12%, time_elapsed=92.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+36/63 [01:35<01:13,  2.73s/it] █████▋    
+loss=1.87, acc=55.47%, time_elapsed=95.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+37/63 [01:37<01:11,  2.73s/it] █████▊    
+loss=1.90, acc=49.22%, time_elapsed=98.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+38/63 [01:40<01:07,  2.69s/it] ██████    
+loss=1.92, acc=56.25%, time_elapsed=100.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+39/63 [01:43<01:05,  2.73s/it] ██████▏   
+loss=1.93, acc=48.44%, time_elapsed=103.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+40/63 [01:45<01:00,  2.65s/it] ██████▎   
+loss=1.81, acc=57.81%, time_elapsed=105.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+41/63 [01:48<00:56,  2.58s/it] ██████▌   
+loss=1.96, acc=46.09%, time_elapsed=108.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+42/63 [01:50<00:54,  2.59s/it] ██████▋   
+loss=1.89, acc=57.03%, time_elapsed=110.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+43/63 [01:53<00:51,  2.56s/it] ██████▊   
+loss=1.89, acc=56.25%, time_elapsed=113.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+44/63 [01:55<00:47,  2.52s/it] ██████▉   
+loss=1.91, acc=57.03%, time_elapsed=115.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+45/63 [01:58<00:44,  2.49s/it] ███████▏  
+loss=1.86, acc=59.38%, time_elapsed=118.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+46/63 [02:00<00:42,  2.51s/it] ███████▎  
+loss=1.88, acc=53.12%, time_elapsed=120.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+47/63 [02:03<00:40,  2.53s/it] ███████▍  
+loss=1.86, acc=54.69%, time_elapsed=123.2s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+48/63 [02:05<00:37,  2.51s/it] ███████▌  
+loss=1.88, acc=52.34%, time_elapsed=125.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+49/63 [02:08<00:34,  2.49s/it] ███████▊  
+loss=1.87, acc=49.22%, time_elapsed=128.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+50/63 [02:10<00:32,  2.48s/it] ███████▉  
+loss=1.90, acc=50.78%, time_elapsed=130.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+51/63 [02:13<00:29,  2.46s/it] ████████  
+loss=1.86, acc=55.47%, time_elapsed=133.2s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+52/63 [02:15<00:27,  2.51s/it] ████████▎ 
+loss=1.83, acc=53.91%, time_elapsed=135.8s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+53/63 [02:18<00:25,  2.55s/it] ████████▍ 
+loss=1.81, acc=64.84%, time_elapsed=138.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+54/63 [02:20<00:22,  2.55s/it] ████████▌ 
+loss=1.96, acc=46.88%, time_elapsed=140.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+55/63 [02:23<00:20,  2.56s/it] ████████▋ 
+loss=1.86, acc=60.16%, time_elapsed=143.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+56/63 [02:25<00:17,  2.53s/it] ████████▉ 
+loss=1.91, acc=56.25%, time_elapsed=145.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+57/63 [02:28<00:14,  2.50s/it] █████████ 
+loss=1.83, acc=60.16%, time_elapsed=148.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+58/63 [02:31<00:12,  2.51s/it] █████████▏
+loss=1.88, acc=68.75%, time_elapsed=151.1s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+59/63 [02:33<00:10,  2.59s/it] █████████▎
+loss=1.97, acc=50.00%, time_elapsed=153.7s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+60/63 [02:36<00:07,  2.59s/it] █████████▌
+loss=1.83, acc=53.91%, time_elapsed=156.2s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+61/63 [02:38<00:05,  2.55s/it] █████████▋
+loss=1.87, acc=56.25%, time_elapsed=158.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+62/63 [02:41<00:02,  2.55s/it] █████████▊
+loss=1.87, acc=53.12%, time_elapsed=161.6s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+
+
+
+Now evaluating epoch 17:
+
+
+0/63 [00:02<?, ?it/s]           
+loss=1.77, acc=66.41%, time_elapsed=2.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+1/63 [00:05<02:36,  2.53s/it] ▏         
+loss=1.96, acc=49.22%, time_elapsed=5.2s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+2/63 [00:07<02:40,  2.63s/it] ▎         
+loss=1.90, acc=50.78%, time_elapsed=7.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+3/63 [00:10<02:37,  2.63s/it] ▍         
+loss=1.94, acc=56.25%, time_elapsed=10.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+4/63 [00:12<02:34,  2.63s/it] ▋         
+loss=1.84, acc=58.59%, time_elapsed=12.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+5/63 [00:15<02:28,  2.56s/it] ▊         
+loss=1.96, acc=59.38%, time_elapsed=15.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+6/63 [00:18<02:34,  2.72s/it] ▉         
+loss=1.85, acc=58.59%, time_elapsed=18.6s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+7/63 [00:21<02:31,  2.71s/it] █         
+loss=1.82, acc=67.97%, time_elapsed=21.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+8/63 [00:24<02:27,  2.69s/it] █▎        
+loss=1.88, acc=60.16%, time_elapsed=24.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+9/63 [00:26<02:27,  2.72s/it] █▍        
+loss=1.90, acc=54.69%, time_elapsed=26.7s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+10/63 [00:29<02:23,  2.71s/it] █▌        
+loss=1.86, acc=51.56%, time_elapsed=29.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+11/63 [00:31<02:17,  2.65s/it] █▋        
+loss=1.78, acc=61.72%, time_elapsed=31.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+12/63 [00:34<02:14,  2.63s/it] █▉        
+loss=1.88, acc=53.12%, time_elapsed=34.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+13/63 [00:36<02:11,  2.62s/it] ██        
+loss=1.85, acc=50.78%, time_elapsed=36.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+14/63 [00:39<02:06,  2.57s/it] ██▏       
+loss=1.82, acc=53.12%, time_elapsed=39.4s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+15/63 [00:41<02:02,  2.55s/it] ██▍       
+loss=1.90, acc=51.56%, time_elapsed=42.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+16/63 [00:44<02:00,  2.57s/it] ██▌       
+loss=1.93, acc=53.12%, time_elapsed=44.8s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+17/63 [00:47<02:01,  2.63s/it] ██▋       
+loss=1.79, acc=61.72%, time_elapsed=47.4s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+18/63 [00:50<01:58,  2.62s/it] ██▊       
+loss=1.82, acc=66.41%, time_elapsed=50.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+19/63 [00:52<01:55,  2.63s/it] ███       
+loss=1.81, acc=53.12%, time_elapsed=52.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+20/63 [00:54<01:50,  2.56s/it] ███▏      
+loss=1.88, acc=57.81%, time_elapsed=55.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+21/63 [00:57<01:47,  2.56s/it] ███▎      
+loss=1.83, acc=58.59%, time_elapsed=57.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+22/63 [01:00<01:45,  2.58s/it] ███▍      
+loss=1.85, acc=55.47%, time_elapsed=60.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+23/63 [01:02<01:42,  2.57s/it] ███▋      
+loss=1.76, acc=61.72%, time_elapsed=62.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+24/63 [01:05<01:41,  2.60s/it] ███▊      
+loss=1.85, acc=57.81%, time_elapsed=65.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+25/63 [01:07<01:38,  2.59s/it] ███▉      
+loss=1.85, acc=57.03%, time_elapsed=67.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+26/63 [01:10<01:34,  2.54s/it] ████▏     
+loss=1.78, acc=59.38%, time_elapsed=70.2s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+27/63 [01:12<01:30,  2.50s/it] ████▎     
+loss=1.87, acc=57.03%, time_elapsed=72.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+28/63 [01:15<01:28,  2.53s/it] ████▍     
+loss=1.82, acc=54.69%, time_elapsed=75.2s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+29/63 [01:17<01:24,  2.50s/it] ████▌     
+loss=1.78, acc=60.94%, time_elapsed=77.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+30/63 [01:20<01:22,  2.51s/it] ████▊     
+loss=1.82, acc=54.69%, time_elapsed=80.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+31/63 [01:22<01:22,  2.57s/it] ████▉     
+loss=1.79, acc=59.38%, time_elapsed=82.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+32/63 [01:25<01:18,  2.53s/it] █████     
+loss=1.94, acc=49.22%, time_elapsed=85.5s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+33/63 [01:27<01:16,  2.54s/it] █████▏    
+loss=1.73, acc=68.75%, time_elapsed=87.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+34/63 [01:30<01:12,  2.51s/it] █████▍    
+loss=1.90, acc=52.34%, time_elapsed=90.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+35/63 [01:32<01:11,  2.54s/it] █████▌    
+loss=1.82, acc=57.81%, time_elapsed=92.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+36/63 [01:35<01:07,  2.50s/it] █████▋    
+loss=1.88, acc=50.78%, time_elapsed=95.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+37/63 [01:38<01:05,  2.52s/it] █████▊    
+loss=1.86, acc=57.03%, time_elapsed=98.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+38/63 [01:40<01:04,  2.58s/it] ██████    
+loss=1.82, acc=57.03%, time_elapsed=100.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+39/63 [01:43<01:01,  2.57s/it] ██████▏   
+loss=1.89, acc=46.88%, time_elapsed=103.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+40/63 [01:45<00:58,  2.56s/it] ██████▎   
+loss=1.89, acc=55.47%, time_elapsed=105.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+41/63 [01:48<00:56,  2.56s/it] ██████▌   
+loss=1.81, acc=60.16%, time_elapsed=108.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+42/63 [01:50<00:53,  2.55s/it] ██████▋   
+loss=1.77, acc=62.50%, time_elapsed=110.9s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+43/63 [01:53<00:50,  2.53s/it] ██████▊   
+loss=1.78, acc=55.47%, time_elapsed=113.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+44/63 [01:56<00:47,  2.49s/it] ██████▉   
+loss=1.90, acc=52.34%, time_elapsed=116.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+45/63 [01:58<00:46,  2.56s/it] ███████▏  
+loss=1.82, acc=50.00%, time_elapsed=118.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+46/63 [02:00<00:42,  2.49s/it] ███████▎  
+loss=1.81, acc=59.38%, time_elapsed=120.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+47/63 [02:03<00:40,  2.51s/it] ███████▍  
+loss=1.72, acc=62.50%, time_elapsed=123.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+48/63 [02:05<00:36,  2.45s/it] ███████▌  
+loss=1.84, acc=52.34%, time_elapsed=125.9s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+49/63 [02:08<00:35,  2.52s/it] ███████▊  
+loss=1.79, acc=61.72%, time_elapsed=128.5s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+50/63 [02:11<00:33,  2.55s/it] ███████▉  
+loss=1.86, acc=61.72%, time_elapsed=131.0s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+51/63 [02:13<00:30,  2.55s/it] ████████  
+loss=1.96, acc=52.34%, time_elapsed=134.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+52/63 [02:16<00:29,  2.66s/it] ████████▎ 
+loss=1.82, acc=53.91%, time_elapsed=136.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+53/63 [02:19<00:26,  2.66s/it] ████████▍ 
+loss=1.84, acc=53.91%, time_elapsed=139.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+54/63 [02:21<00:23,  2.64s/it] ████████▌ 
+loss=1.79, acc=61.72%, time_elapsed=141.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+55/63 [02:24<00:20,  2.61s/it] ████████▋ 
+loss=1.87, acc=53.91%, time_elapsed=144.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+56/63 [02:26<00:17,  2.57s/it] ████████▉ 
+loss=1.81, acc=53.91%, time_elapsed=146.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+57/63 [02:29<00:15,  2.54s/it] █████████ 
+loss=1.85, acc=53.91%, time_elapsed=149.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+58/63 [02:32<00:12,  2.57s/it] █████████▏
+loss=1.84, acc=58.59%, time_elapsed=152.0s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+59/63 [02:34<00:10,  2.61s/it] █████████▎
+loss=1.87, acc=54.69%, time_elapsed=154.6s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+60/63 [02:36<00:07,  2.60s/it] █████████▌
+loss=1.77, acc=56.25%, time_elapsed=157.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+61/63 [02:39<00:05,  2.53s/it] █████████▋
+loss=1.86, acc=54.69%, time_elapsed=159.4s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+62/63 [02:41<00:02,  2.50s/it] █████████▊
+loss=1.70, acc=62.50%, time_elapsed=161.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+
+
+
+Now evaluating epoch 18:
+
+
+0/63 [00:02<?, ?it/s]           
+loss=1.87, acc=58.59%, time_elapsed=2.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+1/63 [00:05<02:35,  2.51s/it] ▏         
+loss=1.83, acc=63.28%, time_elapsed=5.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+2/63 [00:07<02:40,  2.62s/it] ▎         
+loss=1.81, acc=57.03%, time_elapsed=7.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+3/63 [00:10<02:32,  2.55s/it] ▍         
+loss=1.80, acc=59.38%, time_elapsed=10.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+4/63 [00:12<02:26,  2.48s/it] ▋         
+loss=1.73, acc=60.16%, time_elapsed=12.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+5/63 [00:15<02:22,  2.45s/it] ▊         
+loss=1.88, acc=58.59%, time_elapsed=15.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+6/63 [00:17<02:23,  2.51s/it] ▉         
+loss=1.85, acc=57.81%, time_elapsed=17.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+7/63 [00:20<02:23,  2.56s/it] █         
+loss=1.80, acc=56.25%, time_elapsed=20.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+8/63 [00:22<02:19,  2.53s/it] █▎        
+loss=1.75, acc=58.59%, time_elapsed=22.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+9/63 [00:25<02:13,  2.47s/it] █▍        
+loss=1.90, acc=57.03%, time_elapsed=25.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+10/63 [00:27<02:14,  2.53s/it] █▌        
+loss=1.84, acc=46.09%, time_elapsed=27.8s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+11/63 [00:30<02:13,  2.57s/it] █▋        
+loss=1.93, acc=50.78%, time_elapsed=30.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+12/63 [00:33<02:15,  2.66s/it] █▉        
+loss=1.84, acc=55.47%, time_elapsed=33.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+13/63 [00:35<02:10,  2.61s/it] ██        
+loss=1.83, acc=52.34%, time_elapsed=35.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+14/63 [00:38<02:07,  2.60s/it] ██▏       
+loss=1.88, acc=57.03%, time_elapsed=38.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+15/63 [00:41<02:06,  2.64s/it] ██▍       
+loss=1.79, acc=51.56%, time_elapsed=41.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+16/63 [00:44<02:08,  2.73s/it] ██▌       
+loss=1.98, acc=46.09%, time_elapsed=44.1s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+17/63 [00:46<02:04,  2.71s/it] ██▋       
+loss=1.79, acc=58.59%, time_elapsed=46.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+18/63 [00:49<02:00,  2.67s/it] ██▊       
+loss=1.77, acc=60.16%, time_elapsed=49.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+19/63 [00:51<01:54,  2.61s/it] ███       
+loss=1.83, acc=56.25%, time_elapsed=51.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+20/63 [00:54<01:54,  2.66s/it] ███▏      
+loss=1.80, acc=56.25%, time_elapsed=54.3s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+21/63 [00:56<01:48,  2.59s/it] ███▎      
+loss=1.78, acc=52.34%, time_elapsed=57.0s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+22/63 [00:59<01:46,  2.60s/it] ███▍      
+loss=1.83, acc=51.56%, time_elapsed=59.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+23/63 [01:02<01:45,  2.64s/it] ███▋      
+loss=1.70, acc=62.50%, time_elapsed=62.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+24/63 [01:04<01:40,  2.59s/it] ███▊      
+loss=1.73, acc=64.84%, time_elapsed=64.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+25/63 [01:07<01:35,  2.50s/it] ███▉      
+loss=1.81, acc=56.25%, time_elapsed=67.0s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+26/63 [01:09<01:33,  2.52s/it] ████▏     
+loss=1.76, acc=60.16%, time_elapsed=69.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+27/63 [01:11<01:30,  2.52s/it] ████▎     
+loss=1.75, acc=53.91%, time_elapsed=72.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+28/63 [01:14<01:27,  2.49s/it] ████▍     
+loss=1.75, acc=62.50%, time_elapsed=74.6s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+29/63 [01:16<01:26,  2.53s/it] ████▌     
+loss=1.75, acc=59.38%, time_elapsed=77.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+30/63 [01:19<01:22,  2.49s/it] ████▊     
+loss=1.75, acc=58.59%, time_elapsed=79.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+31/63 [01:21<01:18,  2.47s/it] ████▉     
+loss=1.92, acc=50.78%, time_elapsed=81.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+32/63 [01:24<01:15,  2.43s/it] █████     
+loss=1.80, acc=59.38%, time_elapsed=84.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+33/63 [01:26<01:13,  2.45s/it] █████▏    
+loss=1.80, acc=63.28%, time_elapsed=86.9s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+34/63 [01:29<01:12,  2.51s/it] █████▍    
+loss=1.80, acc=57.81%, time_elapsed=89.3s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+35/63 [01:31<01:09,  2.50s/it] █████▌    
+loss=1.75, acc=60.16%, time_elapsed=91.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+36/63 [01:34<01:08,  2.52s/it] █████▋    
+loss=1.81, acc=54.69%, time_elapsed=94.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+37/63 [01:36<01:06,  2.54s/it] █████▊    
+loss=1.83, acc=60.94%, time_elapsed=97.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+38/63 [01:39<01:02,  2.51s/it] ██████    
+loss=1.82, acc=50.00%, time_elapsed=99.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+39/63 [01:42<01:00,  2.52s/it] ██████▏   
+loss=1.77, acc=57.81%, time_elapsed=102.1s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+40/63 [01:45<00:58,  2.54s/it] ██████▎   
+loss=1.77, acc=60.16%, time_elapsed=105.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+41/63 [01:47<00:58,  2.66s/it] ██████▌   
+loss=1.75, acc=57.81%, time_elapsed=107.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+42/63 [01:50<00:54,  2.61s/it] ██████▋   
+loss=1.78, acc=58.59%, time_elapsed=110.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+43/63 [01:52<00:52,  2.62s/it] ██████▊   
+loss=1.77, acc=57.03%, time_elapsed=112.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+44/63 [01:55<00:49,  2.59s/it] ██████▉   
+loss=1.84, acc=57.03%, time_elapsed=115.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+45/63 [01:57<00:46,  2.60s/it] ███████▏  
+loss=1.78, acc=50.78%, time_elapsed=118.0s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+46/63 [02:00<00:44,  2.62s/it] ███████▎  
+loss=1.87, acc=50.78%, time_elapsed=120.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+47/63 [02:03<00:42,  2.63s/it] ███████▍  
+loss=1.85, acc=43.75%, time_elapsed=123.0s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+48/63 [02:05<00:38,  2.56s/it] ███████▌  
+loss=1.76, acc=57.03%, time_elapsed=125.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+49/63 [02:08<00:36,  2.58s/it] ███████▊  
+loss=1.77, acc=55.47%, time_elapsed=128.3s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+50/63 [02:10<00:33,  2.58s/it] ███████▉  
+loss=1.81, acc=57.03%, time_elapsed=130.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+51/63 [02:13<00:30,  2.55s/it] ████████  
+loss=1.77, acc=60.94%, time_elapsed=133.1s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+52/63 [02:15<00:27,  2.50s/it] ████████▎ 
+loss=1.70, acc=62.50%, time_elapsed=135.4s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+53/63 [02:18<00:24,  2.45s/it] ████████▍ 
+loss=1.85, acc=48.44%, time_elapsed=138.1s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+54/63 [02:20<00:22,  2.51s/it] ████████▌ 
+loss=1.78, acc=59.38%, time_elapsed=140.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+55/63 [02:23<00:20,  2.54s/it] ████████▋ 
+loss=1.73, acc=59.38%, time_elapsed=143.2s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+56/63 [02:25<00:17,  2.54s/it] ████████▉ 
+loss=1.81, acc=49.22%, time_elapsed=145.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+57/63 [02:28<00:15,  2.56s/it] █████████ 
+loss=1.81, acc=52.34%, time_elapsed=148.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+58/63 [02:30<00:12,  2.56s/it] █████████▏
+loss=1.82, acc=50.78%, time_elapsed=150.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+59/63 [02:33<00:10,  2.51s/it] █████████▎
+loss=1.74, acc=60.94%, time_elapsed=153.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+60/63 [02:36<00:07,  2.56s/it] █████████▌
+loss=1.78, acc=62.50%, time_elapsed=156.1s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+61/63 [02:38<00:05,  2.60s/it] █████████▋
+loss=1.72, acc=58.59%, time_elapsed=158.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+62/63 [02:41<00:02,  2.54s/it] █████████▊
+loss=1.89, acc=46.88%, time_elapsed=161.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+
+
+
+Now evaluating epoch 19:
+
+
+0/63 [00:02<?, ?it/s]           
+loss=1.82, acc=55.47%, time_elapsed=2.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+1/63 [00:05<02:48,  2.72s/it] ▏         
+loss=1.74, acc=57.81%, time_elapsed=5.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+2/63 [00:08<02:44,  2.70s/it] ▎         
+loss=1.78, acc=63.28%, time_elapsed=8.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+3/63 [00:10<02:42,  2.72s/it] ▍         
+loss=1.84, acc=50.78%, time_elapsed=10.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+4/63 [00:13<02:33,  2.60s/it] ▋         
+loss=1.76, acc=56.25%, time_elapsed=13.0s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+5/63 [00:15<02:28,  2.56s/it] ▊         
+loss=1.83, acc=57.03%, time_elapsed=15.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+6/63 [00:18<02:24,  2.54s/it] ▉         
+loss=1.77, acc=56.25%, time_elapsed=18.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+7/63 [00:20<02:24,  2.59s/it] █         
+loss=1.78, acc=60.16%, time_elapsed=20.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+8/63 [00:23<02:22,  2.59s/it] █▎        
+loss=1.71, acc=57.81%, time_elapsed=23.2s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+9/63 [00:25<02:16,  2.53s/it] █▍        
+loss=1.77, acc=58.59%, time_elapsed=25.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+10/63 [00:28<02:13,  2.53s/it] █▌        
+loss=1.85, acc=56.25%, time_elapsed=28.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+11/63 [00:31<02:17,  2.65s/it] █▋        
+loss=1.77, acc=57.81%, time_elapsed=31.4s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+12/63 [00:33<02:16,  2.67s/it] █▉        
+loss=1.76, acc=55.47%, time_elapsed=34.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+13/63 [00:36<02:12,  2.66s/it] ██        
+loss=1.76, acc=55.47%, time_elapsed=36.7s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+14/63 [00:39<02:11,  2.68s/it] ██▏       
+loss=1.75, acc=54.69%, time_elapsed=39.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+15/63 [00:42<02:13,  2.78s/it] ██▍       
+loss=1.88, acc=53.12%, time_elapsed=42.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+16/63 [00:45<02:11,  2.81s/it] ██▌       
+loss=1.89, acc=59.38%, time_elapsed=45.7s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+17/63 [00:48<02:12,  2.89s/it] ██▋       
+loss=1.76, acc=58.59%, time_elapsed=48.2s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+18/63 [00:50<02:04,  2.77s/it] ██▊       
+loss=1.76, acc=54.69%, time_elapsed=50.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+19/63 [00:53<02:00,  2.73s/it] ███       
+loss=1.70, acc=62.50%, time_elapsed=53.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+20/63 [00:55<01:54,  2.65s/it] ███▏      
+loss=1.81, acc=58.59%, time_elapsed=55.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+21/63 [00:58<01:50,  2.62s/it] ███▎      
+loss=1.78, acc=57.81%, time_elapsed=58.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+22/63 [01:01<01:45,  2.58s/it] ███▍      
+loss=1.74, acc=54.69%, time_elapsed=61.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+23/63 [01:03<01:45,  2.63s/it] ███▋      
+loss=1.83, acc=54.69%, time_elapsed=63.8s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+24/63 [01:06<01:43,  2.66s/it] ███▊      
+loss=1.81, acc=57.81%, time_elapsed=66.7s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+25/63 [01:09<01:44,  2.75s/it] ███▉      
+loss=1.80, acc=53.91%, time_elapsed=69.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+26/63 [01:11<01:39,  2.69s/it] ████▏     
+loss=1.73, acc=60.94%, time_elapsed=71.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+27/63 [01:14<01:35,  2.66s/it] ████▎     
+loss=1.75, acc=60.16%, time_elapsed=74.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+28/63 [01:16<01:30,  2.59s/it] ████▍     
+loss=1.77, acc=50.00%, time_elapsed=76.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+29/63 [01:19<01:28,  2.60s/it] ████▌     
+loss=1.78, acc=66.41%, time_elapsed=79.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+30/63 [01:22<01:24,  2.55s/it] ████▊     
+loss=1.79, acc=55.47%, time_elapsed=82.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+31/63 [01:24<01:24,  2.64s/it] ████▉     
+loss=1.73, acc=57.03%, time_elapsed=84.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+32/63 [01:27<01:21,  2.64s/it] █████     
+loss=1.74, acc=60.94%, time_elapsed=87.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+33/63 [01:30<01:19,  2.64s/it] █████▏    
+loss=1.80, acc=61.72%, time_elapsed=90.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+34/63 [01:32<01:17,  2.66s/it] █████▍    
+loss=1.82, acc=56.25%, time_elapsed=92.8s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+35/63 [01:35<01:14,  2.65s/it] █████▌    
+loss=1.71, acc=60.16%, time_elapsed=95.5s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+36/63 [01:38<01:12,  2.68s/it] █████▋    
+loss=1.79, acc=53.12%, time_elapsed=98.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+37/63 [01:40<01:08,  2.62s/it] █████▊    
+loss=1.72, acc=60.94%, time_elapsed=100.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+38/63 [01:42<01:03,  2.56s/it] ██████    
+loss=1.79, acc=51.56%, time_elapsed=102.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+39/63 [01:45<01:00,  2.54s/it] ██████▏   
+loss=1.71, acc=56.25%, time_elapsed=105.5s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+40/63 [01:47<00:58,  2.54s/it] ██████▎   
+loss=1.74, acc=59.38%, time_elapsed=107.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+41/63 [01:50<00:55,  2.51s/it] ██████▌   
+loss=1.78, acc=55.47%, time_elapsed=110.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+42/63 [01:53<00:53,  2.55s/it] ██████▋   
+loss=1.77, acc=56.25%, time_elapsed=113.1s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+43/63 [01:55<00:51,  2.56s/it] ██████▊   
+loss=1.77, acc=60.16%, time_elapsed=115.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+44/63 [01:58<00:48,  2.55s/it] ██████▉   
+loss=1.79, acc=53.91%, time_elapsed=118.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+45/63 [02:01<00:46,  2.61s/it] ███████▏  
+loss=1.68, acc=57.81%, time_elapsed=121.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+46/63 [02:03<00:45,  2.66s/it] ███████▎  
+loss=1.71, acc=54.69%, time_elapsed=123.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+47/63 [02:06<00:41,  2.61s/it] ███████▍  
+loss=1.77, acc=48.44%, time_elapsed=126.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+48/63 [02:09<00:39,  2.64s/it] ███████▌  
+loss=1.72, acc=57.03%, time_elapsed=129.0s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+49/63 [02:11<00:36,  2.63s/it] ███████▊  
+loss=1.78, acc=54.69%, time_elapsed=131.8s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+50/63 [02:14<00:34,  2.68s/it] ███████▉  
+loss=1.70, acc=57.03%, time_elapsed=134.4s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+51/63 [02:16<00:31,  2.66s/it] ████████  
+loss=1.67, acc=55.47%, time_elapsed=136.9s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+52/63 [02:19<00:28,  2.62s/it] ████████▎ 
+loss=1.70, acc=58.59%, time_elapsed=139.4s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+53/63 [02:21<00:25,  2.58s/it] ████████▍ 
+loss=1.67, acc=61.72%, time_elapsed=141.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+54/63 [02:24<00:23,  2.56s/it] ████████▌ 
+loss=1.83, acc=50.78%, time_elapsed=144.7s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+55/63 [02:27<00:21,  2.63s/it] ████████▋ 
+loss=1.74, acc=53.91%, time_elapsed=147.2s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+56/63 [02:29<00:18,  2.58s/it] ████████▉ 
+loss=1.72, acc=55.47%, time_elapsed=149.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+57/63 [02:32<00:15,  2.54s/it] █████████ 
+loss=1.79, acc=48.44%, time_elapsed=152.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+58/63 [02:34<00:12,  2.57s/it] █████████▏
+loss=1.77, acc=57.03%, time_elapsed=154.6s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+59/63 [02:36<00:10,  2.51s/it] █████████▎
+loss=1.80, acc=48.44%, time_elapsed=156.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+60/63 [02:39<00:07,  2.43s/it] █████████▌
+loss=1.85, acc=45.31%, time_elapsed=159.5s, used_memory=3.00 GB, cuda_memory_peak=2.22 GiB
+
+61/63 [02:42<00:04,  2.49s/it] █████████▋
+loss=1.70, acc=53.91%, time_elapsed=162.3s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+62/63 [02:44<00:02,  2.57s/it] █████████▊
+loss=1.66, acc=58.59%, time_elapsed=164.9s, used_memory=3.01 GB, cuda_memory_peak=2.22 GiB
+
+Test Accuracy after training is: 0.484375
