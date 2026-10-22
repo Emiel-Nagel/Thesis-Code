@@ -123,3 +123,12 @@ def save_matrices(output_dir: Path, matrices: list[torch.Tensor], names: list[st
 def load_matrices(work_dir: Path, is_control: bool = False) -> dict[str, np.ndarray]:
     with np.load(work_dir / _filename(is_control)) as data:
         return dict(data.items())
+
+def sample_exc_inh_recurrent_matrices(ns_hidden: list[int], percent_inh: float) -> list[torch.Tensor]:
+    def _build_matrix(n_neurons: int) -> torch.Tensor:
+        n_inh = round((percent_inh / 100.0) * n_neurons)
+        n_exc = n_neurons - n_inh
+        one_dim_tensor = torch.cat([torch.ones(n_exc), -torch.ones(n_inh)])
+        return one_dim_tensor.unsqueeze(1).expand(-1, n_neurons).clone()
+
+    return [_build_matrix(n_neurons) for n_neurons in ns_hidden]

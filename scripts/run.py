@@ -6,7 +6,7 @@ from pathlib import Path
 from thesis_code import SRNN, datasets, runs
 from thesis_code.network_components.layers import SynapticRecurrentLayer, StandardRecurrentLayer, OutputLayer
 from thesis_code.decay_sampling import tau_to_beta, sample_heterogeneous_decays_uniform, sample_heterogeneous_decays_normal
-from thesis_code.connectivity import sample_ee_pv_som_neurons, save_neurons, build_recurrent_and_pruned_matrices, save_matrices
+from thesis_code.connectivity import sample_ee_pv_som_neurons, save_neurons, build_recurrent_and_pruned_matrices, save_matrices, sample_exc_inh_recurrent_matrices
 
 from thesis_code.recording import Recorder
 import thesis_code.training as tr
@@ -105,9 +105,10 @@ def run(run_name: str, seed: int, cfg: dict, output_dir: Path) -> None:
     )
     save_neurons(output_dir, neurons)
     forw_matrices = [torch.ones(n_in, n_out) for n_in, n_out in zip(layers[:-1], layers[1:])]
-    rec_matrices, pruned_matrices = build_recurrent_and_pruned_matrices(neurons)
+    # rec_matrices, pruned_matrices = build_recurrent_and_pruned_matrices(neurons)
+    rec_matrices = sample_exc_inh_recurrent_matrices(ns_hidden, percent_inh=50.0)
     # rec_matrices = [torch.ones(n, n) for n in ns_hidden]
-    # pruned_matrices = [torch.ones(n, n) for n in ns_hidden]
+    pruned_matrices = [torch.ones(n, n) for n in ns_hidden]
     save_matrices(output_dir, rec_matrices, 
         names=[f"recurrent_mask_{i}" for i, _ in enumerate(rec_matrices)], 
         is_control=False
