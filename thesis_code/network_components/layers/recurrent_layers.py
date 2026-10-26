@@ -10,6 +10,7 @@ class RecurrentLayer(nn.Module):
         forward_matrix: torch.Tensor,
         recurrent_matrix: torch.Tensor,
         refractory_period: int = 0,
+        use_daleslaw: bool = True,
     ) -> None:
         super().__init__()
         self.n_neurons = recurrent_matrix.shape[0]
@@ -18,6 +19,7 @@ class RecurrentLayer(nn.Module):
             f"forward_matrix outputs {forward_matrix.shape[1]} neurons, recurrent_matrix has {self.n_neurons}"
 
         self.weights = MaskedKaimingLinear(forward_matrix)
+        # self.weights = DaleslawLinear(forward_matrix) if use_daleslaw else MaskedKaimingLinear(forward_matrix)
 
         assert isinstance(refractory_period, int) and refractory_period >= 0, \
             "refractory_period is set incorrectly"
@@ -84,8 +86,9 @@ class StandardRecurrentLayer(RecurrentLayer):
         spike_grad: Any,
         fully_learnable: bool = True,
         refractory_period: int = 0,
+        use_daleslaw: bool = True,
     ) -> None:
-        super().__init__(forward_matrix, recurrent_matrix, refractory_period)
+        super().__init__(forward_matrix, recurrent_matrix, refractory_period, use_daleslaw)
         self.neurons = MaskedRLeaky(
             beta=beta,
             linear_features=self.n_neurons,
@@ -95,6 +98,7 @@ class StandardRecurrentLayer(RecurrentLayer):
             rec_matrix=recurrent_matrix,
             threshold=torch.ones(self.n_neurons),
             reset_delay=False,
+            use_daleslaw=use_daleslaw,
         )
         self.spk, self.mem = self.neurons.init_rleaky()
 
@@ -115,9 +119,10 @@ class SynapticRecurrentLayer(RecurrentLayer):
         beta: torch.Tensor | float,
         spike_grad: Any,
         fully_learnable: bool = True,
-        refractory_period: int = 0, 
+        refractory_period: int = 0,
+        use_daleslaw: bool = True,
     ) -> None:
-        super().__init__(forward_matrix, recurrent_matrix, refractory_period)
+        super().__init__(forward_matrix, recurrent_matrix, refractory_period, use_daleslaw)
         self.neurons = MaskedRSynaptic(
             alpha=alpha,
             beta=beta,
@@ -129,6 +134,7 @@ class SynapticRecurrentLayer(RecurrentLayer):
             rec_matrix=recurrent_matrix,
             threshold=torch.ones(self.n_neurons),
             reset_delay=False,
+            use_daleslaw=use_daleslaw,
         )
         self.spk, self.syn, self.mem = self.neurons.init_rsynaptic()
 

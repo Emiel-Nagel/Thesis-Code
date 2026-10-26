@@ -4,7 +4,7 @@ import snntorch as snn
 from .linears import DaleslawLinear, MaskedKaimingLinear
 
 class MaskedRLeaky(snn.RLeaky):
-    def __init__(self, *args, rec_matrix: torch.Tensor, **kwargs) -> None:
+    def __init__(self, *args, rec_matrix: torch.Tensor, use_daleslaw: bool = True, **kwargs) -> None:
         assert rec_matrix.shape[0] == rec_matrix.shape[1], \
             f"expected a square matrix, got shape {tuple(rec_matrix.shape)}"
 
@@ -12,7 +12,7 @@ class MaskedRLeaky(snn.RLeaky):
         rec_matrix.fill_diagonal_(0.0)
 
         super().__init__(*args, **kwargs)
-        self.recurrent = DaleslawLinear(rec_matrix)
+        self.recurrent = DaleslawLinear(rec_matrix) if use_daleslaw else MaskedKaimingLinear(rec_matrix)
         self.recurrent.zero_diagonal()
         if not self.learn_recurrent:
             for param in self.recurrent.parameters():
@@ -25,7 +25,7 @@ class MaskedRLeaky(snn.RLeaky):
         return self.recurrent.get_weights()
 
 class MaskedRSynaptic(snn.RSynaptic):
-    def __init__(self, *args, rec_matrix: torch.Tensor, **kwargs) -> None:
+    def __init__(self, *args, rec_matrix: torch.Tensor, use_daleslaw: bool = True, **kwargs) -> None:
         assert rec_matrix.shape[0] == rec_matrix.shape[1], \
             f"expected a square matrix, got shape {tuple(rec_matrix.shape)}"
 
@@ -33,7 +33,7 @@ class MaskedRSynaptic(snn.RSynaptic):
         rec_matrix.fill_diagonal_(0.0)
 
         super().__init__(*args, **kwargs)
-        self.recurrent = DaleslawLinear(rec_matrix)
+        self.recurrent = DaleslawLinear(rec_matrix) if use_daleslaw else MaskedKaimingLinear(rec_matrix)
         self.recurrent.zero_diagonal()
         if not self.learn_recurrent:
             for param in self.recurrent.parameters():

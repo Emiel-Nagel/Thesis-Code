@@ -1,6 +1,8 @@
 import torch
 import subprocess, shutil, datetime, tomllib, os, base64, requests
 from pathlib import Path
+from collections.abc import Iterator
+import logging
 
 from .srnn import SRNN
 
@@ -9,10 +11,11 @@ CODE_DIR = Path(__file__).resolve().parent.parent
 OUTPUT_DIR = CODE_DIR / "outputs"
 RUNS_DIR = CODE_DIR / "runs"
 RUNS_TEMP_DIR = RUNS_DIR / "_runs_tmp"
-CONFIG_PATH = RUNS_DIR / "config.toml"
+CONFIG_DIR = RUNS_DIR / "scheduled"
+DONE_DIR = CONFIG_DIR / "_done"
 
-def load_config() -> dict:
-    with open(CONFIG_PATH, 'rb') as cfg_file:
+def load_config(config_path: Path) -> dict:
+    with open(config_path, 'rb') as cfg_file:
         return tomllib.load(cfg_file)
 
 def generate_run_id() -> str:
@@ -24,10 +27,10 @@ def get_git_commit() -> str:
         capture_output=True, text=True, check=True, cwd=CODE_DIR,
     ).stdout.strip()
 
-def create_output_dir(run_name: str) -> Path:
+def create_output_dir(config_path: Path, run_name: str) -> Path:
     output_dir = OUTPUT_DIR / run_name
-    output_dir.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(CONFIG_PATH, output_dir / "config.toml")
+    output_dir.mkdir(parents=True, exist_ok=False)
+    shutil.copy2(config_path, output_dir / "config.toml")
     shutil.copy2(CODE_DIR / "scripts" / "analysis.ipynb", output_dir / "analysis.ipynb")
 
     helpers_dir = output_dir / "helpers"
@@ -36,6 +39,19 @@ def create_output_dir(run_name: str) -> Path:
     shutil.copy2(CODE_DIR / "thesis_code" / "analysis.py", helpers_dir / "analysis.py")
     (helpers_dir / "__init__.py").touch()
     return output_dir
+
+def iter_scheduled_runs() -> Iterator[tuple[Path, dict, str, Path]]:
+    DONE_DIR.mkdir(exist_ok=True)
+    print(sorted(CONFIG_DIR.glob("*.toml")))
+    for config_path in sorted(CONFIG_DIR.glob("*.toml")):
+        try:
+            cfg = load_config(config_path)
+            run_name = f"{generate_run_id()}-{cfg["run_name"]}"
+            output_dir = create_output_dir(config_path, run_name)
+        except (tomllib.TOMLDecodeError, KeyError, ValueError, OSError) as e:
+            logging.error("Error: Skipping %s: %s", config_path.name, e)
+            continue
+        yield (config_path, cfg, run_name, output_dir)
 
 def save_net(net: SRNN, optimizer: torch.optim.Optimizer, epoch: int, save_path: Path) -> None:
     try:
@@ -115,3 +131,6 @@ def push_output(output_dir: Path) -> None:
     print(f"Created {REPO}@{branch_name} with {len(files)} files")
     shutil.rmtree(output_dir)
     print("Removed output directory after push")
+
+def remove_config(config_path: Path) -> None:
+    config_path.rename(DONE_DIR / f"{config_path.name}.toml")

@@ -68,10 +68,10 @@ class RecorderBase:
 
 class PerformanceRecorder(RecorderBase):
     def __init__(self) -> None:
-        super().__init__("loss", "acc", data_name="performance")
+        super().__init__("loss_train", "acc_train", "loss_test", "acc_test", data_name="performance")
 
-    def record(self, *, loss_val: float, acc: float, **_) -> None:
-        self._record(loss=loss_val, acc=acc)
+    def record(self, *, loss_train: float, acc_train: float, loss_test: float, acc_test: float, **_) -> None:
+        self._record(loss_train=loss_train, acc_train=acc_train, loss_test=loss_test, acc_test=acc_test)
 
 class GradientRecorder(RecorderBase):
     def __init__(self) -> None:

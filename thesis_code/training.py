@@ -54,20 +54,22 @@ class Regularizer(nn.Module):
             loss_regs.append((g_lower + g_upper).mean(dim=0))      # output shape should be scalar ()
         return torch.stack(loss_regs).sum()
 
-def test_net(net: SRNN, testloader: DataLoader, max_iters: int = None) -> float:
+def test_net(net: SRNN, testloader: DataLoader, max_iters: int = None) -> tuple[float, float]:
     with torch.no_grad():
         acc = 0
+        loss = 0
         net.eval()
 
         for i, (data, targets) in enumerate(testloader):           
             _, mem_rec, _, _ = net(data)
             acc += measure_accuracy(mem_rec, targets)
+            loss += compute_loss(mem_rec, targets)
             if max_iters is not None and i == max_iters:
                 break
 
-    return acc / len(testloader)
+    return acc / len(testloader), loss / len(testloader)
 
-def train_net(net: SRNN, logger: Logger, device: torch.device, trainloader: DataLoader, lr: float = 1e-3, n_epochs: int = 1, max_iters: int = None, 
+def train_net(net: SRNN, logger: Logger, device: torch.device, trainloader: DataLoader, testloader: DataLoader, lr: float = 1e-3, n_epochs: int = 1, max_iters: int = None, 
               max_norm: int = 1e6, separate_timesteps: bool = False, regularizer: Regularizer = None, recorder: Recorder = None,
     ) -> tuple[SRNN, torch.optim.Optimizer, Recorder]:
     optimizer = torch.optim.Adam(net.parameters(), lr=lr)
@@ -125,10 +127,14 @@ def train_net(net: SRNN, logger: Logger, device: torch.device, trainloader: Data
             if max_iters is not None and i == max_iters:
                 break
 
+        acc_test, loss_test = test_net(net, testloader, max_iters)
+
         if recorder is not None:
             recorder.record_epoch(
-                loss_val=float(np.mean(losses)),
-                acc=float(np.mean(accs)),
+                loss_train=float(np.mean(losses)),
+                acc_train=float(np.mean(accs)),
+                loss_test=loss_test,
+                acc_test=acc_test,
                 weights=net.get_weights(),
                 spk_ins=data,
                 hidden_spks=hidden_spks,
