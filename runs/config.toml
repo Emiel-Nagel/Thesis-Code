@@ -25,6 +25,8 @@ percent_pv = 25.0
 percent_som = 25.0
 add_control_net = false
 use_synapses = false
+use_daleslaw = false
+use_connectivity = false
 
 [srnn.decays]
 # beta_sampling_mode = "single_value"
