@@ -104,7 +104,7 @@ def plot_weight_matrices(weights: np.ndarray, neuron_ranges: dict[str, tuple[int
     fig.savefig(fname=name, dpi='figure')
 
 class InteractiveSpikePlot:
-    def __init__(self, layer_spikes: dict[str, np.ndarray], target_labels: list[str], neuron_ranges: dict[str, tuple[int, int]], epoch_i_start: int = 0) -> None:
+    def __init__(self, layer_spikes: dict[str, np.ndarray], target_labels: list[str], neuron_ranges: dict[str, tuple[int, int]] = None, epoch_i_start: int = 0) -> None:
         self.layer_spikes = layer_spikes
         self.target_labels = target_labels
         self.neuron_ranges = neuron_ranges
@@ -138,7 +138,7 @@ class InteractiveSpikePlot:
                 ax.set_title(f"{layer_name}")
                 ax.set_ylabel("Count (n)")
                 ax.set_xlabel("Target label")
-                ax.set_xticks(range(1, 21))
+                ax.set_xticks(range(20))
                 continue
 
             if layer_name == "mems_out":
@@ -162,7 +162,7 @@ class InteractiveSpikePlot:
             ax.set_xlim(0, spike_matrix.shape[0])
             ax.set_ylim(0, spike_matrix.shape[1])
 
-            if layer_name == "spikes_hidden_0":
+            if layer_name == "spikes_hidden_0" and self.neuron_ranges is not None:
                 for neuron_type, (start, stop) in self.neuron_ranges.items():
                     add_bracket(ax, start, stop, neuron_type, side="right", offset=6, cap=4, label_pad=4, color="k", lw=1.2, fontsize=10)
                     ax.hlines(y=start - 0.5, color="r", lw=1, ls="--", xmin=0, xmax=spike_matrix.shape[0])
