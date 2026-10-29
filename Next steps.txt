@@ -27,3 +27,11 @@ ENFORCE SPARSITY!!!!
 Really dive into tahvili et al paper for details how they tested!!
 Also get deep understanding of Garner paper
 - Really understand the loss!!
+
+
+reduce max-iters to 800
+recude max epochs to 50
+baseline with vs without refractory period
+get results in table
+look at Baronig for parameters (especially when using ALIF)
+look how Miguel unrolls data (sparse matrices)
