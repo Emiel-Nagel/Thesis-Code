@@ -3,10 +3,10 @@ import os, requests
 from dotenv import load_dotenv
 load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
-BASE_URL = os.environ["DASH_URL"].rstrip("/")
+BASE_URL = None # os.environ["DASH_URL"].rstrip("/")
 
 _session = requests.Session()
-_session.headers["X-Token"] = os.environ["DASH_TOKEN"]
+_session.headers["X-Token"] = None # os.environ["DASH_TOKEN"]
 
 forbidden_content = []
 forbidden_content += str(Path(__file__).resolve()).split('\\')

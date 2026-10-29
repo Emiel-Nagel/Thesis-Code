@@ -1,4 +1,4 @@
-from thesis_code.logging import Logger
+from thesis_code.run_logging import Logger
 
 logger = Logger(run_name="Test run", seed=0)
 logger.log("Does this log?")

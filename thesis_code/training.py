@@ -9,7 +9,7 @@ import psutil, os
 
 from .srnn import SRNN
 from .recording import Recorder
-from .logging import Logger
+from .run_logging import Logger
 
 def measure_accuracy(mem_outs: torch.Tensor, targets: torch.Tensor) -> float:
     probs = F.softmax(mem_outs, dim=-1)

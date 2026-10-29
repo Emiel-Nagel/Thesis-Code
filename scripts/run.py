@@ -10,7 +10,7 @@ from thesis_code.connectivity import sample_ee_pv_som_neurons, save_neurons, bui
 from thesis_code.recording import Recorder
 import thesis_code.training as tr
 
-from thesis_code.logging import Logger
+from thesis_code.run_logging import Logger
 
 def setup(seed: int, logger: Logger) -> torch.device:
     flushing = torch.set_flush_denormal(True)
@@ -219,6 +219,7 @@ if __name__ == "__main__":
         with ProcessPoolExecutor(
             max_workers=cfg["training"]["n_workers"],
             mp_context=ctx,
+            max_tasks_per_child=1,
         ) as pool:
             results = list(pool.map(run, [run_name] * len(seeds), seeds, [cfg] * len(seeds), output_subdirs))
 
