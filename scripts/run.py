@@ -219,9 +219,15 @@ if __name__ == "__main__":
         with ProcessPoolExecutor(
             max_workers=cfg["training"]["n_workers"],
             mp_context=ctx,
+            max_tasks_per_child=1,
         ) as pool:
             results = list(pool.map(run, [run_name] * len(seeds), seeds, [cfg] * len(seeds), output_subdirs))
 
-        runs.push_output(output_dir)
         print(f"Finished run {run_name} successfully")
+
+        try:
+            runs.push_output(output_dir)
+        except Exception as e:
+            print(f"Error pushing outputs to github: {e}")
+            continue
         runs.remove_config(config_path)
