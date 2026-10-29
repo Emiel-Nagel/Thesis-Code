@@ -13,25 +13,27 @@ from pathlib import Path
 
 from . import analysis as a
 
-def plot_performance(loss_rec: np.ndarray, acc_rec: np.ndarray) -> None:
-    fig, (ax_loss, ax_acc) = plt.subplots(nrows=1, ncols=2, facecolor='w', figsize=(18, 7))
+def plot_performance(loss_train: np.ndarray, acc_train: np.ndarray, loss_test: np.ndarray, acc_test: np.ndarray) -> None:
+    fig, ((ax_loss_train, ax_loss_test), (ax_acc_train, ax_acc_test)) = plt.subplots(nrows=2, ncols=2, facecolor='w', figsize=(18, 7), gridspec_kw={'hspace': 0.4})
     fig.suptitle(f"Training losses and accuracies per epoch")
 
-    ax_loss.plot(a.get_median_line(loss_rec), label="Median loss curve")
-    ax_loss.fill_between(np.arange(loss_rec.shape[-1]), *a.get_percentile_band(loss_rec), alpha=0.3, label="Percentile band between 25 and 75")
-    ax_loss.set_title(f"Train Set Loss for {loss_rec.shape[0]} trial(s)")
-    ax_loss.set_xlabel("Epoch")
-    ax_loss.set_ylabel("Loss")
-    ax_loss.xaxis.set_major_locator(MaxNLocator(integer=True))
-    ax_loss.legend()
+    for loss_rec, ax_loss, loss_type in zip([loss_train, loss_test], [ax_loss_train, ax_loss_test], ["Train", "Test"]):
+        ax_loss.plot(a.get_median_line(loss_rec), label="Median loss curve")
+        ax_loss.fill_between(np.arange(loss_rec.shape[-1]), *a.get_percentile_band(loss_rec), alpha=0.3, label="Percentile band between 25 and 75")
+        ax_loss.set_title(f"{loss_type} Set Loss for {loss_rec.shape[0]} trial(s)")
+        ax_loss.set_xlabel("Epoch")
+        ax_loss.set_ylabel("Loss")
+        ax_loss.xaxis.set_major_locator(MaxNLocator(integer=True))
+        ax_loss.legend()
 
-    ax_acc.plot(a.get_median_line(acc_rec), label="Median accuracy curve")
-    ax_acc.fill_between(np.arange(loss_rec.shape[-1]), *a.get_percentile_band(acc_rec), alpha=0.3, label="Percentile band between 25 and 75")
-    ax_acc.set_title(f"Train Set Accuracy for {acc_rec.shape[0]} trial(s)")
-    ax_acc.set_xlabel("Epoch")
-    ax_acc.set_ylabel("Accuracy")
-    ax_acc.xaxis.set_major_locator(MaxNLocator(integer=True))
-    ax_acc.legend()
+    for acc_rec, ax_acc, acc_type in zip([acc_train, acc_test], [ax_acc_train, ax_acc_test], ["Train", "Test"]):
+        ax_acc.plot(a.get_median_line(acc_rec), label="Median accuracy curve")
+        ax_acc.fill_between(np.arange(acc_rec.shape[-1]), *a.get_percentile_band(acc_rec), alpha=0.3, label="Percentile band between 25 and 75")
+        ax_acc.set_title(f"{acc_type} Set Accuracy for {acc_rec.shape[0]} trial(s)")
+        ax_acc.set_xlabel("Epoch")
+        ax_acc.set_ylabel("Accuracy")
+        ax_acc.xaxis.set_major_locator(MaxNLocator(integer=True))
+        ax_acc.legend()
 
 def plot_gradients(max_grad_rec: np.ndarray, avg_grad_rec: np.ndarray) -> None:
     fig, (ax_max, ax_avg) = plt.subplots(nrows=1, ncols=2, facecolor='w', figsize=(18, 7))
