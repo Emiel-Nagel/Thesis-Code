@@ -5,6 +5,7 @@ from collections.abc import Iterator
 import logging
 
 from .srnn import SRNN
+from .configs import Config
 
 REPO = "Emiel-Nagel/Thesis-Code"
 CODE_DIR = Path(__file__).resolve().parent.parent
@@ -13,10 +14,6 @@ RUNS_DIR = CODE_DIR / "runs"
 RUNS_TEMP_DIR = RUNS_DIR / "_runs_tmp"
 CONFIG_DIR = RUNS_DIR / "scheduled"
 DONE_DIR = CONFIG_DIR / "_done"
-
-def load_config(config_path: Path) -> dict:
-    with open(config_path, 'rb') as cfg_file:
-        return tomllib.load(cfg_file)
 
 def generate_run_id() -> str:
     return str(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
@@ -27,10 +24,9 @@ def get_git_commit() -> str:
         capture_output=True, text=True, check=True, cwd=CODE_DIR,
     ).stdout.strip()
 
-def create_output_dir(config_path: Path, run_name: str) -> Path:
-    output_dir = OUTPUT_DIR / run_name
+def create_output_dir() -> Path:
+    output_dir = OUTPUT_DIR / generate_run_id()
     output_dir.mkdir(parents=True, exist_ok=False)
-    shutil.copy2(config_path, output_dir / "config.toml")
     shutil.copy2(CODE_DIR / "scripts" / "analysis.ipynb", output_dir / "analysis.ipynb")
 
     helpers_dir = output_dir / "helpers"
@@ -38,6 +34,12 @@ def create_output_dir(config_path: Path, run_name: str) -> Path:
     shutil.copy2(CODE_DIR / "thesis_code" / "plotting.py", helpers_dir / "plotting.py")
     shutil.copy2(CODE_DIR / "thesis_code" / "analysis.py", helpers_dir / "analysis.py")
     (helpers_dir / "__init__.py").touch()
+    return output_dir
+
+def create_seed_dir(output_dir: Path, seed: int, cfg: Config) -> Path:
+    cfg.save_json(output_dir)
+    output_dir = output_dir / f"seed_{seed}"
+    output_dir.mkdir(parents=True, exist_ok=True)
     return output_dir
 
 def iter_scheduled_runs() -> Iterator[tuple[Path, dict, str, Path]]:
@@ -64,15 +66,14 @@ def save_net(net: SRNN, optimizer: torch.optim.Optimizer, epoch: int, save_path:
     except Exception as e:
         print(f"Failed to save net as {save_path.name}, caused by {e!r}")
 
-def push_output(output_dir: Path) -> None:
+def push_output(output_dir: Path, branch_name: str) -> None:
     """
     Pushes the output to a new branch under 'outputs/'
     """
     token = os.environ["GITHUB_TOKEN"]
     message = f"Successfully completed run, added results for run {output_dir.name}"
     repo_url = f"https://api.github.com/repos/{REPO}"
-    branch_name = f"outputs/{output_dir.name}"
-    # rel = output_dir.resolve().relative_to(CODE_DIR.resolve())
+    branch_name = f"outputs/{branch_name}"
 
     s = requests.Session()
     s.headers.update({
@@ -81,7 +82,7 @@ def push_output(output_dir: Path) -> None:
         "X-GitHub-Api-Version": "2022-11-28",
     })
 
-    def call(method: str, path: str, **kw) -> dict:
+    def _call(method: str, path: str, **kw) -> dict:
         r = s.request(method, f"{repo_url}{path}", timeout=120, **kw)
         if not r.ok:
             raise RuntimeError(f"{method} {path} -> {r.status_code}: {r.text}")
@@ -106,7 +107,7 @@ def push_output(output_dir: Path) -> None:
     for p in files:
         size = p.stat().st_size
         try:
-            blob = call("POST", "/git/blobs", json={
+            blob = _call("POST", "/git/blobs", json={
                 "content": base64.b64encode(p.read_bytes()).decode(),
                 "encoding": "base64",
             })
@@ -116,13 +117,13 @@ def push_output(output_dir: Path) -> None:
         entries.append({"path": repo_path, "mode": "100644", "type": "blob", "sha": blob["sha"]})
 
     # Tree with NO base_tree -> contains only these files
-    tree = call("POST", "/git/trees", json={"tree": entries})
+    tree = _call("POST", "/git/trees", json={"tree": entries})
 
     try:
-        commit = call("POST", "/git/commits", json={
+        commit = _call("POST", "/git/commits", json={
             "message": message, "tree": tree["sha"], "parents": [],
         })
-        call("POST", "/git/refs", json={"ref": f"refs/heads/{branch_name}", "sha": commit["sha"]})
+        _call("POST", "/git/refs", json={"ref": f"refs/heads/{branch_name}", "sha": commit["sha"]})
     except Exception as e:
         print(f"Error pushing outputs to new branch {REPO}@{branch_name}: {e}")
         print(f"Keeping {output_dir} since the push failed")
@@ -132,5 +133,9 @@ def push_output(output_dir: Path) -> None:
     shutil.rmtree(output_dir)
     print("Removed output directory after push")
 
-def remove_config(config_path: Path) -> None:
-    config_path.rename(DONE_DIR / f"{config_path.name}.toml")
+def remove_config(config_path: Path):
+    shutil.copy2(config_path, DONE_DIR / f"{config_path.name}.py")
+
+def remove_output_dir(output_dir: Path) -> None:
+    shutil.rmtree(output_dir)
+    print("Removed output directory after push")

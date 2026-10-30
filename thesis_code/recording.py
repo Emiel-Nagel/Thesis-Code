@@ -3,6 +3,7 @@ import torch.nn as nn
 import numpy as np
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, Future
+from dataclasses import dataclass
 
 _pool = ThreadPoolExecutor(max_workers=1)
 
@@ -120,18 +121,25 @@ class SpikeRecorder(RecorderBase):
             **metrics,
         )
 
+@dataclass
+class RecordingConfig:
+    record_performance: bool
+    record_gradients: bool
+    record_weights: bool
+    record_spikes: bool
+
 class Recorder:
-    def __init__(self, num_hidden_layers: int, options: dict[str, bool]) -> None:
+    def __init__(self, num_hidden_layers: int, rec_cfg: RecordingConfig) -> None:
         self.iter_recorders: list[RecorderBase] = []
         self.epoch_recorders: list[RecorderBase] = []
 
-        if options.get("record_gradients"):
+        if rec_cfg.record_gradients:
             self.iter_recorders.append(GradientRecorder())
-        if options.get("record_performance"):
+        if rec_cfg.record_performance:
             self.epoch_recorders.append(PerformanceRecorder())
-        if options.get("record_weights"):
+        if rec_cfg.record_weights:
             self.epoch_recorders.append(WeightRecorder(num_hidden_layers))
-        if options.get("record_spikes"):
+        if rec_cfg.record_spikes:
             self.epoch_recorders.append(SpikeRecorder(num_hidden_layers))
 
     def record_iteration(self, **kwargs) -> None:

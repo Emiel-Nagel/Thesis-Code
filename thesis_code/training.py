@@ -6,10 +6,12 @@ import torch.nn.functional as F
 import numpy as np
 from tqdm.auto import tqdm
 import psutil, os
+from dataclasses import dataclass, field
 
 from .srnn import SRNN
 from .recording import Recorder
 from .run_logging import Logger
+from .datasets import DatasetConfig
 
 def measure_accuracy(mem_outs: torch.Tensor, targets: torch.Tensor) -> float:
     probs = F.softmax(mem_outs, dim=-1)
@@ -143,3 +145,24 @@ def train_net(net: SRNN, logger: Logger, device: torch.device, trainloader: Data
             )
 
     return net, optimizer, recorder
+
+@dataclass
+class RegularizationConfig:
+    apply: bool
+    lam_lower: float
+    v_lower: float
+    lam_uppers: list[float] = field(default_factory=lambda: [0.5])
+    v_uppers: list[float] = field(default_factory=lambda: [50])
+    L: int
+
+@dataclass
+class TrainingConfig:
+    dt: float
+    batch_size: int
+    max_iters: int
+    n_epochs: int
+    lr: float
+    separate_timesteps: bool
+    n_trials: int
+    regularization: RegularizationConfig = field(default_factory=RegularizationConfig)
+    dataset: DatasetConfig = field(default_factory=DatasetConfig)

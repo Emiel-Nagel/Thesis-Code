@@ -11,8 +11,12 @@ from thesis_code.recording import Recorder
 import thesis_code.training as tr
 
 from thesis_code.run_logging import Logger
+from thesis_code.configs import Config, DecayConfig
 
-def setup(seed: int, logger: Logger) -> torch.device:
+def setup(output_dir: Path, seed: int, cfg: Config) -> tuple[Path, Logger, torch.device]:
+    runs.create_seed_dir(output_dir, seed, cfg)
+    logger = Logger(run_name=cfg.run_name, seed=seed)
+
     flushing = torch.set_flush_denormal(True)
     logger.log(f"Floating point flushing is set to {flushing}")
 
@@ -21,7 +25,7 @@ def setup(seed: int, logger: Logger) -> torch.device:
 
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("mps") if torch.backends.mps.is_available() else torch.device("cpu")
     logger.log(f"Using device: {device}")
-    return device
+    return output_dir, logger, device
 
 def build_srnns(
     dt: float,
@@ -34,13 +38,12 @@ def build_srnns(
     use_daleslaw: bool,
     use_connectivity: bool,
     refractory_period: int,
-    decay_cfg: dict,
+    decay_cfg: DecayConfig,
     device: torch.device,
     output_dir: Path,
     add_control_net: bool,
 ) -> tuple[SRNN, SRNN | None]:
     layers = [input_dim] + ns_hidden
-    print(f"Using layers: {layers}")
 
     if use_daleslaw:
         if use_connectivity:
@@ -60,10 +63,6 @@ def build_srnns(
 
     forw_matrices = [torch.ones(n_in, n_out) for n_in, n_out in zip(layers[:-1], layers[1:])]
 
-    print("Forward matrix shapes are: " + "".join(str(tuple(m.shape)) for m in forw_matrices))
-    print("Recurrent matrix shapes are: " + "".join(str(tuple(m.shape)) for m in rec_matrices))
-    print("Pruned matrix shapes are: " + "".join(str(tuple(m.shape)) for m in pruned_matrices))
-
     save_matrices(output_dir, rec_matrices, 
         names=[f"recurrent_mask_{i}" for i, _ in enumerate(rec_matrices)], 
         is_control=False
@@ -74,19 +73,19 @@ def build_srnns(
             is_control=True
         )
 
-    match decay_cfg["beta_sampling_mode"]:
+    match decay_cfg.beta_sampling_mode:
         case "single_value":
-            betas = decay_cfg["tau_single_values"]
+            betas = decay_cfg.tau_single_values
         case "normal":
             betas = [sample_heterogeneous_decays_normal(dt, n, tau_mean=m*dt, tau_std=s*dt, device=device)
-                     for n, m, s in zip(ns_hidden, decay_cfg["tau_means"], decay_cfg["tau_stds"])]
+                     for n, m, s in zip(ns_hidden, decay_cfg.tau_means, decay_cfg.tau_stds)]
         case "uniform":
             betas = [sample_heterogeneous_decays_uniform(dt, n, tau_upper=tu*dt, tau_lower=tl*dt, device=device)
-                     for n, tu, tl in zip(ns_hidden, decay_cfg["tau_uppers"], decay_cfg["tau_lowers"])]
+                     for n, tu, tl in zip(ns_hidden, decay_cfg.tau_uppers, decay_cfg.tau_lowers)]
 
     rec_layer_class = SynapticRecurrentLayer if use_synapses else StandardRecurrentLayer
 
-    def build_srnn(rec_matrices: list[torch.Tensor]) -> SRNN:
+    def _build_srnn(rec_matrices: list[torch.Tensor]) -> SRNN:
         return SRNN(
             rec_layers=[
                 rec_layer_class(
@@ -100,8 +99,8 @@ def build_srnns(
             out_layer=OutputLayer(ns_hidden[-1], output_dim, beta=tau_to_beta(dt, decay_cfg["tau_out"]*dt))
         ).to(device)
 
-    net = build_srnn(rec_matrices=rec_matrices)
-    net_control = build_srnn(rec_matrices=pruned_matrices) if add_control_net else None
+    net = _build_srnn(rec_matrices=rec_matrices)
+    net_control = _build_srnn(rec_matrices=pruned_matrices) if add_control_net else None
     return net, net_control
 
 def train(
@@ -135,58 +134,57 @@ def train(
 
         return net, optimizer, recorder
 
-def run(run_name: str, seed: int, cfg: dict, output_dir: Path) -> None:
-    output_dir.mkdir(parents=True, exist_ok=True)
-    logger = Logger(run_name=run_name, seed=seed)
-    device = setup(seed, logger)
+def run(output_dir: Path, seed: int, cfg: Config) -> None:
+    output_dir, logger, device = setup(output_dir, seed, cfg)
 
-    train_cfg = cfg["training"]
-    dt = train_cfg["dt"]
+    train_cfg = cfg.training
+    dt = train_cfg.dt
     SHD_trainloader, SHD_testloader, input_dim, classes = datasets.get_SHD_dataset(
-        batch_size=train_cfg["batch_size"],
+        batch_size=train_cfg.batch_size,
         device=device,
         time_window=dt*1e6,
     )
 
-    reg_cfg = train_cfg["regularization"]
+    reg_cfg = train_cfg.regularization
     regularizer = tr.Regularizer(
-        lam_lower=reg_cfg["lam_lower"],
-        v_lower=reg_cfg["v_lower"],
-        lam_uppers=reg_cfg["lam_uppers"],
-        v_uppers=reg_cfg["v_uppers"],
-        L=reg_cfg["L"]
-    ) if reg_cfg["apply"] else None
+        lam_lower=reg_cfg.lam_lower,
+        v_lower=reg_cfg.v_lower,
+        lam_uppers=reg_cfg.lam_uppers,
+        v_uppers=reg_cfg.v_uppers,
+        L=reg_cfg.L,
+    ) if reg_cfg.apply else None
 
-    ns_hidden = cfg["srnn"]["ns_hidden"]
+    srnn_cfg = cfg.srnn
+    ns_hidden = srnn_cfg.ns_hidden
 
     net, net_control = build_srnns(
         dt=dt,
         input_dim=input_dim,
         output_dim=len(classes),
         ns_hidden=ns_hidden,
-        percent_pv=cfg["srnn"]["percent_pv"],
-        percent_som=cfg["srnn"]["percent_som"],
-        use_synapses=cfg["srnn"]["use_synapses"],
-        use_daleslaw=cfg["srnn"]["use_daleslaw"],
-        use_connectivity=cfg["srnn"]["use_connectivity"],
-        refractory_period=cfg["srnn"]["refractory_period"],
-        decay_cfg=cfg["srnn"]["decays"],
+        percent_pv=srnn_cfg.percent_pv,
+        percent_som=srnn_cfg.percent_som,
+        use_synapses=srnn_cfg.use_synapses,
+        use_daleslaw=srnn_cfg.use_daleslaw,
+        use_connectivity=srnn_cfg.use_connectivity,
+        refractory_period=srnn_cfg.refractory_period,
+        decay_cfg=srnn_cfg.decays,
 
         device=device,
         output_dir=output_dir,
-        add_control_net=cfg["srnn"]["add_control_net"],
+        add_control_net=srnn_cfg.add_control_net,
     )
 
     recorder = Recorder(
         num_hidden_layers=len(ns_hidden),
-        options=cfg.get("recording", {}),
+        rec_cfg=cfg.recording,
     )
 
     logger.log("\n\n---------------")
     logger.log("Now testing net")
 
-    net, optimizer, recorder = train(net, logger, device, SHD_trainloader, SHD_testloader, train_cfg["lr"], train_cfg["n_epochs"], regularizer, recorder)
-    runs.save_net(net, optimizer, epoch=train_cfg["n_epochs"], save_path=output_dir / "net.checkpoint.pt")
+    net, optimizer, recorder = train(net, logger, device, SHD_trainloader, SHD_testloader, train_cfg.lr, train_cfg.n_epochs, regularizer, recorder)
+    runs.save_net(net, optimizer, epoch=train_cfg.n_epochs, save_path=output_dir / "net.checkpoint.pt")
     recorder.save(output_dir / "data_net")
 
     if net_control is not None:
@@ -195,39 +193,7 @@ def run(run_name: str, seed: int, cfg: dict, output_dir: Path) -> None:
         logger.log("Now testing control net")
 
         net_control, optimizer_control, recorder = train(net_control, logger, device, SHD_trainloader, SHD_testloader, train_cfg["lr"], train_cfg["n_epochs"], regularizer, recorder)
-        runs.save_net(net_control, optimizer_control, epoch=train_cfg["n_epochs"], save_path=output_dir / "net_control.checkpoint.pt")
+        runs.save_net(net_control, optimizer_control, epoch=train_cfg.n_epochs, save_path=output_dir / "net_control.checkpoint.pt")
         recorder.save(output_dir / "data_net_control")
 
     logger.write_to_file(output_dir)
-
-if __name__ == "__main__":
-    import multiprocessing as mp
-    from concurrent.futures import ProcessPoolExecutor
-
-    for config_path, cfg, run_name, output_dir in runs.iter_scheduled_runs():
-        print(f"Now attempting run {run_name}")
-        n_trials = cfg["training"]["n_trials"]
-        seeds = range(n_trials)
-        output_subdirs = [output_dir / f"seed_{i}" for i in seeds]
-
-        datasets.download_SHD_dataset(
-            time_window=cfg["training"]["dt"]*1e6,
-            re_download=cfg["training"]["dataset"]["re_download"],
-        )
-
-        ctx = mp.get_context("spawn")       # required for CUDA
-        with ProcessPoolExecutor(
-            max_workers=cfg["training"]["n_workers"],
-            mp_context=ctx,
-            max_tasks_per_child=1,
-        ) as pool:
-            results = list(pool.map(run, [run_name] * len(seeds), seeds, [cfg] * len(seeds), output_subdirs))
-
-        print(f"Finished run {run_name} successfully")
-
-        try:
-            runs.push_output(output_dir)
-        except Exception as e:
-            print(f"Error pushing outputs to github: {e}")
-            continue
-        runs.remove_config(config_path)

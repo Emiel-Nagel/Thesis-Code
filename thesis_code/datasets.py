@@ -5,6 +5,7 @@ import torch
 from torch.utils.data import DataLoader, Dataset
 import shutil
 from pathlib import Path
+from dataclasses import dataclass
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATASETS_DIR = PROJECT_ROOT / "datasets"
@@ -86,3 +87,7 @@ def get_SHD_dataset(batch_size: int, device: torch.device, time_window: float = 
         sensor_size[0],
         train_dataset.classes,
     )
+
+@dataclass
+class DatasetConfig:
+    re_download: bool
