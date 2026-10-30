@@ -12,7 +12,6 @@ For every scheduled/*.py file it:
 Usage:  python run_scheduled.py
 """
 import re
-import shutil
 import subprocess
 import sys
 from concurrent.futures import ThreadPoolExecutor
@@ -20,98 +19,59 @@ from pathlib import Path
 
 # ---------------- Config (mirrors the bash script) ----------------
 PROJECT_DIR = Path(__file__).resolve().parent        # change if this file lives elsewhere
-SCHEDULED_DIR = PROJECT_DIR / "scheduled"
-SETUP_SCRIPT = PROJECT_DIR / "setup_output.py"       # python setup_output.py <experiment.py>
-PUSH_SCRIPT = PROJECT_DIR / "push_output.py"         # python push_output.py <output_dir>
+SCHEDULED_DIR = PROJECT_DIR / "experiments" / "scheduled"
+SETUP_SCRIPT = PROJECT_DIR / "scripts" / "setup_experiments.py"       # python setup_output.py <experiment.py>
+PUSH_SCRIPT = PROJECT_DIR / "scripts" / "push_output.py"         # python push_output.py <output_dir>
 
 N_COPIES = 5                                         # task ids 1..N_COPIES
-MAX_PARALLEL = 2                                     # same as the %2 in --array
+MAX_PARALLEL = 5                                     # same as the %2 in --array
 PUSH_EVEN_IF_COPIES_FAILED = True
 LOG_DIR = PROJECT_DIR / "local_logs"                 # stdout/stderr of each copy
 # ------------------------------------------------------------------
 
 PYTHON = sys.executable  # use the same interpreter/environment as this script
 
-def run_setup(experiment: Path):
-    """Run the setup script; return (cfg, output_dir) or None on failure.
-
-    The setup script must print a line:  SETUP_RESULT <cfg> <output_dir>
-    """
+def _run_script(script: Path, *args) -> subprocess.CompletedProcess:
     proc = subprocess.run(
-        [PYTHON, str(SETUP_SCRIPT), str(experiment)],
-        capture_output=True, text=True, cwd=PROJECT_DIR,
-    )
+        [PYTHON, str(script), *map(str, args)],
+        capture_output=True, text=True, cwd=PROJECT_DIR)
     if proc.stdout:
         print(proc.stdout, end="")
     if proc.returncode != 0:
         print(proc.stderr, file=sys.stderr)
         return None
-    matches = re.findall(r"^SETUP_RESULT (\S+) (\S+)\s*$", proc.stdout, flags=re.M)
-    if not matches:
-        return None
-    return matches[-1]  # last SETUP_RESULT line, like `tail -n 1`
-
-def run_copy(experiment: Path, cfg: str, output_dir: str, task_id: int) -> int:
-    """Run one copy of the experiment; stdout/stderr go to local_logs/."""
-    LOG_DIR.mkdir(exist_ok=True)
-    out = LOG_DIR / f"{experiment.stem}_{task_id}.out"
-    err = LOG_DIR / f"{experiment.stem}_{task_id}.err"
-    print(f"Running: python {experiment.name} {cfg} {output_dir} {task_id}")
-    with open(out, "w") as fo, open(err, "w") as fe:
-        proc = subprocess.run(
-            [PYTHON, str(experiment), cfg, output_dir, str(task_id)],
-            stdout=fo, stderr=fe, cwd=PROJECT_DIR,
-        )
-    print(f"  task {task_id} finished with exit code {proc.returncode}")
-    return proc.returncode
-
+    return proc
 
 def main() -> int:
-    files = sorted(SCHEDULED_DIR.glob("*.py"))
-    if not files:
-        print(f"No .py files found in {SCHEDULED_DIR}")
+    # step 1: run setup_output.py
+    setup = _run_script(SETUP_SCRIPT)
+    if setup is None:
         return 1
 
+    m = re.search(r"^OUTPUT_DIR (\S+)\s*$", setup.stdout, flags=re.M)
+    run_list = [(Path(c), Path(r)) for c, r in
+                re.findall(r"^RUN (\S+) (\S+)\s*$", setup.stdout, flags=re.M)]
+    if not m or not run_list:
+        print("Setup printed no OUTPUT_DIR/RUN lines")
+        return 1
+    output_dir = m.group(1)
+    print(run_list)
+
+    # step 2: run 5 copies of each of the runs
     print("Started running scheduled experiments.")
-    for experiment in files:
-        print("=" * 50)
-        print(f"Experiment: {experiment.stem}")
-        print("=" * 50)
-
-        # ---- 1) Setup ----
-        result = run_setup(experiment)
-        if result is None:
-            print(f"Setup failed for {experiment.stem} (no SETUP_RESULT line). Skipping.")
-            continue
-        cfg, output_dir = result
-        print(f"cfg={cfg}")
-        print(f"output_dir={output_dir}")
-
-        # ---- 2) Copies, max MAX_PARALLEL at a time ----
+    for experiment, run_dir in run_list:
+        print(f"Running {experiment.name} -> {run_dir}")
         with ThreadPoolExecutor(max_workers=MAX_PARALLEL) as pool:
-            futures = [
-                pool.submit(run_copy, experiment, cfg, output_dir, i)
-                for i in range(1, N_COPIES + 1)
-            ]
-            codes = [f.result() for f in futures]
-        if any(codes):
-            print(f"WARNING: at least one copy of {experiment.stem} failed: {codes}")
-            if not PUSH_EVEN_IF_COPIES_FAILED:
-                print(f"Keeping {output_dir} locally, skipping push.")
-                continue
+            futures = [pool.submit(_run_script, experiment,
+                "--output_dir", run_dir, "--seed", i)
+                for i in range(1, N_COPIES + 1)]
+        failed = [i for i, f in enumerate(futures, 1) if f.result() is None]
+        if failed:
+            print(f"WARNING: seeds {failed} of {experiment.name} failed")
 
-        # ---- 3) Push, delete local output_dir only if it worked ----
-        push = subprocess.run([PYTHON, str(PUSH_SCRIPT), output_dir], cwd=PROJECT_DIR)
-        if push.returncode == 0:
-            print(f"Push succeeded, deleting {output_dir}")
-            if output_dir and Path(output_dir).is_dir():
-                shutil.rmtree(output_dir)
-        else:
-            print(f"Push FAILED, keeping {output_dir}")
-
-    print("All tasks finished.")
+    # step 3: push the outputs to a new branch
+    _run_script(PUSH_SCRIPT, "--output_dir", output_dir)
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(main())

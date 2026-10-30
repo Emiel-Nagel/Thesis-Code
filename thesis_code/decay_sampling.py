@@ -5,16 +5,16 @@ from dataclasses import dataclass, field
 @dataclass
 class DecayConfig:
     beta_sampling_mode: Literal["single_value", "normal", "uniform"]
-    # mode "single_value"
-    tau_single_values: Optional[list[float]]  # ms
-    # mode "normal"
-    tau_means: Optional[list[float]]  # ms
-    tau_stds: Optional[list[float]]  # ms
-    # mode "uniform"
-    tau_uppers: Optional[list[float]]  # ms
-    tau_lowers: Optional[list[float]]  # ms
- 
     tau_out: float  # ms
+
+    # mode "single_value"
+    tau_single_values: Optional[list[float]] = None  # ms
+    # mode "normal"
+    tau_means: Optional[list[float]] = None  # ms
+    tau_stds: Optional[list[float]] = None  # ms
+    # mode "uniform"
+    tau_uppers: Optional[list[float]] = None  # ms
+    tau_lowers: Optional[list[float]] = None  # ms
 
 def tau_to_beta(dt: float, tau: float | torch.Tensor) -> torch.Tensor:
     """

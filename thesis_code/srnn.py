@@ -70,7 +70,7 @@ class SRNN(nn.Module):
 
 @dataclass
 class SRNNConfig:
-    ns_hidden: list[int] = field(default_factory=lambda: [256])
+    ns_hidden: list[int]
     percent_pv: float
     percent_som: float
     add_control_net: bool

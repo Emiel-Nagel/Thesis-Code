@@ -14,14 +14,14 @@ from thesis_code.run_logging import Logger
 from thesis_code.configs import Config, DecayConfig
 
 def setup(output_dir: Path, seed: int, cfg: Config) -> tuple[Path, Logger, torch.device]:
-    runs.create_seed_dir(output_dir, seed, cfg)
+    output_dir = runs.create_seed_dir(output_dir, seed)
     logger = Logger(run_name=cfg.run_name, seed=seed)
 
     flushing = torch.set_flush_denormal(True)
     logger.log(f"Floating point flushing is set to {flushing}")
 
     torch.manual_seed(seed)
-    torch.set_num_threads(1)
+    torch.set_num_threads(4)
 
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("mps") if torch.backends.mps.is_available() else torch.device("cpu")
     logger.log(f"Using device: {device}")
@@ -96,7 +96,7 @@ def build_srnns(
                     refractory_period=refractory_period,
                     use_daleslaw=use_daleslaw,
                 ) for fm, rm, beta in zip(forw_matrices, rec_matrices, betas)],
-            out_layer=OutputLayer(ns_hidden[-1], output_dim, beta=tau_to_beta(dt, decay_cfg["tau_out"]*dt))
+            out_layer=OutputLayer(ns_hidden[-1], output_dim, beta=tau_to_beta(dt, decay_cfg.tau_out*dt))
         ).to(device)
 
     net = _build_srnn(rec_matrices=rec_matrices)
@@ -192,7 +192,7 @@ def run(output_dir: Path, seed: int, cfg: Config) -> None:
         logger.log("\n\n---------------")
         logger.log("Now testing control net")
 
-        net_control, optimizer_control, recorder = train(net_control, logger, device, SHD_trainloader, SHD_testloader, train_cfg["lr"], train_cfg["n_epochs"], regularizer, recorder)
+        net_control, optimizer_control, recorder = train(net_control, logger, device, SHD_trainloader, SHD_testloader, train_cfg.lr, train_cfg.n_epochs, regularizer, recorder)
         runs.save_net(net_control, optimizer_control, epoch=train_cfg.n_epochs, save_path=output_dir / "net_control.checkpoint.pt")
         recorder.save(output_dir / "data_net_control")
 

@@ -3,6 +3,7 @@ import subprocess, shutil, datetime, tomllib, os, base64, requests
 from pathlib import Path
 from collections.abc import Iterator
 import logging
+import importlib.util, sys
 
 from .srnn import SRNN
 from .configs import Config
@@ -24,10 +25,17 @@ def get_git_commit() -> str:
         capture_output=True, text=True, check=True, cwd=CODE_DIR,
     ).stdout.strip()
 
+def load_config(config_path: Path) -> Config:
+    spec = importlib.util.spec_from_file_location(config_path.stem, config_path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    if not hasattr(mod, "cfg"):
+        raise AttributeError(f"{config_path} does not define a module-level `cfg`")
+    return mod.cfg
+
 def create_output_dir() -> Path:
     output_dir = OUTPUT_DIR / generate_run_id()
     output_dir.mkdir(parents=True, exist_ok=False)
-    shutil.copy2(CODE_DIR / "scripts" / "analysis.ipynb", output_dir / "analysis.ipynb")
 
     helpers_dir = output_dir / "helpers"
     helpers_dir.mkdir(parents=True, exist_ok=True)
@@ -36,8 +44,14 @@ def create_output_dir() -> Path:
     (helpers_dir / "__init__.py").touch()
     return output_dir
 
-def create_seed_dir(output_dir: Path, seed: int, cfg: Config) -> Path:
+def create_run_dir(output_dir: Path, cfg: Config) -> Path:
+    output_dir = output_dir / cfg.run_name
+    output_dir.mkdir(parents=True, exist_ok=True)
     cfg.save_json(output_dir)
+    shutil.copy2(CODE_DIR / "scripts" / "analysis.ipynb", output_dir / "analysis.ipynb")
+    return output_dir
+
+def create_seed_dir(output_dir: Path, seed: int) -> Path:
     output_dir = output_dir / f"seed_{seed}"
     output_dir.mkdir(parents=True, exist_ok=True)
     return output_dir

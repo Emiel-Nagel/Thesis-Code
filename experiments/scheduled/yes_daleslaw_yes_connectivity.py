@@ -1,13 +1,15 @@
+from pathlib import Path
+
 from thesis_code.configs import *
 
 cfg = Config(
-    run_name = "test_yes_daleslaw_no_connectivity_normal_feedforward_long_epochs",
+    run_name = Path(__file__).stem,
 
     training = TrainingConfig(
         dt = 0.001,  # timesteps are now in milliseconds
         batch_size = 128,
         max_iters = 800,
-        n_epochs = 50,
+        n_epochs = 1,
         lr = 1e-3,
         separate_timesteps = False,
         n_trials = 5,
@@ -32,9 +34,9 @@ cfg = Config(
         percent_som = 25.0,
         add_control_net = False,
         use_synapses = False,
-        use_daleslaw = False,
-        use_connectivity = False,
-        refractory_period = 5,
+        use_daleslaw = True,
+        use_connectivity = True,
+        refractory_period = 0,
 
         decays = DecayConfig(
             # beta_sampling_mode = "single_value"
@@ -62,13 +64,12 @@ cfg = Config(
 
 if __name__ == "__main__":
     import argparse
-    from pathlib import Path
 
-    from scripts import run
+    from thesis_code import run_experiment
 
     p = argparse.ArgumentParser()
     p.add_argument("--output_dir", type=Path, required=True)
     p.add_argument("--seed", type=int, required=True)
     args = p.parse_args()
 
-    run.run(Path(args.output_dir), args.seed, cfg)
+    run_experiment.run(Path(args.output_dir), args.seed, cfg)

@@ -151,8 +151,8 @@ class RegularizationConfig:
     apply: bool
     lam_lower: float
     v_lower: float
-    lam_uppers: list[float] = field(default_factory=lambda: [0.5])
-    v_uppers: list[float] = field(default_factory=lambda: [50])
+    lam_uppers: list[float]
+    v_uppers: list[float]
     L: int
 
 @dataclass
