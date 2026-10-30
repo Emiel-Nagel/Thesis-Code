@@ -35,6 +35,8 @@ def _run_script(script: Path, *args) -> subprocess.CompletedProcess:
     proc = subprocess.run(
         [PYTHON, str(script), *map(str, args)],
         capture_output=True, text=True, cwd=PROJECT_DIR)
+    if proc.stderr:
+        print(proc.stderr, file=sys.stderr, end="")
     if proc.stdout:
         print(proc.stdout, end="")
     if proc.returncode != 0:
