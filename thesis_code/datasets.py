@@ -47,39 +47,50 @@ def _build_dataloader(dataset: Dataset, cache_path: Path, batch_size: int, train
         drop_last=train,
     )
 
-def _build_raw_dataset(train: bool, time_window: float) -> tonic.datasets.SHD:
+def _build_raw_dataset(train: bool, n_timepoints: int) -> tonic.datasets.SHD:
+    """
+    What ToFrame does
+
+    With n_time_bins=n_timepoints, it:
+
+    Splits the time axis of the sample into n_timepoints equal-width bins. start_time=0 makes the first bin start at t = 0. The last bin ends at the sample's final event time.
+    Counts the spikes of each neuron in each bin.
+    Returns an array of shape (n_timepoints, 1, 700), which is (T, polarity, neurons). Each entry is the number of spikes that neuron fired in that time bin.
+
+    For example, with n_timepoints=100 and a ~1 s recording, each bin is about 10 ms wide. A neuron that fires 3 times in that window gets a value of 3 in that bin.
+    """
     return tonic.datasets.SHD(
         save_to=str(DATA_PATH),
         train=train,
         transform=transforms.ToFrame(
             sensor_size=tonic.datasets.SHD.sensor_size,
-            time_window=time_window,
+            n_time_bins=n_timepoints,
             start_time=0,
         ),
     )
 
-def _SHD_cache_path(time_window: float, train: bool) -> Path:
-    return CACHE_PATH / "SHD" / f"tw{round(time_window)}" / ("train" if train else "test")
+def _SHD_cache_path(n_timepoints: int, train: bool) -> Path:
+    return CACHE_PATH / "SHD" / f"tw{n_timepoints}" / ("train" if train else "test")
 
-def download_SHD_dataset(time_window: float = 1000, re_download: bool = False):
+def download_SHD_dataset(n_timepoints: float = 1000, re_download: bool = False):
     if re_download:
         shutil.rmtree(DATA_PATH / "SHD", ignore_errors=True)
         shutil.rmtree(CACHE_PATH / "SHD", ignore_errors=True)
 
     for train in (True, False):
-        dataset = _build_raw_dataset(train, time_window)
-        cached = DiskCachedDataset(dataset, cache_path=str(_SHD_cache_path(time_window, train)))
+        dataset = _build_raw_dataset(train, n_timepoints)
+        cached = DiskCachedDataset(dataset, cache_path=str(_SHD_cache_path(n_timepoints, train)))
         for i in range(len(cached)):    # forces every sample to be computed and written
             cached[i]
 
-def get_SHD_dataset(batch_size: int, device: torch.device, time_window: float = 1000) -> tuple[PreparedLoader, PreparedLoader, int, list]:
+def get_SHD_dataset(batch_size: int, device: torch.device, n_timepoints: int = 200) -> tuple[PreparedLoader, PreparedLoader, int, list]:
     sensor_size = tonic.datasets.SHD.sensor_size
     pin_memory = torch.device(device).type == "cuda"
-    train_dataset = _build_raw_dataset(train=True, time_window=time_window)
-    trainloader = _build_dataloader(train_dataset, _SHD_cache_path(time_window, True), batch_size, train=True, pin_memory=pin_memory)
+    train_dataset = _build_raw_dataset(train=True, n_timepoints=n_timepoints)
+    trainloader = _build_dataloader(train_dataset, _SHD_cache_path(n_timepoints, True), batch_size, train=True, pin_memory=pin_memory)
 
-    test_dataset = _build_raw_dataset(train=False, time_window=time_window)
-    testloader = _build_dataloader(test_dataset, _SHD_cache_path(time_window, False), batch_size, train=False, pin_memory=pin_memory)
+    test_dataset = _build_raw_dataset(train=False, n_timepoints=n_timepoints)
+    testloader = _build_dataloader(test_dataset, _SHD_cache_path(n_timepoints, False), batch_size, train=False, pin_memory=pin_memory)
 
     return (
         PreparedLoader(trainloader, device),
@@ -88,6 +99,13 @@ def get_SHD_dataset(batch_size: int, device: torch.device, time_window: float = 
         train_dataset.classes,
     )
 
+def dataset_to_tensor(loader: PreparedLoader, device: torch.device) -> tuple[torch.Tensor, torch.Tensor]:
+    data_list, targets_list = zip(*iter(loader))
+    data = torch.cat(data_list)
+    targets = torch.cat(targets_list)
+    return torch.stack(data, dim=0).to(device), torch.stack(targets, dim=0).to(device)
+
 @dataclass
 class DatasetConfig:
     re_download: bool
+    n_timepoints: int

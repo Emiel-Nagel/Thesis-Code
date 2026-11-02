@@ -29,8 +29,6 @@ class SRNN(nn.Module):
         return w_rec
 
     def forward(self, data: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, list[torch.Tensor]]:
-        self.reset()
-
         spk_outs, mem_outs = [], []
         hidden_spks = [[] for _ in range(len(self.rec_layers))]
         hidden_mems = [[] for _ in range(len(self.rec_layers))]
@@ -48,9 +46,8 @@ class SRNN(nn.Module):
 
         return torch.stack(spk_outs, dim=0), torch.stack(mem_outs, dim=0), [torch.stack(spks_h, dim=0) for spks_h in hidden_spks], [torch.stack(mem_h, dim=0) for mem_h in hidden_mems]
 
-    def forward_sequence(self, data: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, list[torch.Tensor]]:
-        self.reset()
-        
+    @torch.compile
+    def forward_sequence(self, data: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, list[torch.Tensor]]:        
         hidden_spks = []
         hidden_mems = []
 

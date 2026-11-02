@@ -88,7 +88,8 @@ def train_net(net: SRNN, logger: Logger, device: torch.device, trainloader: Data
         losses, accs = [], []
         for i, (data, targets) in progress_bar:
 
-            forward_fn = net.forward_sequence if separate_timesteps else net
+            net.reset()
+            forward_fn = net.forward_sequence if not separate_timesteps else net
             spk_outs, mem_outs, hidden_spks, hidden_mems = forward_fn(data)
 
             loss_val = compute_loss(mem_outs, targets)
@@ -163,6 +164,5 @@ class TrainingConfig:
     n_epochs: int
     lr: float
     separate_timesteps: bool
-    n_trials: int
     regularization: RegularizationConfig = field(default_factory=RegularizationConfig)
     dataset: DatasetConfig = field(default_factory=DatasetConfig)

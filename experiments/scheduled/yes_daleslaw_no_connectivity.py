@@ -8,11 +8,10 @@ cfg = Config(
     training = TrainingConfig(
         dt = 0.001,  # timesteps are now in milliseconds
         batch_size = 128,
-        max_iters = 800,
+        max_iters = 500,
         n_epochs = 50,
         lr = 1e-3,
         separate_timesteps = False,
-        n_trials = 5,
 
         regularization = RegularizationConfig(
             apply = True,
@@ -25,6 +24,7 @@ cfg = Config(
 
         dataset = DatasetConfig(
             re_download = False,
+            n_timepoints = 200,
         )
     ),
 

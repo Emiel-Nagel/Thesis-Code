@@ -31,6 +31,7 @@ Also get deep understanding of Garner paper
 
 reduce max-iters to 800
 recude max epochs to 50
+set max timepoints to 200
 baseline with vs without refractory period
 get results in table
 look at Baronig for parameters (especially when using ALIF)

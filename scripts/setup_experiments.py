@@ -16,6 +16,6 @@ if __name__ == "__main__":
         print(f"RUN {experiment} {str(run_dir)}")
 
     datasets.download_SHD_dataset(
-        time_window=cfg.training.dt*1e6,
+        n_timepoints=cfg.training.dataset.n_timepoints,
         re_download=cfg.training.dataset.re_download,
     )

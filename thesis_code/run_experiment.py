@@ -142,7 +142,7 @@ def run(output_dir: Path, seed: int, cfg: Config) -> None:
     SHD_trainloader, SHD_testloader, input_dim, classes = datasets.get_SHD_dataset(
         batch_size=train_cfg.batch_size,
         device=device,
-        time_window=dt*1e6,
+        n_timepoints=train_cfg.dataset.n_timepoints,
     )
 
     reg_cfg = train_cfg.regularization
