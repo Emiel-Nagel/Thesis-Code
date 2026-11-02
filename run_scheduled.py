@@ -26,7 +26,7 @@ SETUP_SCRIPT = PROJECT_DIR / "scripts" / "setup_experiments.py"       # python s
 PUSH_SCRIPT = PROJECT_DIR / "scripts" / "push_output.py"         # python push_output.py <output_dir>
 
 N_COPIES = 1                                         # task ids 1..N_COPIES
-MAX_PARALLEL = 3                                     # same as the %2 in --array
+MAX_PARALLEL = 1                                     # same as the %2 in --array
 PUSH_EVEN_IF_COPIES_FAILED = True
 LOG_DIR = PROJECT_DIR / "local_logs"                 # stdout/stderr of each copy
 # ------------------------------------------------------------------

@@ -1,12 +1,13 @@
 from pathlib import Path
 import requests
-from dotenv import load_dotenv
-load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+import datetime
+# from dotenv import load_dotenv
+# load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 BASE_URL = "https://thesis-code-logstream.onrender.com" # None # os.environ["DASH_URL"].rstrip("/")
 
 _session = requests.Session()
-_session.headers["X-Token"] = None # os.environ["DASH_TOKEN"]
+_session.headers["X-Token"] = "AyWT0xqHiAITo5MvwxoMZ-dD8iPvaAz9KBf6VmFuH_Q" # None # os.environ["DASH_TOKEN"]
 
 forbidden_content = []
 forbidden_content += str(Path(__file__).resolve()).split('\\')
@@ -34,7 +35,7 @@ def reset_log_stream(timeout: float = 5.0) -> None:
     
 class Logger:
     def __init__(self, run_name: str, seed: int) -> None:
-        self.run_name = run_name
+        self.run_name = f"{run_name}-{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}"
         self.seed = seed
         self.content = f"Output logs for run={run_name}, seed={seed}:\n"
         send_to_log_stream(self.run_name, self.seed, self.content)
