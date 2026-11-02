@@ -3,7 +3,7 @@ import requests
 from dotenv import load_dotenv
 load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
-BASE_URL = None # os.environ["DASH_URL"].rstrip("/")
+BASE_URL = "https://thesis-code-logstream.onrender.com" # None # os.environ["DASH_URL"].rstrip("/")
 
 _session = requests.Session()
 _session.headers["X-Token"] = None # os.environ["DASH_TOKEN"]
