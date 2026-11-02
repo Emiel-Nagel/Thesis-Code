@@ -31,7 +31,6 @@ N_COPIES=5                                   # seeds 1 .. N_COPIES
 MAX_PARALLEL=5                               # max seeds running at once PER experiment (empty = no limit)
 WORKER_TIME="06:00:00"                       # time limit per seed
 WORKER_PARTITION="neurophys,battaglialab,neuroinf"
-MAIL_USER="username@donders.ru.nl"           # gets an e-mail when the push job ends or fails
 # ----------------------------------------
 
 source ~/.bashrc
@@ -54,12 +53,6 @@ mapfile -t RUN_LINES < <(sed -n 's/^RUN //p' <<< "$SETUP_OUT")
 if [[ -z "$OUTPUT_DIR" || ${#RUN_LINES[@]} -eq 0 ]]; then
     echo "Setup printed no OUTPUT_DIR/RUN lines"
     exit 1
-fi
-
-# Optional: build the dataset cache once so parallel seeds do not race to create it
-if [[ -n "$WARMUP_SCRIPT" ]]; then
-    echo "Warming up cache..."
-    python "$WARMUP_SCRIPT" || { echo "Cache warm-up failed"; exit 1; }
 fi
 
 # ---- 2) Submit every experiment as an array job, without waiting ---------
@@ -109,8 +102,6 @@ sbatch --dependency=afterany:"$DEPS" \
     --time=02:00:00 \
     --output="slurm-push-%j.out" \
     --error="slurm-push-%j.err" \
-    --mail-type=END,FAIL \
-    --mail-user="$MAIL_USER" \
     --wrap="python \"$PUSH_SCRIPT\" --output_dir \"$OUTPUT_DIR\""
 
 echo "All jobs submitted. The push runs after jobs: $DEPS"
