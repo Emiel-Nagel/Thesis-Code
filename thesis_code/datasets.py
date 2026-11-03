@@ -103,7 +103,7 @@ def dataset_to_tensor(loader: PreparedLoader, device: torch.device) -> tuple[tor
     data_list, targets_list = zip(*iter(loader))
     data = torch.cat(data_list)
     targets = torch.cat(targets_list)
-    return torch.stack(data, dim=0).to(device), torch.stack(targets, dim=0).to(device)
+    return data.to(torch.uint8).to(device), targets.to(device)
 
 @dataclass
 class DatasetConfig:

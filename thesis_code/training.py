@@ -62,7 +62,8 @@ def test_net(net: SRNN, testloader: DataLoader, max_iters: int = None) -> tuple[
         loss = 0
         net.eval()
 
-        for i, (data, targets) in enumerate(testloader):           
+        for i, (data, targets) in enumerate(testloader):
+            net.reset()
             _, mem_rec, _, _ = net(data)
             acc += measure_accuracy(mem_rec, targets)
             loss += compute_loss(mem_rec, targets)
