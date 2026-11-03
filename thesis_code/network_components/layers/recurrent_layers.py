@@ -84,6 +84,7 @@ class StandardRecurrentLayer(RecurrentLayer):
         recurrent_matrix: torch.Tensor,
         beta: torch.Tensor | float,
         spike_grad: Any,
+        threshold: torch.Tensor | float = 1.0,
         fully_learnable: bool = True,
         refractory_period: int = 0,
         use_daleslaw: bool = True,
@@ -96,14 +97,14 @@ class StandardRecurrentLayer(RecurrentLayer):
             spike_grad=spike_grad,
             learn_beta=fully_learnable,
             rec_matrix=recurrent_matrix,
-            threshold=torch.ones(self.n_neurons),
+            threshold=threshold,
             reset_delay=False,
             use_daleslaw=use_daleslaw,
         )
-        self.spk, self.mem = self.neurons.init_rleaky()
+        self.spk, self.mem = self.neurons.reset_mem()
 
     def _reset_neuron_state(self) -> None:
-        self.spk, self.mem = self.neurons.init_rleaky()
+        self.spk, self.mem = self.neurons.reset_mem()
         self.neurons.reset_recurrent_weights()
 
     def _step(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
@@ -118,6 +119,7 @@ class SynapticRecurrentLayer(RecurrentLayer):
         alpha: torch.Tensor | float,
         beta: torch.Tensor | float,
         spike_grad: Any,
+        threshold: torch.Tensor | float = 1.0,
         fully_learnable: bool = True,
         refractory_period: int = 0,
         use_daleslaw: bool = True,
@@ -132,14 +134,14 @@ class SynapticRecurrentLayer(RecurrentLayer):
             learn_alpha=fully_learnable,
             learn_beta=fully_learnable,
             rec_matrix=recurrent_matrix,
-            threshold=torch.ones(self.n_neurons),
+            threshold=threshold,
             reset_delay=False,
             use_daleslaw=use_daleslaw,
         )
-        self.spk, self.syn, self.mem = self.neurons.init_rsynaptic()
+        self.spk, self.syn, self.mem = self.neurons.reset_mem()
 
     def _reset_neuron_state(self) -> None:
-        self.spk, self.syn, self.mem = self.neurons.init_rsynaptic()
+        self.spk, self.syn, self.mem = self.neurons.reset_mem()
         self.neurons.reset_recurrent_weights()
 
     def _step(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:

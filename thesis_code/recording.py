@@ -121,6 +121,13 @@ class SpikeRecorder(RecorderBase):
             **metrics,
         )
 
+@dataclass
+class RecordingConfig:
+    record_performance: bool
+    record_gradients: bool
+    record_weights: bool
+    record_spikes: bool
+
 class Recorder:
     def __init__(self, num_hidden_layers: int, rec_cfg: RecordingConfig) -> None:
         self.iter_recorders: list[RecorderBase] = []
@@ -151,10 +158,3 @@ class Recorder:
         output_dir.mkdir(parents=True, exist_ok=True)
         for r in self.iter_recorders + self.epoch_recorders:
             r.save(output_dir)
-
-@dataclass
-class RecordingConfig:
-    record_performance: bool
-    record_gradients: bool
-    record_weights: bool
-    record_spikes: bool

@@ -93,6 +93,7 @@ def build_srnns(
                     recurrent_matrix=rm.clone().to(device),
                     beta=beta.clone().to(device),
                     spike_grad=fast_sigmoid(slope=25),
+                    threshold=torch.ones(rm.shape[0], device=device),
                     refractory_period=refractory_period,
                     use_daleslaw=use_daleslaw,
                 ) for fm, rm, beta in zip(forw_matrices, rec_matrices, betas)],
