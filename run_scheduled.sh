@@ -12,9 +12,9 @@
 #   1) runs scripts/setup_experiments.py, which prints
 #          OUTPUT_DIR <output_dir>
 #          RUN <experiment.py> <run_dir>          (one line per scheduled experiment)
-#   2) submits every experiment as its own array job (seeds 1..N_COPIES) without waiting,
-#      so all experiments sit in the queue at once and run as soon as GPUs are free
-#   3) submits one push job that starts after ALL array jobs have ended
+#   2) submits ONE array job covering every (experiment, seed) pair, with at most
+#      MAX_PARALLEL tasks running at once in total (= max GPUs in use)
+#   3) submits one push job that starts after the array job has ended
 #
 # Submit with:   sbatch run_scheduled.sh
 # or run it directly on a login node:   bash run_scheduled.sh
@@ -28,7 +28,7 @@ PUSH_SCRIPT="$PROJECT_DIR/scripts/push_output.py"          # python push_output.
 WARMUP_SCRIPT=""                                           # optional, e.g. "$PROJECT_DIR/scripts/warm_cache.py"; empty = skip
 
 N_COPIES=5                                   # seeds 1 .. N_COPIES
-MAX_PARALLEL=5                               # max seeds running at once PER experiment (empty = no limit)
+MAX_PARALLEL=2                               # max tasks (= GPUs) running at once IN TOTAL (empty = no limit)
 WORKER_TIME="06:00:00"                       # time limit per seed
 WORKER_PARTITION="neurophys,battaglialab,neuroinf"
 # ----------------------------------------
@@ -55,46 +55,44 @@ if [[ -z "$OUTPUT_DIR" || ${#RUN_LINES[@]} -eq 0 ]]; then
     exit 1
 fi
 
-# ---- 2) Submit every experiment as an array job, without waiting ---------
-echo "Started submitting scheduled experiments."
-JOB_IDS=()
-for line in "${RUN_LINES[@]}"; do
-    read -r EXPERIMENT RUN_DIR <<< "$line"
-    name=$(basename "$EXPERIMENT" .py)
+# ---- 2) One array job over every (experiment, seed) pair ------------------
+# The list of "<experiment.py> <run_dir>" lines is handed to the tasks through the
+# environment (sbatch exports the whole environment by default).
+export RUNS_STR
+RUNS_STR=$(printf '%s\n' "${RUN_LINES[@]}")
 
-    # \$ keeps the variable literal here, so it is expanded inside the job, not now
-    WORKER_CMD="export OMP_NUM_THREADS=\$SLURM_CPUS_PER_TASK MKL_NUM_THREADS=\$SLURM_CPUS_PER_TASK; "
-    WORKER_CMD+="echo \"Seed \$SLURM_ARRAY_TASK_ID -> GPU \$CUDA_VISIBLE_DEVICES\"; "
-    WORKER_CMD+="python -u \"$EXPERIMENT\" --output_dir \"$RUN_DIR\" --seed \$SLURM_ARRAY_TASK_ID"
+N_EXP=${#RUN_LINES[@]}
+TOTAL=$((N_EXP * N_COPIES))
 
-    jid=$(sbatch --parsable \
-        --job-name="${name:0:20}" \
-        --partition="$WORKER_PARTITION" \
-        --exclude=cn40 \
-        --gres=gpu:1 \
-        --cpus-per-task=4 \
-        --mem-per-cpu=6000 \
-        --time="$WORKER_TIME" \
-        --array=1-"$N_COPIES"${MAX_PARALLEL:+%$MAX_PARALLEL} \
-        --output="slurm-%A_%a.out" \
-        --error="slurm-%A_%a.err" \
-        --wrap="$WORKER_CMD")
-    if [[ $? -ne 0 || -z "$jid" ]]; then
-        echo "WARNING: could not submit $name, skipping it"
-        continue
-    fi
-    echo "Submitted $name -> $RUN_DIR (job $jid)"
-    JOB_IDS+=("$jid")
-done
+# \$ keeps the variable literal here, so it is expanded inside the task, not now
+WORKER_CMD="idx=\$((SLURM_ARRAY_TASK_ID)); "
+WORKER_CMD+="read -r EXPERIMENT RUN_DIR <<< \"\$(sed -n \"\$((idx / $N_COPIES + 1))p\" <<< \"\$RUNS_STR\")\"; "
+WORKER_CMD+="SEED=\$((idx % $N_COPIES + 1)); "
+WORKER_CMD+="export OMP_NUM_THREADS=\$SLURM_CPUS_PER_TASK MKL_NUM_THREADS=\$SLURM_CPUS_PER_TASK; "
+WORKER_CMD+="echo \"Task \$idx: \$EXPERIMENT seed \$SEED -> GPU \$CUDA_VISIBLE_DEVICES\"; "
+WORKER_CMD+="python -u \"\$EXPERIMENT\" --output_dir \"\$RUN_DIR\" --seed \$SEED"
 
-if [[ ${#JOB_IDS[@]} -eq 0 ]]; then
-    echo "Nothing was submitted."
+echo "Submitting $N_EXP experiments x $N_COPIES seeds = $TOTAL tasks (max ${MAX_PARALLEL:-unlimited} at once)"
+JOB_ID=$(sbatch --parsable \
+    --job-name=thesis-runs \
+    --partition="$WORKER_PARTITION" \
+    --exclude=cn40 \
+    --gres=gpu:1 \
+    --cpus-per-task=4 \
+    --mem-per-cpu=6000 \
+    --time="$WORKER_TIME" \
+    --array=0-$((TOTAL - 1))${MAX_PARALLEL:+%$MAX_PARALLEL} \
+    --output="slurm-%A_%a.out" \
+    --error="slurm-%A_%a.err" \
+    --wrap="$WORKER_CMD")
+if [[ $? -ne 0 || -z "$JOB_ID" ]]; then
+    echo "Could not submit the array job."
     exit 1
 fi
+echo "Submitted array job $JOB_ID"
 
 # ---- 3) Push job: starts once every array job has ended (success or not) --
-DEPS=$(IFS=:; echo "${JOB_IDS[*]}")
-sbatch --dependency=afterany:"$DEPS" \
+sbatch --dependency=afterany:"$JOB_ID" \
     --job-name=push-outputs \
     --partition="$WORKER_PARTITION" \
     --cpus-per-task=1 \
@@ -104,4 +102,4 @@ sbatch --dependency=afterany:"$DEPS" \
     --error="slurm-push-%j.err" \
     --wrap="python \"$PUSH_SCRIPT\" --output_dir \"$OUTPUT_DIR\""
 
-echo "All jobs submitted. The push runs after jobs: $DEPS"
+echo "All jobs submitted. The push runs after job $JOB_ID"
