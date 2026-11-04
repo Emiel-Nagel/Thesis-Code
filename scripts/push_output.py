@@ -17,5 +17,5 @@ if __name__ == "__main__":
             runs.push_output(run_dir, branch_name)
         except Exception as e:
             print(e, file=sys.stderr)
-        runs.remove_output_dir(run_dir)
-    runs.remove_output_dir(output_dir)
+        # runs.remove_output_dir(run_dir)
+    # runs.remove_output_dir(output_dir)

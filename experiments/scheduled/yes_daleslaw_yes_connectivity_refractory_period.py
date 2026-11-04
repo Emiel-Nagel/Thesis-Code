@@ -34,9 +34,9 @@ cfg = Config(
         percent_som = 25.0,
         add_control_net = False,
         use_synapses = False,
-        use_daleslaw = False,
-        use_connectivity = False,
-        refractory_period = 0,
+        use_daleslaw = True,
+        use_connectivity = True,
+        refractory_period = 5,
 
         decays = DecayConfig(
             # beta_sampling_mode = "single_value"
