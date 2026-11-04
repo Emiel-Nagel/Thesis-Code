@@ -1,6 +1,7 @@
 """
 Implementation based on:
 https://arxiv.org/html/2408.07517v3
+https://synapticflow.readthedocs.io/en/latest/ALIF.html
 
 
 
@@ -9,7 +10,7 @@ LIF neuron equation:
 
 ALIF neuron equation:
 τ_u * du/dt = -u(t) + I(t) - w(t)
-τ_w * dw/dt = -w(t) + a*u(t) - b*z(t)
+τ_w * dw/dt = -w(t) + a*u(t) + b*z(t)
 
 snntorch.RLeaky implementation:
 U[t+1] = βU[t] + I_{\\rm in}[t+1] + V(S_{\\rm out}[t]) - RU_{\\rm thr}
@@ -45,8 +46,6 @@ class ALIFRLeaky(snn.RLeaky):
     def get_recurrent_weights(self) -> torch.Tensor:
         return self.recurrent.get_weights()
 
-
-    @torch.compile
     def _step_membrane(self, beta_u: torch.Tensor, u: torch.Tensor, I: torch.Tensor, V: torch.Tensor, w: torch.Tensor) -> torch.Tensor:
         """
         Implements _base_state_function from RLeaky:
@@ -54,11 +53,10 @@ class ALIFRLeaky(snn.RLeaky):
         """
         return beta_u * u + I + V - w
 
-    @torch.compile
     def _step_adaptation(self, beta_w: torch.Tensor, w: torch.Tensor, u: torch.Tensor, a: torch.Tensor, b: torch.Tensor, z: torch.Tensor) -> torch.Tensor:
         """
-        Implements the following snntorch adaptation on τ_w * dw/dt = -w(t) + a*u(t) - b*z(t):
-        W[t+1] = β_w * W[t] + a*U[t] - b*Z[t]
+        Implements the following snntorch adaptation on τ_w * dw/dt = -w(t) + a*u(t) + b*z(t):
+        W[t+1] = β_w * W[t] + a*U[t] + b*Z[t]
         """
         return beta_w * w + a*u - b*z
 
