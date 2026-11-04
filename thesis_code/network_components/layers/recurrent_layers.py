@@ -148,3 +148,16 @@ class SynapticRecurrentLayer(RecurrentLayer):
         spk, self.syn, mem = self.neurons(x, self.spk, self.syn, self.mem)
         self.spk, self.mem = self._compute_refractory_period(spk, mem)
         return self.spk, self.mem
+
+class ALIFRecurrentLayer(RecurrentLayer):
+    def __init__(self,
+    
+    ) -> None:
+        super().__init__()
+
+
+    def _reset_neuron_state(self) -> None:
+        pass
+
+    def _step(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+        pass
