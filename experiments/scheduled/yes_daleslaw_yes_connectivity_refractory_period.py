@@ -38,11 +38,11 @@ cfg = Config(
         use_connectivity = True,
         refractory_period = 5,
 
-        decays = DecayConfig(
+        betas = SamplingConfig(
             # beta_sampling_mode = "single_value"
             # tau_single_values = [10] #ms
 
-            beta_sampling_mode = "normal",
+            sampling_mode = "normal",
             tau_means = [10], #ms
             tau_stds = [1], #ms
 

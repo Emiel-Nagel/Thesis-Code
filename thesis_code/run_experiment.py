@@ -3,15 +3,15 @@ from snntorch.surrogate import fast_sigmoid
 from pathlib import Path
 
 from thesis_code import SRNN, datasets, runs
-from thesis_code.network_components.layers import SynapticRecurrentLayer, StandardRecurrentLayer, OutputLayer
-from thesis_code.decay_sampling import tau_to_beta, sample_heterogeneous_decays_uniform, sample_heterogeneous_decays_normal
+from thesis_code.network_components.layers import SynapticRecurrentLayer, StandardRecurrentLayer, ALIFRecurrentLayer, RecurrentLayerConfig, OutputLayer
+from thesis_code.parameter_sampling import tau_to_beta, sample_heterogeneous_uniform, sample_heterogeneous_normal, sample_values
 from thesis_code.connectivity import sample_ee_pv_som_neurons, save_neurons, build_recurrent_and_pruned_matrices, save_matrices, sample_exc_inh_recurrent_matrices
 
 from thesis_code.recording import Recorder
 import thesis_code.training as tr
 
 from thesis_code.run_logging import Logger
-from thesis_code.configs import Config, DecayConfig
+from thesis_code.configs import Config, SamplingConfig
 
 def setup(output_dir: Path, seed: int, cfg: Config) -> tuple[Path, Logger, torch.device]:
     output_dir = runs.create_seed_dir(output_dir, seed)
@@ -31,27 +31,23 @@ def build_srnns(
     dt: float,
     input_dim: int,
     output_dim: int,
-    ns_hidden: list[int],
-    percent_pv: float,
-    percent_som: float,
-    use_synapses: bool,
+    hidden_layer_cfgs: list[RecurrentLayerConfig],
     use_daleslaw: bool,
     use_connectivity: bool,
     refractory_period: int,
-    decay_cfg: DecayConfig,
+    tau_out: float,
     device: torch.device,
     output_dir: Path,
     add_control_net: bool,
 ) -> tuple[SRNN, SRNN | None]:
-    layers = [input_dim] + ns_hidden
-
+    # TODO: update run
+    
+    ns_hidden = [hl_cfg.n_neurons for hl_cfg in hidden_layer_cfgs]
+    percent_pv = hidden_layer_cfgs[0].percent_pv
+    percent_som = hidden_layer_cfgs[0].percent_som
     if use_daleslaw:
         if use_connectivity:
-            neurons = sample_ee_pv_som_neurons(
-                ns_hidden=ns_hidden,
-                percent_pv=percent_pv,
-                percent_som=percent_som,
-            )
+            neurons = sample_ee_pv_som_neurons(ns_hidden, percent_pv, percent_som)
             save_neurons(output_dir, neurons)
             rec_matrices, pruned_matrices = build_recurrent_and_pruned_matrices(neurons)
         else:
@@ -60,8 +56,6 @@ def build_srnns(
     else:
         rec_matrices = [torch.ones(n, n) for n in ns_hidden]
         pruned_matrices = [torch.ones(n, n) for n in ns_hidden]
-
-    forw_matrices = [torch.ones(n_in, n_out) for n_in, n_out in zip(layers[:-1], layers[1:])]
 
     save_matrices(output_dir, rec_matrices, 
         names=[f"recurrent_mask_{i}" for i, _ in enumerate(rec_matrices)], 
@@ -73,36 +67,108 @@ def build_srnns(
             is_control=True
         )
 
-    match decay_cfg.beta_sampling_mode:
-        case "single_value":
-            betas = decay_cfg.tau_single_values
-        case "normal":
-            betas = [sample_heterogeneous_decays_normal(dt, n, tau_mean=m*dt, tau_std=s*dt, device=device)
-                     for n, m, s in zip(ns_hidden, decay_cfg.tau_means, decay_cfg.tau_stds)]
-        case "uniform":
-            betas = [sample_heterogeneous_decays_uniform(dt, n, tau_upper=tu*dt, tau_lower=tl*dt, device=device)
-                     for n, tu, tl in zip(ns_hidden, decay_cfg.tau_uppers, decay_cfg.tau_lowers)]
-
-    rec_layer_class = SynapticRecurrentLayer if use_synapses else StandardRecurrentLayer
-
     def _build_srnn(rec_matrices: list[torch.Tensor]) -> SRNN:
-        return SRNN(
-            rec_layers=[
-                rec_layer_class(
-                    forward_matrix=fm.clone().to(device),
-                    recurrent_matrix=rm.clone().to(device),
-                    beta=beta.clone().to(device),
+        rec_layers = []
+        n_prev = input_dim
+        for hl_cfg, rec_matrix in zip(hidden_layer_cfgs, rec_matrices):
+            n = hl_cfg.n_neurons
+            n_prev = hl_cfg.n_neurons
+
+            rec_layers.append(
+                hl_cfg.rec_layer_class(
+                    forward_matrix=torch.ones(n_prev, n, device=device),
+                    recurrent_matrix=rec_matrix.to(device),
+                    beta=sample_values(hl_cfg.beta, dt, n, device),
+                    beta_w=sample_values(hl_cfg.beta_w, dt, n, device),
+                    a=sample_values(hl_cfg.a, dt, n, device),
+                    b=sample_values(hl_cfg.b, dt, n, device),
                     spike_grad=fast_sigmoid(slope=25),
-                    threshold=torch.ones(rm.shape[0], device=device),
+                    threshold=torch.ones(n, device=device),
                     refractory_period=refractory_period,
                     use_daleslaw=use_daleslaw,
-                ) for fm, rm, beta in zip(forw_matrices, rec_matrices, betas)],
-            out_layer=OutputLayer(ns_hidden[-1], output_dim, beta=tau_to_beta(dt, decay_cfg.tau_out*dt))
-        ).to(device)
+                )
+            )
+        return SRNN(rec_layers, out_layer=OutputLayer(n_prev, output_dim, beta=tau_to_beta(dt, tau_out*dt)))
 
     net = _build_srnn(rec_matrices=rec_matrices)
     net_control = _build_srnn(rec_matrices=pruned_matrices) if add_control_net else None
     return net, net_control
+
+# def build_srnns(
+#     dt: float,
+#     input_dim: int,
+#     output_dim: int,
+#     ns_hidden: list[int],
+#     percent_pv: float,
+#     percent_som: float,
+#     use_synapses: bool,
+
+#     refractory_period: int,
+#     beta_cfg: SamplingConfig,
+#     device: torch.device,
+#     output_dir: Path,
+#     add_control_net: bool,
+# ) -> tuple[SRNN, SRNN | None]:
+#     layers = [input_dim] + ns_hidden
+
+#     if use_daleslaw:
+#         if use_connectivity:
+#             neurons = sample_ee_pv_som_neurons(
+#                 ns_hidden=ns_hidden,
+#                 percent_pv=percent_pv,
+#                 percent_som=percent_som,
+#             )
+#             save_neurons(output_dir, neurons)
+#             rec_matrices, pruned_matrices = build_recurrent_and_pruned_matrices(neurons)
+#         else:
+#             rec_matrices = sample_exc_inh_recurrent_matrices(ns_hidden, percent_inh=percent_pv + percent_som)
+#             pruned_matrices = sample_exc_inh_recurrent_matrices(ns_hidden, percent_inh=percent_pv + percent_som)
+#     else:
+#         rec_matrices = [torch.ones(n, n) for n in ns_hidden]
+#         pruned_matrices = [torch.ones(n, n) for n in ns_hidden]
+
+#     forw_matrices = [torch.ones(n_in, n_out) for n_in, n_out in zip(layers[:-1], layers[1:])]
+
+#     save_matrices(output_dir, rec_matrices, 
+#         names=[f"recurrent_mask_{i}" for i, _ in enumerate(rec_matrices)], 
+#         is_control=False
+#     )
+#     if add_control_net:
+#         save_matrices(output_dir, pruned_matrices, 
+#             names=[f"recurrent_mask_{i}" for i, _ in enumerate(pruned_matrices)], 
+#             is_control=True
+#         )
+
+#     match beta_cfg.sampling_mode:
+#         case "single_value":
+#             betas = beta_cfg.tau_single_values
+#         case "normal":
+#             betas = [sample_heterogeneous_normal(dt, n, tau_mean=m*dt, tau_std=s*dt, device=device)
+#                      for n, m, s in zip(ns_hidden, beta_cfg.tau_means, beta_cfg.tau_stds)]
+#         case "uniform":
+#             betas = [sample_heterogeneous_uniform(dt, n, tau_upper=tu*dt, tau_lower=tl*dt, device=device)
+#                      for n, tu, tl in zip(ns_hidden, beta_cfg.tau_uppers, beta_cfg.tau_lowers)]
+
+#     rec_layer_class = SynapticRecurrentLayer if use_synapses else StandardRecurrentLayer
+
+#     def _build_srnn(rec_matrices: list[torch.Tensor]) -> SRNN:
+#         return SRNN(
+#             rec_layers=[
+#                 rec_layer_class(
+#                     forward_matrix=fm.clone().to(device),
+#                     recurrent_matrix=rm.clone().to(device),
+#                     beta=beta.clone().to(device),
+#                     spike_grad=fast_sigmoid(slope=25),
+#                     threshold=torch.ones(rm.shape[0], device=device),
+#                     refractory_period=refractory_period,
+#                     use_daleslaw=use_daleslaw,
+#                 ) for fm, rm, beta in zip(forw_matrices, rec_matrices, betas)],
+#             out_layer=OutputLayer(ns_hidden[-1], output_dim, beta=tau_to_beta(dt, beta_cfg.tau_out*dt))
+#         ).to(device)
+
+#     net = _build_srnn(rec_matrices=rec_matrices)
+#     net_control = _build_srnn(rec_matrices=pruned_matrices) if add_control_net else None
+#     return net, net_control
 
 def train(
         net: SRNN,
@@ -169,7 +235,7 @@ def run(output_dir: Path, seed: int, cfg: Config) -> None:
         use_daleslaw=srnn_cfg.use_daleslaw,
         use_connectivity=srnn_cfg.use_connectivity,
         refractory_period=srnn_cfg.refractory_period,
-        decay_cfg=srnn_cfg.decays,
+        beta_cfg=srnn_cfg.betas,
 
         device=device,
         output_dir=output_dir,

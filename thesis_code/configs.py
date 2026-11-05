@@ -5,7 +5,7 @@ from dataclasses import asdict, dataclass, field, fields, is_dataclass
 from pathlib import Path
 from typing import get_type_hints
 
-from .decay_sampling import DecayConfig
+from .parameter_sampling import SamplingConfig
 from .datasets import DatasetConfig
 from .training import TrainingConfig, RegularizationConfig
 from .recording import RecordingConfig

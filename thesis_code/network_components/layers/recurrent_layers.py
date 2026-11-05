@@ -1,8 +1,11 @@
 import torch
 import torch.nn as nn
-from typing import Any
+from typing import Any, Optional, Literal
+from dataclasses import dataclass, field
 
+from ...parameter_sampling import SamplingConfig
 from ..neurons import MaskedRLeaky, MaskedRSynaptic
+from ..alif_neurons import MaskedALIFRLeaky
 from ..linears import DaleslawLinear, MaskedKaimingLinear
 
 class RecurrentLayer(nn.Module):
@@ -151,13 +154,63 @@ class SynapticRecurrentLayer(RecurrentLayer):
 
 class ALIFRecurrentLayer(RecurrentLayer):
     def __init__(self,
-    
+        forward_matrix: torch.Tensor,
+        recurrent_matrix: torch.Tensor,
+        beta: torch.Tensor | float,
+        beta_w: torch.Tensor | float,
+        a: torch.Tensor | float,
+        b: torch.Tensor | float,
+        spike_grad: Any,
+        threshold: torch.Tensor | float = 1.0,
+        fully_learnable: bool = True,
+        refractory_period: int = 0,
+        use_daleslaw: bool = True,
     ) -> None:
-        super().__init__()
-
+        super().__init__(forward_matrix, recurrent_matrix, refractory_period, use_daleslaw)
+        self.neurons = MaskedALIFRLeaky(
+            beta=beta,
+            beta_w=beta_w,
+            a=a,
+            b=b,
+            linear_features=self.n_neurons,
+            init_hidden=False,
+            spike_grad=spike_grad,
+            learn_beta=fully_learnable,
+            learn_beta_w=fully_learnable,
+            learn_a=fully_learnable,
+            learn_b=fully_learnable,
+            rec_matrix=recurrent_matrix,
+            threshold=threshold,
+            reset_delay=False,
+            use_daleslaw=use_daleslaw,
+        )
+        self.spk, self.mem, self.adpt = self.neurons.reset_mem()
 
     def _reset_neuron_state(self) -> None:
-        pass
+        self.spk, self.mem, self.adpt = self.neurons.reset_mem()
+        self.neurons.reset_recurrent_weights()
 
     def _step(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
-        pass
+        self.spk, self.mem, self.adpt = self.neurons(x, self.spk, self.mem, self.adpt)
+        return self.spk, self.mem
+
+@dataclass
+class RecurrentLayerConfig:
+    n_neurons: int
+    percent_pv: float
+    percent_som: float
+    rec_layer_class: StandardRecurrentLayer | SynapticRecurrentLayer | ALIFRecurrentLayer
+    beta: SamplingConfig = field(default_factory=SamplingConfig)
+    beta_w: Optional[SamplingConfig] = None,
+    a: Optional[SamplingConfig] = None,
+    b: Optional[SamplingConfig] = None,
+
+    def __post_init__(self) -> None:
+        is_alif = issubclass(self.rec_layer_class, ALIFRecurrentLayer)
+        set_params = {p for p in ("beta_w", "a", "b") if getattr(self, p) is not None}
+        required = {"beta_w", "a", "b"} if is_alif else set()
+        if set_params != required:
+            raise ValueError(
+                f"{self.rec_layer_class.__name__} requires exactly {sorted(required)} "
+                f"to be set, but got {sorted(set_params)}"
+            )

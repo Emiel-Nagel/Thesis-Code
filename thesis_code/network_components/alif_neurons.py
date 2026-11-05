@@ -29,11 +29,13 @@ import snntorch as snn
 from .linears import DaleslawLinear, MaskedKaimingLinear
 
 class ALIFRLeaky(snn.RLeaky):
-    def __init__(self, *args, beta_w: float | torch.Tensor, a: float | torch.Tensor, b: float | torch.Tensor, **kwargs) -> None:
+    def __init__(self, *args, beta_w: float | torch.Tensor, a: float | torch.Tensor, b: float | torch.Tensor, 
+            learn_beta_w: bool = True, learn_a: bool = True, learn_b: bool = True, **kwargs
+        ) -> None:
         super().__init__(*args, init_hidden=False, **kwargs)
-        self._register_variable("beta_w", beta_w)
-        self._register_variable("a", a)
-        self._register_variable("b", b)
+        self._register_variable("beta_w", beta_w, learn_beta_w)
+        self._register_variable("a", a, learn_a)
+        self._register_variable("b", b, learn_b)
 
     def _register_variable(self, name: str, value: float | torch.Tensor, learnable: bool = True) -> None:
         value = torch.as_tensor(value, dtype=torch.float32)
@@ -93,7 +95,7 @@ class ALIFRLeaky(snn.RLeaky):
         mem_prev = mem if mem is not None else self.mem
         if mem_prev.numel() == 0:
             mem_prev = torch.zeros_like(input_)
-            
+
         spk, mem = super().forward(input_, spk, mem)
 
         self.adpt = self._step_adaptation(
