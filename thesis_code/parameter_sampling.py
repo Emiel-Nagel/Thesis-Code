@@ -18,11 +18,11 @@ class SamplingConfig:
 
     def __post_init__(self) -> None:
         required = {
-            "single_value": {"tau_single_values"},
-            "normal": {"tau_means", "tau_stds"},
-            "uniform": {"tau_uppers", "tau_lowers"},
+            "single_value": {"tau_single_value"},
+            "normal": {"tau_mean", "tau_std"},
+            "uniform": {"tau_upper", "tau_lower"},
         }[self.sampling_mode]
-        all_params = {"tau_single_values", "tau_means", "tau_stds", "tau_uppers", "tau_lowers"}
+        all_params = {"tau_single_value", "tau_mean", "tau_std", "tau_upper", "tau_lower"}
 
         set_params = {p for p in all_params if getattr(self, p) is not None}
         if set_params != required:

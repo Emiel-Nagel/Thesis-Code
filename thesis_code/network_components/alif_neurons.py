@@ -32,7 +32,7 @@ class ALIFRLeaky(snn.RLeaky):
     def __init__(self, *args, beta_w: float | torch.Tensor, a: float | torch.Tensor, b: float | torch.Tensor, 
             learn_beta_w: bool = True, learn_a: bool = True, learn_b: bool = True, **kwargs
         ) -> None:
-        super().__init__(*args, init_hidden=False, **kwargs)
+        super().__init__(*args, **kwargs)
         self._register_variable("beta_w", beta_w, learn_beta_w)
         self._register_variable("a", a, learn_a)
         self._register_variable("b", b, learn_b)

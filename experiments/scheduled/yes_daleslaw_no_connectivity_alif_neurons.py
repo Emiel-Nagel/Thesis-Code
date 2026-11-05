@@ -34,11 +34,11 @@ cfg = Config(
                 n_neurons = 256,
                 percent_pv = 25.0,
                 percent_som = 25.0,
-                rec_layer_class = ALIFRecurrentLayer,
-                beta = SamplingConfig(sampling_mode = "normal", tau_mean = [10], tau_std = [1]),
-                beta_w = SamplingConfig(sampling_mode = "normal", tau_mean = [30], tau_std = [5]),
-                a = SamplingConfig(sampling_mode = "normal", tau_mean = [3], tau_std = [2]),
-                b = SamplingConfig(sampling_mode = "normal", tau_mean = [1], tau_std = [1])
+                rec_layer_type = "alif",
+                beta = SamplingConfig(sampling_mode = "normal", is_decay=True, tau_mean = 10, tau_std = 1),
+                beta_w = SamplingConfig(sampling_mode = "normal", is_decay=True, tau_mean = 30, tau_std = 5),
+                a = SamplingConfig(sampling_mode = "normal", is_decay=False, tau_mean = 3, tau_std = 2),
+                b = SamplingConfig(sampling_mode = "normal", is_decay=False, tau_mean = 1, tau_std = 1)
             )
         ],
         add_control_net = False,

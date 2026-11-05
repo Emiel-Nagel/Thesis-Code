@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from typing import Any, Optional, Literal
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, asdict
 
 from ...parameter_sampling import SamplingConfig
 from ..neurons import MaskedRLeaky, MaskedRSynaptic
@@ -91,6 +91,7 @@ class StandardRecurrentLayer(RecurrentLayer):
         fully_learnable: bool = True,
         refractory_period: int = 0,
         use_daleslaw: bool = True,
+        *args, **kwargs
     ) -> None:
         super().__init__(forward_matrix, recurrent_matrix, refractory_period, use_daleslaw)
         self.neurons = MaskedRLeaky(
@@ -126,6 +127,7 @@ class SynapticRecurrentLayer(RecurrentLayer):
         fully_learnable: bool = True,
         refractory_period: int = 0,
         use_daleslaw: bool = True,
+        *args, **kwargs
     ) -> None:
         super().__init__(forward_matrix, recurrent_matrix, refractory_period, use_daleslaw)
         self.neurons = MaskedRSynaptic(
@@ -165,6 +167,7 @@ class ALIFRecurrentLayer(RecurrentLayer):
         fully_learnable: bool = True,
         refractory_period: int = 0,
         use_daleslaw: bool = True,
+        *args, **kwargs
     ) -> None:
         super().__init__(forward_matrix, recurrent_matrix, refractory_period, use_daleslaw)
         self.neurons = MaskedALIFRLeaky(
@@ -194,23 +197,26 @@ class ALIFRecurrentLayer(RecurrentLayer):
         self.spk, self.mem, self.adpt = self.neurons(x, self.spk, self.mem, self.adpt)
         return self.spk, self.mem
 
+LAYER_CLASSES = {
+    "standard": StandardRecurrentLayer,
+    "synaptic": SynapticRecurrentLayer,
+    "alif": ALIFRecurrentLayer,
+}
+
 @dataclass
 class RecurrentLayerConfig:
     n_neurons: int
     percent_pv: float
     percent_som: float
-    rec_layer_class: StandardRecurrentLayer | SynapticRecurrentLayer | ALIFRecurrentLayer
+    rec_layer_type: Literal["standard", "synaptic", "alif"]
     beta: SamplingConfig = field(default_factory=SamplingConfig)
-    beta_w: Optional[SamplingConfig] = None,
-    a: Optional[SamplingConfig] = None,
-    b: Optional[SamplingConfig] = None,
+    beta_w: Optional[SamplingConfig] = None
+    a: Optional[SamplingConfig] = None
+    b: Optional[SamplingConfig] = None
 
     def __post_init__(self) -> None:
-        is_alif = issubclass(self.rec_layer_class, ALIFRecurrentLayer)
+        required = {"beta_w", "a", "b"} if self.rec_layer_type == "alif" else set()
         set_params = {p for p in ("beta_w", "a", "b") if getattr(self, p) is not None}
-        required = {"beta_w", "a", "b"} if is_alif else set()
         if set_params != required:
-            raise ValueError(
-                f"{self.rec_layer_class.__name__} requires exactly {sorted(required)} "
-                f"to be set, but got {sorted(set_params)}"
-            )
+            raise ValueError(f"{self.rec_layer_type} requires exactly {sorted(required)} "
+                             f"to be set, but got {sorted(set_params)}")

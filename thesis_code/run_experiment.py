@@ -3,7 +3,7 @@ from snntorch.surrogate import fast_sigmoid
 from pathlib import Path
 
 from thesis_code import SRNN, datasets, runs
-from thesis_code.network_components.layers import RecurrentLayerConfig, OutputLayer
+from thesis_code.network_components.layers import OutputLayer, RecurrentLayerConfig, LAYER_CLASSES
 from thesis_code.parameter_sampling import tau_to_beta, sample_values
 from thesis_code.connectivity import sample_ee_pv_som_neurons, save_neurons, build_recurrent_and_pruned_matrices, save_matrices, sample_exc_inh_recurrent_matrices
 
@@ -70,23 +70,22 @@ def build_srnns(
         n_prev = input_dim
         for hl_cfg, rec_matrix in zip(hidden_layer_cfgs, rec_matrices):
             n = hl_cfg.n_neurons
-            n_prev = hl_cfg.n_neurons
-
             rec_layers.append(
-                hl_cfg.rec_layer_class(
+                LAYER_CLASSES[hl_cfg.rec_layer_type](
                     forward_matrix=torch.ones(n_prev, n, device=device),
                     recurrent_matrix=rec_matrix.to(device),
                     beta=sample_values(hl_cfg.beta, dt, n, device),
-                    beta_w=sample_values(hl_cfg.beta_w, dt, n, device),
-                    a=sample_values(hl_cfg.a, dt, n, device),
-                    b=sample_values(hl_cfg.b, dt, n, device),
+                    beta_w=sample_values(hl_cfg.beta_w, dt, n, device) if hl_cfg.beta_w is not None else None,
+                    a=sample_values(hl_cfg.a, dt, n, device) if hl_cfg.a is not None else None,
+                    b=sample_values(hl_cfg.b, dt, n, device) if hl_cfg.b is not None else None,
                     spike_grad=fast_sigmoid(slope=25),
                     threshold=torch.ones(n, device=device),
                     refractory_period=refractory_period,
                     use_daleslaw=use_daleslaw,
                 )
             )
-        return SRNN(rec_layers, out_layer=OutputLayer(n_prev, output_dim, beta=tau_to_beta(dt, tau_out*dt)))
+            n_prev = n
+        return SRNN(rec_layers, out_layer=OutputLayer(n_prev, output_dim, beta=tau_to_beta(dt, tau_out*dt))).to(device)
 
     net = _build_srnn(rec_matrices=rec_matrices)
     net_control = _build_srnn(rec_matrices=pruned_matrices) if add_control_net else None

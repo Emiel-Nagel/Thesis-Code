@@ -4,6 +4,7 @@ import json
 from dataclasses import asdict, dataclass, field, fields, is_dataclass
 from pathlib import Path
 from typing import get_type_hints
+from dacite import Config as DaciteConfig, from_dict
 
 from .parameter_sampling import SamplingConfig
 from .network_components.layers import StandardRecurrentLayer, SynapticRecurrentLayer, ALIFRecurrentLayer, RecurrentLayerConfig
@@ -25,7 +26,7 @@ class Config:
  
     @classmethod
     def from_dict(cls, data: dict) -> "Config":
-        return _build(cls, data)
+        return from_dict(cls, data, DaciteConfig(strict=True))
  
     def save_json(self, dir: Path) -> None:
         with open(dir / "config.json", "w") as f:
