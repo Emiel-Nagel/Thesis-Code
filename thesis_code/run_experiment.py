@@ -3,15 +3,15 @@ from snntorch.surrogate import fast_sigmoid
 from pathlib import Path
 
 from thesis_code import SRNN, datasets, runs
-from thesis_code.network_components.layers import SynapticRecurrentLayer, StandardRecurrentLayer, ALIFRecurrentLayer, RecurrentLayerConfig, OutputLayer
-from thesis_code.parameter_sampling import tau_to_beta, sample_heterogeneous_uniform, sample_heterogeneous_normal, sample_values
+from thesis_code.network_components.layers import RecurrentLayerConfig, OutputLayer
+from thesis_code.parameter_sampling import tau_to_beta, sample_values
 from thesis_code.connectivity import sample_ee_pv_som_neurons, save_neurons, build_recurrent_and_pruned_matrices, save_matrices, sample_exc_inh_recurrent_matrices
 
 from thesis_code.recording import Recorder
 import thesis_code.training as tr
 
 from thesis_code.run_logging import Logger
-from thesis_code.configs import Config, SamplingConfig
+from thesis_code.configs import Config
 
 def setup(output_dir: Path, seed: int, cfg: Config) -> tuple[Path, Logger, torch.device]:
     output_dir = runs.create_seed_dir(output_dir, seed)
