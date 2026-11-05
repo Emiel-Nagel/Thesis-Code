@@ -29,29 +29,23 @@ cfg = Config(
     ),
 
     srnn = SRNNConfig(
-        ns_hidden = [256],
-        percent_pv = 25.0,
-        percent_som = 25.0,
+        hidden_layers=[
+            RecurrentLayerConfig(
+                n_neurons = 256,
+                percent_pv = 25.0,
+                percent_som = 25.0,
+                rec_layer_class = ALIFRecurrentLayer,
+                beta = SamplingConfig(sampling_mode = "normal", tau_mean = [10], tau_std = [1]),
+                beta_w = SamplingConfig(sampling_mode = "normal", tau_mean = [30], tau_std = [5]),
+                a = SamplingConfig(sampling_mode = "normal", tau_mean = [3], tau_std = [2]),
+                b = SamplingConfig(sampling_mode = "normal", tau_mean = [1], tau_std = [1])
+            )
+        ],
         add_control_net = False,
-        use_synapses = False,
-        use_daleslaw = True,
-        use_connectivity = True,
-        refractory_period = 5,
-
-        betas = SamplingConfig(
-            # beta_sampling_mode = "single_value"
-            # tau_single_values = [10] #ms
-
-            sampling_mode = "normal",
-            tau_means = [10], #ms
-            tau_stds = [1], #ms
-
-            # beta_sampling_mode = "uniform"
-            # tau_uppers = [11] #ms
-            # tau_lowers = [9] #ms
-
-            tau_out = 20, #ms
-        )
+        use_daleslaw = False,
+        use_connectivity = False,
+        refractory_period = 0,
+        tau_out = 20, #ms
     ),
 
     recording = RecordingConfig(

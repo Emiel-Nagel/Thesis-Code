@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import get_type_hints
 
 from .parameter_sampling import SamplingConfig
+from .network_components.layers import StandardRecurrentLayer, SynapticRecurrentLayer, ALIFRecurrentLayer, RecurrentLayerConfig
 from .datasets import DatasetConfig
 from .training import TrainingConfig, RegularizationConfig
 from .recording import RecordingConfig
