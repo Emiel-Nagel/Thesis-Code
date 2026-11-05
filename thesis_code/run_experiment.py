@@ -39,9 +39,7 @@ def build_srnns(
     device: torch.device,
     output_dir: Path,
     add_control_net: bool,
-) -> tuple[SRNN, SRNN | None]:
-    # TODO: update run
-    
+) -> tuple[SRNN, SRNN | None]:    
     ns_hidden = [hl_cfg.n_neurons for hl_cfg in hidden_layer_cfgs]
     percent_pv = hidden_layer_cfgs[0].percent_pv
     percent_som = hidden_layer_cfgs[0].percent_som
@@ -222,20 +220,16 @@ def run(output_dir: Path, seed: int, cfg: Config) -> None:
     ) if reg_cfg.apply else None
 
     srnn_cfg = cfg.srnn
-    ns_hidden = srnn_cfg.ns_hidden
 
     net, net_control = build_srnns(
         dt=dt,
         input_dim=input_dim,
         output_dim=len(classes),
-        ns_hidden=ns_hidden,
-        percent_pv=srnn_cfg.percent_pv,
-        percent_som=srnn_cfg.percent_som,
-        use_synapses=srnn_cfg.use_synapses,
+        hidden_layer_cfgs=srnn_cfg.hidden_layers,
         use_daleslaw=srnn_cfg.use_daleslaw,
         use_connectivity=srnn_cfg.use_connectivity,
         refractory_period=srnn_cfg.refractory_period,
-        beta_cfg=srnn_cfg.betas,
+        tau_out=srnn_cfg.tau_out,
 
         device=device,
         output_dir=output_dir,
@@ -243,7 +237,7 @@ def run(output_dir: Path, seed: int, cfg: Config) -> None:
     )
 
     recorder = Recorder(
-        num_hidden_layers=len(ns_hidden),
+        num_hidden_layers=len(srnn_cfg.hidden_layers),
         rec_cfg=cfg.recording,
     )
 
