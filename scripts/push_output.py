@@ -11,9 +11,9 @@ if __name__ == "__main__":
     args = p.parse_args()
     output_dir = Path(args.output_dir)
 
+    branch_name = f"{output_dir.name}-{output_dir.name}"
     for run_dir in sorted(p for p in output_dir.iterdir() if p.is_dir()):
         try:
-            branch_name = f"{output_dir.name}-{run_dir.name}"
             runs.push_output(run_dir, branch_name)
         except Exception as e:
             print(e, file=sys.stderr)
