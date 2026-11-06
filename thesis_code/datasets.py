@@ -44,7 +44,7 @@ def _build_dataloader(dataset: Dataset, cache_path: Path, batch_size: int, train
         collate_fn=tonic.collation.PadTensors(batch_first=False),
         shuffle=train,
         pin_memory=pin_memory,
-        drop_last=train,
+        drop_last=True,
     )
 
 def _build_raw_dataset(train: bool, n_timepoints: int) -> tonic.datasets.SHD:

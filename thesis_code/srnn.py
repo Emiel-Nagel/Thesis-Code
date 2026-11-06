@@ -1,12 +1,10 @@
 import torch
 import torch.nn as nn
 
-from dataclasses import dataclass, field
-
-from .decay_sampling import DecayConfig
+from dataclasses import dataclass
 
 from .network_components.linears import DaleslawLinear
-from .network_components.layers import OutputLayer, StandardRecurrentLayer, SynapticRecurrentLayer
+from .network_components.layers import OutputLayer, StandardRecurrentLayer, SynapticRecurrentLayer, RecurrentLayerConfig
 
 class SRNN(nn.Module):
     def __init__(self,
@@ -67,12 +65,9 @@ class SRNN(nn.Module):
 
 @dataclass
 class SRNNConfig:
-    ns_hidden: list[int]
-    percent_pv: float
-    percent_som: float
+    hidden_layers: list[RecurrentLayerConfig]
     add_control_net: bool
-    use_synapses: bool
     use_daleslaw: bool
     use_connectivity: bool
     refractory_period: int
-    decays: DecayConfig = field(default_factory=DecayConfig)
+    tau_out: float  # ms

@@ -4,7 +4,7 @@ from pathlib import Path
 
 from thesis_code import SRNN, datasets, runs
 from thesis_code.network_components.layers import SynapticRecurrentLayer, StandardRecurrentLayer, OutputLayer
-from thesis_code.decay_sampling import tau_to_beta, sample_heterogeneous_decays_uniform, sample_heterogeneous_decays_normal
+from thesis_code.parameter_sampling import tau_to_beta, sample_heterogeneous_uniform, sample_heterogeneous_normal
 from thesis_code.connectivity import sample_ee_pv_som_neurons, save_neurons, build_recurrent_and_pruned_matrices, save_matrices, sample_exc_inh_recurrent_matrices
 
 from thesis_code.recording import Recorder
@@ -78,10 +78,10 @@ def build_srnns(
         case "single_value":
             betas = decay_cfg["tau_single_values"]
         case "normal":
-            betas = [sample_heterogeneous_decays_normal(dt, n, tau_mean=m*dt, tau_std=s*dt, device=device)
+            betas = [sample_heterogeneous_normal(dt, n, tau_mean=m*dt, tau_std=s*dt, device=device)
                      for n, m, s in zip(ns_hidden, decay_cfg["tau_means"], decay_cfg["tau_stds"])]
         case "uniform":
-            betas = [sample_heterogeneous_decays_uniform(dt, n, tau_upper=tu*dt, tau_lower=tl*dt, device=device)
+            betas = [sample_heterogeneous_uniform(dt, n, tau_upper=tu*dt, tau_lower=tl*dt, device=device)
                      for n, tu, tl in zip(ns_hidden, decay_cfg["tau_uppers"], decay_cfg["tau_lowers"])]
 
     rec_layer_class = SynapticRecurrentLayer if use_synapses else StandardRecurrentLayer

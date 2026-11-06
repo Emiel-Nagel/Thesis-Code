@@ -4,7 +4,7 @@ import torch
 class MaskedLinear(nn.Module):
     def __init__(self, con_matrix: torch.Tensor) -> None:
         super().__init__()
-        self.linear = nn.Linear(*con_matrix.shape, bias=False)
+        self.linear = nn.Linear(*con_matrix.shape, bias=False, device=con_matrix.device)
         self.register_buffer('con_matrix_t', con_matrix.T.contiguous())
         self._masked_weight = None
 

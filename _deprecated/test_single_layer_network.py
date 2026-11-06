@@ -3,7 +3,7 @@ from snntorch.surrogate import fast_sigmoid
 
 from thesis_code import SRNN, datasets
 from thesis_code.network_components.layers import StandardRecurrentLayer, OutputLayer
-from thesis_code.decay_sampling import sample_heterogeneous_decays_normal, tau_to_beta
+from thesis_code.parameter_sampling import sample_heterogeneous_normal, tau_to_beta
 from thesis_code.connectivity import sample_ee_pv_som_neurons, build_recurrent_matrix, build_recurrent_and_pruned_matrices
 
 from thesis_code.recording import SpikeRecorder, PerformanceRecorder, GradientRecorder
@@ -46,7 +46,7 @@ def build_srnn(rec_matrices: list[torch.Tensor], betas: list[torch.Tensor]) -> S
 
 neurons = sample_ee_pv_som_neurons(ns_hidden, percent_pv=25.0, percent_som=25.0)
 rec_matrices, _ = build_recurrent_and_pruned_matrices(neurons)
-betas = [sample_heterogeneous_decays_normal(dt, n, tau_mean=10 * dt, tau_std=1 * dt, device=device) for n in ns_hidden]
+betas = [sample_heterogeneous_normal(dt, n, tau_mean=10 * dt, tau_std=1 * dt, device=device) for n in ns_hidden]
 net = build_srnn(rec_matrices, betas).to(device)
 
 if __name__ == "__main__":

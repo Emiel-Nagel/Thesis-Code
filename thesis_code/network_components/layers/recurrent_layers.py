@@ -1,8 +1,11 @@
 import torch
 import torch.nn as nn
-from typing import Any
+from typing import Any, Optional, Literal
+from dataclasses import dataclass, field, asdict
 
+from ...parameter_sampling import SamplingConfig
 from ..neurons import MaskedRLeaky, MaskedRSynaptic
+from ..alif_neurons import MaskedALIFRLeaky
 from ..linears import DaleslawLinear, MaskedKaimingLinear
 
 class RecurrentLayer(nn.Module):
@@ -88,6 +91,7 @@ class StandardRecurrentLayer(RecurrentLayer):
         fully_learnable: bool = True,
         refractory_period: int = 0,
         use_daleslaw: bool = True,
+        *args, **kwargs
     ) -> None:
         super().__init__(forward_matrix, recurrent_matrix, refractory_period, use_daleslaw)
         self.neurons = MaskedRLeaky(
@@ -123,6 +127,7 @@ class SynapticRecurrentLayer(RecurrentLayer):
         fully_learnable: bool = True,
         refractory_period: int = 0,
         use_daleslaw: bool = True,
+        *args, **kwargs
     ) -> None:
         super().__init__(forward_matrix, recurrent_matrix, refractory_period, use_daleslaw)
         self.neurons = MaskedRSynaptic(
@@ -148,3 +153,70 @@ class SynapticRecurrentLayer(RecurrentLayer):
         spk, self.syn, mem = self.neurons(x, self.spk, self.syn, self.mem)
         self.spk, self.mem = self._compute_refractory_period(spk, mem)
         return self.spk, self.mem
+
+class ALIFRecurrentLayer(RecurrentLayer):
+    def __init__(self,
+        forward_matrix: torch.Tensor,
+        recurrent_matrix: torch.Tensor,
+        beta: torch.Tensor | float,
+        beta_w: torch.Tensor | float,
+        a: torch.Tensor | float,
+        b: torch.Tensor | float,
+        spike_grad: Any,
+        threshold: torch.Tensor | float = 1.0,
+        fully_learnable: bool = True,
+        refractory_period: int = 0,
+        use_daleslaw: bool = True,
+        *args, **kwargs
+    ) -> None:
+        super().__init__(forward_matrix, recurrent_matrix, refractory_period, use_daleslaw)
+        self.neurons = MaskedALIFRLeaky(
+            beta=beta,
+            beta_w=beta_w,
+            a=a,
+            b=b,
+            linear_features=self.n_neurons,
+            init_hidden=False,
+            spike_grad=spike_grad,
+            learn_beta=fully_learnable,
+            learn_beta_w=fully_learnable,
+            learn_a=fully_learnable,
+            learn_b=fully_learnable,
+            rec_matrix=recurrent_matrix,
+            threshold=threshold,
+            reset_delay=False,
+            use_daleslaw=use_daleslaw,
+        )
+        self.spk, self.mem, self.adpt = self.neurons.reset_mem()
+
+    def _reset_neuron_state(self) -> None:
+        self.spk, self.mem, self.adpt = self.neurons.reset_mem()
+        self.neurons.reset_recurrent_weights()
+
+    def _step(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+        self.spk, self.mem, self.adpt = self.neurons(x, self.spk, self.mem, self.adpt)
+        return self.spk, self.mem
+
+LAYER_CLASSES = {
+    "standard": StandardRecurrentLayer,
+    "synaptic": SynapticRecurrentLayer,
+    "alif": ALIFRecurrentLayer,
+}
+
+@dataclass
+class RecurrentLayerConfig:
+    n_neurons: int
+    percent_pv: float
+    percent_som: float
+    rec_layer_type: Literal["standard", "synaptic", "alif"]
+    beta: SamplingConfig = field(default_factory=SamplingConfig)
+    beta_w: Optional[SamplingConfig] = None
+    a: Optional[SamplingConfig] = None
+    b: Optional[SamplingConfig] = None
+
+    def __post_init__(self) -> None:
+        required = {"beta_w", "a", "b"} if self.rec_layer_type == "alif" else set()
+        set_params = {p for p in ("beta_w", "a", "b") if getattr(self, p) is not None}
+        if set_params != required:
+            raise ValueError(f"{self.rec_layer_type} requires exactly {sorted(required)} "
+                             f"to be set, but got {sorted(set_params)}")
