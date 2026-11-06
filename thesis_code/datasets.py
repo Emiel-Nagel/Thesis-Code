@@ -16,8 +16,12 @@ class PreparedLoader:
     """Wraps a DataLoader and applies the standard device/dtype/shape ops to each batch."""
 
     def __init__(self, loader: DataLoader, device: torch.device | str) -> None:
-        self.loader = loader
         self.device = device
+        self.data, self.targets = _load_data(loader)
+
+    def _load_data(self, loader: DataLoader) -> tuple[torch.Tensor, torch.Tensor]:
+        data = torch.tensor
+        targets = torch.tensor
 
     def __len__(self) -> int:
         return len(self.loader)
