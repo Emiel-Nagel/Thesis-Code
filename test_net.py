@@ -6,7 +6,7 @@ import psutil, os
 from thesis_code import SRNN
 from thesis_code.network_components.layers import ALIFRecurrentLayer, OutputLayer
 from thesis_code.parameter_sampling import tau_to_beta, sample_heterogeneous_normal
-from thesis_code.connectivity import sample_ee_pv_som_neurons, build_recurrent_and_pruned_matrices
+from thesis_code.connectivity import sample_ee_pv_som_neurons, build_recurrent_and_pruned_matrices, create_forward_matrix_output
 from thesis_code.training import compute_loss, measure_accuracy, Regularizer
 
 def sample_data_and_targets(batch_size: int, input_size: int, output_size: int, n_steps: int, device: torch.device) -> tuple[torch.Tensor, torch.Tensor]:
@@ -41,7 +41,8 @@ def test_net(n_steps: int, n_epochs: int, batch_size: int, lr: float, dt: float 
 
     neurons = sample_ee_pv_som_neurons([hidden_dim], percent_pv=25, percent_som=25)
     rec_matrices, _ = build_recurrent_and_pruned_matrices(neurons)
-
+    forward_matrix_output = create_forward_matrix_output(neurons[0], output_dim, device=device)
+    
     net = SRNN(
         rec_layers=[
             ALIFRecurrentLayer(
@@ -58,7 +59,8 @@ def test_net(n_steps: int, n_epochs: int, batch_size: int, lr: float, dt: float 
             )   
         ],
         out_layer=OutputLayer(
-            hidden_dim, output_dim, beta=tau_to_beta(dt, 20*dt)
+            forward_matrix=forward_matrix_output,
+            beta=tau_to_beta(dt, 20*dt),
         )
     ).to(device)
 
