@@ -18,8 +18,12 @@ def plot_performance(loss_train: np.ndarray, acc_train: np.ndarray, loss_test: n
     fig.suptitle(f"Training losses and accuracies per epoch")
 
     for loss_rec, ax_loss, loss_type in zip([loss_train, loss_test], [ax_loss_train, ax_loss_test], ["Train", "Test"]):
-        ax_loss.plot(a.get_median_line(loss_rec), label="Median loss curve")
+        median_loss = a.get_median_line(loss_rec)
+        ax_loss.plot(median_loss, label="Median loss curve")
         ax_loss.fill_between(np.arange(loss_rec.shape[-1]), *a.get_percentile_band(loss_rec), alpha=0.3, label="Percentile band between 25 and 75")
+
+        min_loss_val = np.min(median_loss)
+        ax_loss.axhline(min_loss_val, label=f"Minimum loss value = {min_loss_val}", color="r", lw=1, ls="--")
         ax_loss.set_title(f"{loss_type} Set Loss for {loss_rec.shape[0]} trial(s)")
         ax_loss.set_xlabel("Epoch")
         ax_loss.set_ylabel("Loss")
@@ -27,8 +31,12 @@ def plot_performance(loss_train: np.ndarray, acc_train: np.ndarray, loss_test: n
         ax_loss.legend()
 
     for acc_rec, ax_acc, acc_type in zip([acc_train, acc_test], [ax_acc_train, ax_acc_test], ["Train", "Test"]):
-        ax_acc.plot(a.get_median_line(acc_rec), label="Median accuracy curve")
+        median_acc = a.get_median_line(acc_rec)
+        ax_acc.plot(median_acc, label="Median accuracy curve")
         ax_acc.fill_between(np.arange(acc_rec.shape[-1]), *a.get_percentile_band(acc_rec), alpha=0.3, label="Percentile band between 25 and 75")
+
+        max_acc_val = np.max(median_acc)
+        ax_acc.axhline(max_acc_val, label=f"Maximum accuracy value = {max_acc_val}", color="r", lw=1, ls="--")
         ax_acc.set_title(f"{acc_type} Set Accuracy for {acc_rec.shape[0]} trial(s)")
         ax_acc.set_xlabel("Epoch")
         ax_acc.set_ylabel("Accuracy")
