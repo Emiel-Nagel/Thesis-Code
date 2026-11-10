@@ -5,7 +5,7 @@ from pathlib import Path
 from thesis_code import SRNN, datasets, runs
 from thesis_code.network_components.layers import OutputLayer, RecurrentLayerConfig, LAYER_CLASSES
 from thesis_code.parameter_sampling import tau_to_beta, sample_values
-from thesis_code.connectivity import sample_ee_pv_som_neurons, save_neurons, build_recurrent_and_pruned_matrices, save_matrices, sample_exc_inh_recurrent_matrices
+from thesis_code.connectivity import sample_ee_pv_som_neurons, save_neurons, build_recurrent_and_pruned_matrices, save_matrices, sample_exc_inh_recurrent_matrices, create_forward_matrix_output
 
 from thesis_code.recording import Recorder
 import thesis_code.training as tr
@@ -85,7 +85,8 @@ def build_srnns(
                 )
             )
             n_prev = n
-        return SRNN(rec_layers, out_layer=OutputLayer(n_prev, output_dim, beta=tau_to_beta(dt, tau_out*dt))).to(device)
+        return SRNN(rec_layers, out_layer=OutputLayer(create_forward_matrix_output(neurons[0], output_dim, device=device), beta=tau_to_beta(dt, tau_out*dt))).to(device)
+        return SRNN(rec_layers, out_layer=OutputLayer(n_prev, output_dim, beta=tau_to_beta(dt, tau_out*dt))).to(device)     # this is only for one test case
 
     net = _build_srnn(rec_matrices=rec_matrices)
     net_control = _build_srnn(rec_matrices=pruned_matrices) if add_control_net else None

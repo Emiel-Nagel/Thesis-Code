@@ -132,3 +132,10 @@ def sample_exc_inh_recurrent_matrices(ns_hidden: list[int], percent_inh: float) 
         return one_dim_tensor.unsqueeze(1).expand(-1, n_neurons).clone()
 
     return [_build_matrix(n_neurons) for n_neurons in ns_hidden]
+
+def create_forward_matrix_output(layer: list[Neurons], output_dim: int, device: torch.device) -> torch.Tensor:
+    """
+    Ensures only excitatory neurons in the hidden layer connect to the output layer.
+    """
+    forward_output_mask = torch.tensor([n.value for n in layer], device=device) == Neurons.EXCITATORY.value
+    return torch.ones(len(layer), output_dim, device=device) * forward_output_mask[:, None]
