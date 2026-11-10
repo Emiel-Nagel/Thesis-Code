@@ -10,6 +10,9 @@ from IPython.display import HTML
 import snntorch.spikeplot as splt
 import numpy as np
 from pathlib import Path
+from io import BytesIO
+from pptx import Presentation
+from pptx.util import Inches
 
 from . import analysis as a
 
@@ -164,7 +167,7 @@ class InteractiveSpikePlot:
 
             spike_matrix = data[self.epoch_i, :, :]
             splt.raster(torch.from_numpy(spike_matrix), ax, s=0.1, c="black")
-            ax.set_title(f"{layer_name} (mean rate = {round(a.get_layer_mean_spike_rate(spike_matrix), 3)})")
+            ax.set_title(f"{layer_name} (mean rate = {round(a.get_layer_mean_spike_rate(spike_matrix), 3)}")
             ax.set_ylabel("Neuron (n)")
             ax.set_xlabel("Time step (t)")
             ax.set_xlim(0, spike_matrix.shape[0])
@@ -203,6 +206,34 @@ class InteractiveSpikePlot:
 
         self.epoch_i = original_epoch
         self.draw()
+
+    def save_as_pptx(self, path: str = "spikes_plot.pptx", dpi: int = 120) -> None:
+        original_epoch = self.epoch_i
+        buttons = (self.btn_prev.ax, self.btn_next.ax)
+        for b in buttons:
+            b.set_visible(False)
+
+        try:
+            w, h = self.fig.get_size_inches()
+            prs = Presentation()
+            prs.slide_width, prs.slide_height = Inches(w), Inches(h)
+            blank = prs.slide_layouts[6]
+
+            for i in range(self.num_epochs):
+                self.epoch_i = i
+                self.draw()
+                buf = BytesIO()
+                self.fig.savefig(buf, format="png", dpi=dpi)
+                buf.seek(0)
+                slide = prs.slides.add_slide(blank)
+                slide.shapes.add_picture(buf, 0, 0, width=prs.slide_width, height=prs.slide_height)
+
+            prs.save(path)
+        finally:
+            for b in buttons:
+                b.set_visible(True)
+            self.epoch_i = original_epoch
+            self.draw()
 
 def plot_spikes(spike_matrix: np.ndarray, title: str) -> None:
     fig = plt.figure(facecolor="w", figsize=(25, 5))
