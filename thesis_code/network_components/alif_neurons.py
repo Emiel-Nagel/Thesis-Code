@@ -54,9 +54,10 @@ class ALIFRLeaky(snn.RLeaky):
         self.register_buffer("adpt", adpt, False)
 
     def reset_mem(self):
-        self.spk = torch.zeros_like(self.spk, device=self.spk.device)
-        self.mem = torch.zeros_like(self.mem, device=self.mem.device)
-        self.adpt = torch.zeros_like(self.adpt, device=self.adpt.device)
+        device = self.spk.device
+        self.spk = torch.zeros(0, device=device)
+        self.mem = torch.zeros(0, device=device)
+        self.adpt = torch.zeros(0, device=device)
         return self.spk, self.mem, self.adpt
 
     def _step_membrane(self, beta_u: torch.Tensor, U: torch.Tensor, I: torch.Tensor, V: torch.Tensor, W: torch.Tensor) -> torch.Tensor:
@@ -93,7 +94,7 @@ class ALIFRLeaky(snn.RLeaky):
             self.adpt = torch.zeros_like(input_, device=self.adpt.device)
 
         mem_prev = mem if mem is not None else self.mem
-        if mem_prev.numel() == 0:
+        if mem_prev.shape != input_.shape:          # was: numel() == 0
             mem_prev = torch.zeros_like(input_)
 
         spk, mem = super().forward(input_, spk, mem)
