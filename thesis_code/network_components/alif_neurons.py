@@ -63,7 +63,7 @@ class ALIFRLeaky(snn.RLeaky):
     def _step_membrane(self, beta_u: torch.Tensor, U: torch.Tensor, I: torch.Tensor, V: torch.Tensor, W: torch.Tensor) -> torch.Tensor:
         """
         Implements _base_state_function from RLeaky:
-        U[t+1] = βU[t] + I_{\\rm in}[t+1] + V(S_{\\rm out}[t]) - RU_{\\rm thr} - (1-β)W[t]
+        U[t+1] = βU[t] + I_{\\rm in}[t+1] + V(S_{\\rm out}[t]) - RU_{\\rm thr} - W[t]
         """
         return beta_u*U + I + V - (1-beta_u)*W
 
