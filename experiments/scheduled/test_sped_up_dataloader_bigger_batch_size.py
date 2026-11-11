@@ -7,7 +7,7 @@ cfg = Config(
 
     training = TrainingConfig(
         dt = 0.001,  # timesteps are now in milliseconds
-        batch_size = 128,
+        batch_size = 512,
         max_iters = 500,
         n_epochs = 50,
         lr = 1e-3,
