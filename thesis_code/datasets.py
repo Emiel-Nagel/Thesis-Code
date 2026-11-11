@@ -15,36 +15,41 @@ CACHE_PATH = DATASETS_DIR / "cache"
 class PreparedLoader:
     """Wraps a DataLoader and applies the standard device/dtype/shape ops to each batch."""
 
-    def __init__(self, loader: DataLoader, device: torch.device | str) -> None:
-        self.loader = loader
+    def __init__(self, loader: DataLoader, device: torch.device, batch_size: int) -> None:
         self.device = device
+        self.data, self.targets = self._load_data(loader)
+        self.batch_size = batch_size
+
+    def _load_data(self, loader: DataLoader) -> tuple[torch.Tensor, torch.Tensor]:
+        """
+        Loads all data into one big tensor into memory.
+        """
+        data_list, targets_list = [], []
+        for data, targets in loader:
+            data_list.append(data.squeeze(2).clamp_(max=255).to(torch.uint8))
+            targets_list.append(targets)
+        return torch.cat(data_list).to(self.device), torch.cat(targets_list).long().to(self.device)
 
     def __len__(self) -> int:
-        return len(self.loader)
+        return len(self.data) // self.batch_size
 
     def __iter__(self):
-        for data, targets in self.loader:
-            data = data.to(self.device, non_blocking=True).squeeze(2)
-            targets = targets.to(self.device, non_blocking=True).long()
-            yield data, targets
+        perm = torch.randperm(len(self.data), device=self.device)
+        for i in range(0, len(perm) - self.batch_size + 1, self.batch_size):  # drops last incomplete batch
+            sample_indices = perm[i : i + self.batch_size]
+            yield self.data[sample_indices].float().transpose(0, 1), self.targets[sample_indices]
 
-    def __getattr__(self, name: str):
-        if name == "loader":
-            raise AttributeError(name)
-        return getattr(self.loader, name)
-
-def _build_dataloader(dataset: Dataset, cache_path: Path, batch_size: int, train: bool, pin_memory: bool) -> DataLoader:
+def _build_dataloader(dataset: Dataset, cache_path: Path) -> DataLoader:
     cached_dataset = DiskCachedDataset(
         dataset,
         cache_path=str(cache_path)
     )
     return DataLoader(
         cached_dataset,
-        batch_size=batch_size,
-        collate_fn=tonic.collation.PadTensors(batch_first=False),
-        shuffle=train,
-        pin_memory=pin_memory,
-        drop_last=True,
+        batch_size=256,
+        collate_fn=tonic.collation.PadTensors(batch_first=True),
+        shuffle=False,
+        drop_last=False,
     )
 
 def _build_raw_dataset(train: bool, n_timepoints: int) -> tonic.datasets.SHD:
@@ -72,7 +77,7 @@ def _build_raw_dataset(train: bool, n_timepoints: int) -> tonic.datasets.SHD:
 def _SHD_cache_path(n_timepoints: int, train: bool) -> Path:
     return CACHE_PATH / "SHD" / f"tw{n_timepoints}" / ("train" if train else "test")
 
-def download_SHD_dataset(n_timepoints: float = 1000, re_download: bool = False):
+def download_SHD_dataset(n_timepoints: int = 200, re_download: bool = False):
     if re_download:
         shutil.rmtree(DATA_PATH / "SHD", ignore_errors=True)
         shutil.rmtree(CACHE_PATH / "SHD", ignore_errors=True)
@@ -85,25 +90,18 @@ def download_SHD_dataset(n_timepoints: float = 1000, re_download: bool = False):
 
 def get_SHD_dataset(batch_size: int, device: torch.device, n_timepoints: int = 200) -> tuple[PreparedLoader, PreparedLoader, int, list]:
     sensor_size = tonic.datasets.SHD.sensor_size
-    pin_memory = torch.device(device).type == "cuda"
     train_dataset = _build_raw_dataset(train=True, n_timepoints=n_timepoints)
-    trainloader = _build_dataloader(train_dataset, _SHD_cache_path(n_timepoints, True), batch_size, train=True, pin_memory=pin_memory)
+    trainloader = _build_dataloader(train_dataset, _SHD_cache_path(n_timepoints, True))
 
     test_dataset = _build_raw_dataset(train=False, n_timepoints=n_timepoints)
-    testloader = _build_dataloader(test_dataset, _SHD_cache_path(n_timepoints, False), batch_size, train=False, pin_memory=pin_memory)
+    testloader = _build_dataloader(test_dataset, _SHD_cache_path(n_timepoints, False))
 
     return (
-        PreparedLoader(trainloader, device),
-        PreparedLoader(testloader, device),
+        PreparedLoader(trainloader, device, batch_size),
+        PreparedLoader(testloader, device, batch_size),
         sensor_size[0],
         train_dataset.classes,
     )
-
-def dataset_to_tensor(loader: PreparedLoader, device: torch.device) -> tuple[torch.Tensor, torch.Tensor]:
-    data_list, targets_list = zip(*iter(loader))
-    data = torch.cat(data_list)
-    targets = torch.cat(targets_list)
-    return data.to(torch.uint8).to(device), targets.to(device)
 
 @dataclass
 class DatasetConfig:
