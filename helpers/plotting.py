@@ -123,7 +123,7 @@ class InteractiveSpikePlot:
         self.epoch_i = epoch_i_start % self.num_epochs
 
         self.fig, axes = plt.subplots(
-            len(layer_spikes),
+            len(layer_spikes) - 1,
             1,
             figsize=(10, 3 * len(layer_spikes)),
             squeeze=False,
@@ -138,18 +138,19 @@ class InteractiveSpikePlot:
         self.btn_next.on_clicked(self.turn_page_right)
 
     def draw(self) -> None:
+        target = self.layer_spikes["targets"][self.epoch_i]
         for ax, (layer_name, data) in zip(self.axes, self.layer_spikes.items()):
             ax.clear()
             if layer_name == "targets":
-                target = data[self.epoch_i]
-                counts = np.zeros(len(self.target_labels))
-                counts[target] = 1
+                # target = data[self.epoch_i]
+                # counts = np.zeros(len(self.target_labels))
+                # counts[target] = 1
 
-                ax.bar(self.target_labels, counts)
-                ax.set_title(f"{layer_name}")
-                ax.set_ylabel("Count (n)")
-                ax.set_xlabel("Target label")
-                ax.set_xticks(range(20))
+                # ax.bar(self.target_labels, counts)
+                # ax.set_title(f"{layer_name}")
+                # ax.set_ylabel("Count (n)")
+                # ax.set_xlabel("Target label")
+                # ax.set_xticks(range(20))
                 continue
 
             if layer_name == "mems_out":
@@ -163,11 +164,31 @@ class InteractiveSpikePlot:
                 ax.set_title(f"{layer_name}")
                 ax.set_ylabel("Neuron (n)")
                 ax.set_xlabel("Time step (t)")
+
+                ax.annotate(
+                    "",
+                    xy=(1.0, target),
+                    xytext=(1.12, target),
+                    xycoords=ax.get_yaxis_transform(),
+                    textcoords=ax.get_yaxis_transform(),
+                    arrowprops=dict(arrowstyle="->", color="red", lw=2),
+                    annotation_clip=False,
+                )
+                ax.annotate(
+                    "target",
+                    xy=(1.06, target),
+                    xycoords=ax.get_yaxis_transform(),
+                    xytext=(0, -6),
+                    textcoords="offset points",
+                    ha="center", va="top",
+                    color="red",
+                    annotation_clip=False,
+                )
                 continue
 
             spike_matrix = data[self.epoch_i, :, :]
             splt.raster(torch.from_numpy(spike_matrix), ax, s=0.1, c="black")
-            ax.set_title(f"{layer_name} (mean rate = {round(a.get_layer_mean_spike_rate(spike_matrix), 3)}")
+            ax.set_title(f"{layer_name} (mean rate = {round(a.get_layer_mean_spike_rate(spike_matrix), 3)})")
             ax.set_ylabel("Neuron (n)")
             ax.set_xlabel("Time step (t)")
             ax.set_xlim(0, spike_matrix.shape[0])
@@ -178,7 +199,10 @@ class InteractiveSpikePlot:
                     add_bracket(ax, start, stop, neuron_type, side="right", offset=6, cap=4, label_pad=4, color="k", lw=1.2, fontsize=10)
                     ax.hlines(y=start - 0.5, color="r", lw=1, ls="--", xmin=0, xmax=spike_matrix.shape[0])
 
-        self.fig.suptitle(f"Epoch {self.epoch_i + 1} / {self.num_epochs}")
+        self.fig.suptitle(
+            f"Epoch {self.epoch_i + 1} / {self.num_epochs}\n"
+            rf"$\mathbf{{Target\ Class = {target}}}$"
+        )
         self.fig.canvas.draw_idle()
 
     def turn_page_left(self, event=None) -> None:
