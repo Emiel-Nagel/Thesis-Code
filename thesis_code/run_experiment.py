@@ -14,8 +14,8 @@ from thesis_code.run_logging import Logger
 from thesis_code.configs import Config
 
 def setup(output_dir: Path, seed: int, cfg: Config) -> tuple[Path, Logger, torch.device]:
-    output_dir = runs.create_seed_dir(output_dir, seed)
     logger = Logger(run_name=f"{output_dir.name}-{cfg.run_name}", seed=seed)
+    output_dir = runs.create_seed_dir(output_dir, seed)
 
     flushing = torch.set_flush_denormal(True)
     logger.log(f"Floating point flushing is set to {flushing}")
