@@ -2,7 +2,7 @@ import torch
 import matplotlib.pyplot as plt
 from matplotlib.transforms import blended_transform_factory, ScaledTranslation
 from matplotlib.patches import Patch
-from matplotlib.widgets import Button
+from matplotlib.widgets import Button, SpanSelector
 from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib.ticker import FormatStrFormatter, MaxNLocator
 from matplotlib.animation import ArtistAnimation
@@ -18,8 +18,12 @@ def plot_performance(loss_train: np.ndarray, acc_train: np.ndarray, loss_test: n
     fig.suptitle(f"Training losses and accuracies per epoch")
 
     for loss_rec, ax_loss, loss_type in zip([loss_train, loss_test], [ax_loss_train, ax_loss_test], ["Train", "Test"]):
-        ax_loss.plot(a.get_median_line(loss_rec), label="Median loss curve")
+        median_loss = a.get_median_line(loss_rec)
+        ax_loss.plot(median_loss, label="Median loss curve")
         ax_loss.fill_between(np.arange(loss_rec.shape[-1]), *a.get_percentile_band(loss_rec), alpha=0.3, label="Percentile band between 25 and 75")
+
+        min_loss_val = np.min(median_loss)
+        ax_loss.axhline(min_loss_val, label=f"Minimum loss value = {min_loss_val}", color="r", lw=1, ls="--")
         ax_loss.set_title(f"{loss_type} Set Loss for {loss_rec.shape[0]} trial(s)")
         ax_loss.set_xlabel("Epoch")
         ax_loss.set_ylabel("Loss")
@@ -27,8 +31,12 @@ def plot_performance(loss_train: np.ndarray, acc_train: np.ndarray, loss_test: n
         ax_loss.legend()
 
     for acc_rec, ax_acc, acc_type in zip([acc_train, acc_test], [ax_acc_train, ax_acc_test], ["Train", "Test"]):
-        ax_acc.plot(a.get_median_line(acc_rec), label="Median accuracy curve")
+        median_acc = a.get_median_line(acc_rec)
+        ax_acc.plot(median_acc, label="Median accuracy curve")
         ax_acc.fill_between(np.arange(acc_rec.shape[-1]), *a.get_percentile_band(acc_rec), alpha=0.3, label="Percentile band between 25 and 75")
+
+        max_acc_val = np.max(median_acc)
+        ax_acc.axhline(max_acc_val, label=f"Maximum accuracy value = {max_acc_val}", color="r", lw=1, ls="--")
         ax_acc.set_title(f"{acc_type} Set Accuracy for {acc_rec.shape[0]} trial(s)")
         ax_acc.set_xlabel("Epoch")
         ax_acc.set_ylabel("Accuracy")
@@ -104,7 +112,8 @@ def plot_weight_matrices(weights: np.ndarray, neuron_ranges: dict[str, tuple[int
     fig.savefig(fname=name, dpi='figure')
 
 class InteractiveSpikePlot:
-    def __init__(self, layer_spikes: dict[str, np.ndarray], target_labels: list[str], neuron_ranges: dict[str, tuple[int, int]] = None, epoch_i_start: int = 0) -> None:
+    def __init__(self, layer_spikes: dict[str, np.ndarray], target_labels: list[str], neuron_ranges: dict[str, tuple[int, int]] = None, epoch_i_start: int = 0,
+                 dt: float = 0.001, span_layer: str = "spikes_hidden_0") -> None:
         self.layer_spikes = layer_spikes
         self.target_labels = target_labels
         self.neuron_ranges = neuron_ranges
@@ -121,12 +130,27 @@ class InteractiveSpikePlot:
         self.axes = axes[:, 0]
         self.fig.subplots_adjust(bottom=0.15, hspace=0.4)
 
+        self.info = self.fig.text(
+            0.74, 0.5, "Drag over the hidden raster\nto get window stats",
+            va="center", ha="left", family="monospace", fontsize=8,
+            bbox=dict(boxstyle="round", fc="w", ec="0.6"),
+        )
+
+        self.dt = dt            # seconds per time step
+        self.span_layer = span_layer
+        self.span = None
+
         self.btn_prev = Button(self.fig.add_axes([0.30, 0.02, 0.15, 0.05]), "◀ Previous")
         self.btn_next = Button(self.fig.add_axes([0.55, 0.02, 0.15, 0.05]), "Next ▶")
         self.btn_prev.on_clicked(self.turn_page_left)
         self.btn_next.on_clicked(self.turn_page_right)
 
+        self.raster_axes, self.cursor_lines = [], []
+        self.fig.canvas.mpl_connect("motion_notify_event", self.on_hover)
+
     def draw(self) -> None:
+        self.cursor_lines = [ax.axvline(0, color="gray", lw=0.8, ls="--", visible=False)
+                             for ax in self.raster_axes]
         for ax, (layer_name, data) in zip(self.axes, self.layer_spikes.items()):
             ax.clear()
             if layer_name == "targets":
@@ -156,7 +180,7 @@ class InteractiveSpikePlot:
 
             spike_matrix = data[self.epoch_i, :, :]
             splt.raster(torch.from_numpy(spike_matrix), ax, s=0.1, c="black")
-            ax.set_title(f"{layer_name} (mean rate = {round(a.get_layer_mean_spike_rate(spike_matrix), 3)}")
+            ax.set_title(f"{layer_name} (mean rate = {round(a.get_layer_mean_spike_rate(spike_matrix), 3)})")
             ax.set_ylabel("Neuron (n)")
             ax.set_xlabel("Time step (t)")
             ax.set_xlim(0, spike_matrix.shape[0])
@@ -167,7 +191,59 @@ class InteractiveSpikePlot:
                     add_bracket(ax, start, stop, neuron_type, side="right", offset=6, cap=4, label_pad=4, color="k", lw=1.2, fontsize=10)
                     ax.hlines(y=start - 0.5, color="r", lw=1, ls="--", xmin=0, xmax=spike_matrix.shape[0])
 
+            if layer_name == self.span_layer:
+                if self.span is not None:
+                    self.span.disconnect_events()
+                self.span = SpanSelector(
+                    ax, self.on_select, "horizontal",
+                    useblit=True, interactive=True, drag_from_anywhere=True,  # interactive: drag the edges afterwards
+                    props=dict(facecolor="tab:blue", edgecolor="tab:orange", alpha=0.25),  # `rectprops` on matplotlib < 3.5 
+                    handle_props=dict(color="tab:orange", linewidth=2),
+                    grab_range=10,
+                    onmove_callback=self.highlight,      # fires continuously while dragging
+                )
+
         self.fig.suptitle(f"Epoch {self.epoch_i + 1} / {self.num_epochs}")
+        self.fig.canvas.draw_idle()
+
+    def highlight(self, tmin: float, tmax: float) -> None:
+        t0, t1 = max(int(round(tmin)), 0), int(round(tmax))
+        window = self.layer_spikes[self.span_layer][self.epoch_i, t0:t1, :]   # (time, neurons)
+        t_idx, n_idx = np.nonzero(window)
+        self.sel_scatter.set_offsets(np.column_stack([t_idx + t0, n_idx]))
+        self.fig.canvas.draw_idle()
+
+    def on_hover(self, event) -> None:
+        inside = event.inaxes in self.raster_axes and event.xdata is not None
+        for line in self.cursor_lines:
+            if inside:
+                line.set_xdata([event.xdata, event.xdata])
+            line.set_visible(inside)
+        self.fig.canvas.draw_idle()
+
+    def on_select(self, tmin: float, tmax: float) -> None:
+        t0, t1 = max(int(round(tmin)), 0), int(round(tmax))
+        spikes = self.layer_spikes[self.span_layer][self.epoch_i, t0:t1, :]
+        if spikes.shape[0] < 8:
+            self.info.set_text("Window too short")
+            self.fig.canvas.draw_idle()
+            return
+
+        pops = self.neuron_ranges or {"all": (0, spikes.shape[1])}
+        lines = [f"t = {t0}-{t1}  ({(t1 - t0) * self.dt * 1e3:g} ms)", ""]
+        for name, (s, e) in pops.items():
+            pop = spikes[:, s:e].T
+            rate_hz = a.get_layer_mean_spike_rate(pop) / self.dt
+            n_spikes = a.get_layer_spike_count(pop)
+            osc = a.get_population_oscillations(pop, self.dt, n_strongest_freqs=2)
+
+            lines += [f"[{name}]  n={e - s}",
+                      f"  spikes     {n_spikes}",
+                      f"  mean rate  {rate_hz:.2f} Hz"]
+            lines += [f"  {f:6.1f} Hz   psd={p:.3g}" for f, p in osc.items()]
+            lines.append("")
+
+        self.info.set_text("\n".join(lines))
         self.fig.canvas.draw_idle()
 
     def turn_page_left(self, event=None) -> None:

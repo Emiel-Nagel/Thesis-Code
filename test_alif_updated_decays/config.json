@@ -1,0 +1,84 @@
+{
+  "run_name": "test_alif_updated_decays",
+  "training": {
+    "dt": 0.001,
+    "batch_size": 128,
+    "max_iters": 500,
+    "n_epochs": 50,
+    "lr": 0.001,
+    "separate_timesteps": false,
+    "regularization": {
+      "apply": true,
+      "lam_lower": 100.0,
+      "v_lower": 0.01,
+      "lam_uppers": [
+        0.5
+      ],
+      "v_uppers": [
+        50
+      ],
+      "L": 2
+    },
+    "dataset": {
+      "re_download": false,
+      "n_timepoints": 200
+    }
+  },
+  "srnn": {
+    "hidden_layers": [
+      {
+        "n_neurons": 256,
+        "percent_pv": 25.0,
+        "percent_som": 25.0,
+        "rec_layer_type": "alif",
+        "beta": {
+          "sampling_mode": "normal",
+          "is_decay": true,
+          "tau_single_value": null,
+          "tau_mean": 10,
+          "tau_std": 1,
+          "tau_upper": null,
+          "tau_lower": null
+        },
+        "beta_w": {
+          "sampling_mode": "normal",
+          "is_decay": true,
+          "tau_single_value": null,
+          "tau_mean": 30,
+          "tau_std": 5,
+          "tau_upper": null,
+          "tau_lower": null
+        },
+        "a": {
+          "sampling_mode": "normal",
+          "is_decay": false,
+          "tau_single_value": null,
+          "tau_mean": 3,
+          "tau_std": 2,
+          "tau_upper": null,
+          "tau_lower": null
+        },
+        "b": {
+          "sampling_mode": "normal",
+          "is_decay": false,
+          "tau_single_value": null,
+          "tau_mean": 1,
+          "tau_std": 1,
+          "tau_upper": null,
+          "tau_lower": null
+        }
+      }
+    ],
+    "add_control_net": false,
+    "use_daleslaw": false,
+    "use_connectivity": false,
+    "refractory_period": 0,
+    "tau_out": 20
+  },
+  "recording": {
+    "record_performance": true,
+    "record_gradients": true,
+    "record_weights": true,
+    "record_spikes": true
+  }
+}
