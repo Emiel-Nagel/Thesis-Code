@@ -156,7 +156,7 @@ class InteractiveSpikePlot:
 
             spike_matrix = data[self.epoch_i, :, :]
             splt.raster(torch.from_numpy(spike_matrix), ax, s=0.1, c="black")
-            ax.set_title(f"{layer_name} (mean rate = {round(a.get_layer_mean_spike_rate(spike_matrix), 3)}")
+            ax.set_title(f"{layer_name} (mean rate = {round(a.get_layer_mean_spike_rate(spike_matrix), 3)})")
             ax.set_ylabel("Neuron (n)")
             ax.set_xlabel("Time step (t)")
             ax.set_xlim(0, spike_matrix.shape[0])
