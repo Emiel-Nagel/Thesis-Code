@@ -72,7 +72,7 @@ class ALIFRLeaky(snn.RLeaky):
         Implements the following snntorch adaptation on τ_w * dw/dt = -w(t) + a*U[t] + b*S[t]:
         W[t+1] = βw*W[t] + (1 - βw)(aU[t] + bS[t])
         """
-        return beta_w*W + (1-beta_w)*(a*U + b*S)
+        return beta_w*W + a*U + b*S
 
     def _base_state_function(self, input_: torch.Tensor) -> torch.Tensor:
         """
