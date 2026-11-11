@@ -5,3 +5,13 @@ pip install -e .
 
 Add-Content .git\info\exclude ".venv/"
 git check-ignore -v .venv
+
+# for git large file systems:
+git lfs install
+
+git lfs track "*.npz"
+git lfs track "*.npy"
+git lfs track "*.pt" 
+git lfs track "*.ipynb"
+
+git add .gitattributes
