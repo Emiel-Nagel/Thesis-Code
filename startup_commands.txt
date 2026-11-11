@@ -13,5 +13,6 @@ git lfs track "*.npz"
 git lfs track "*.npy"
 git lfs track "*.pt" 
 git lfs track "*.ipynb"
+git lfs track "*.png"
 
 git add .gitattributes
