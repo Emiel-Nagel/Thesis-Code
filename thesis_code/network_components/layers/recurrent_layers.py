@@ -12,10 +12,17 @@ class RecurrentLayer(nn.Module):
     def __init__(self,
         forward_matrix: torch.Tensor,
         recurrent_matrix: torch.Tensor,
+        beta_min: torch.Tensor,
+        beta_max: torch.Tensor,
         refractory_period: int = 0,
         use_daleslaw: bool = True,
+
     ) -> None:
         super().__init__()
+
+        self.register_buffer("beta_min", beta_min, persistent=False)
+        self.register_buffer("beta_max", beta_max, persistent=False)
+
         self.n_neurons = recurrent_matrix.shape[0]
 
         assert forward_matrix.shape[1] == self.n_neurons, \
@@ -29,6 +36,9 @@ class RecurrentLayer(nn.Module):
 
         self.refractory_period = refractory_period
         self.refractory_buffer: torch.Tensor | None = None
+
+    def clamp_beta(self) -> None:
+        self.neurons.clamp_(self.beta_min, self.beta_max)
 
     def reset(self) -> None:
         self._reset_neuron_state()
@@ -86,6 +96,8 @@ class StandardRecurrentLayer(RecurrentLayer):
         forward_matrix: torch.Tensor,
         recurrent_matrix: torch.Tensor,
         beta: torch.Tensor | float,
+        beta_min: torch.Tensor | float,
+        beta_max: torch.Tensor | float,
         spike_grad: Any,
         threshold: torch.Tensor | float = 1.0,
         fully_learnable: bool = True,
@@ -93,7 +105,7 @@ class StandardRecurrentLayer(RecurrentLayer):
         use_daleslaw: bool = True,
         *args, **kwargs
     ) -> None:
-        super().__init__(forward_matrix, recurrent_matrix, refractory_period, use_daleslaw)
+        super().__init__(forward_matrix, recurrent_matrix, beta_min, beta_max, refractory_period, use_daleslaw)
         self.neurons = MaskedRLeaky(
             beta=beta,
             linear_features=self.n_neurons,
@@ -122,6 +134,8 @@ class SynapticRecurrentLayer(RecurrentLayer):
         recurrent_matrix: torch.Tensor,
         alpha: torch.Tensor | float,
         beta: torch.Tensor | float,
+        beta_min: torch.Tensor | float,
+        beta_max: torch.Tensor | float,
         spike_grad: Any,
         threshold: torch.Tensor | float = 1.0,
         fully_learnable: bool = True,
@@ -129,7 +143,7 @@ class SynapticRecurrentLayer(RecurrentLayer):
         use_daleslaw: bool = True,
         *args, **kwargs
     ) -> None:
-        super().__init__(forward_matrix, recurrent_matrix, refractory_period, use_daleslaw)
+        super().__init__(forward_matrix, recurrent_matrix, beta_min, beta_max, refractory_period, use_daleslaw)
         self.neurons = MaskedRSynaptic(
             alpha=alpha,
             beta=beta,
@@ -159,6 +173,8 @@ class ALIFRecurrentLayer(RecurrentLayer):
         forward_matrix: torch.Tensor,
         recurrent_matrix: torch.Tensor,
         beta: torch.Tensor | float,
+        beta_min: torch.Tensor | float,
+        beta_max: torch.Tensor | float,
         beta_w: torch.Tensor | float,
         a: torch.Tensor | float,
         b: torch.Tensor | float,
@@ -169,7 +185,7 @@ class ALIFRecurrentLayer(RecurrentLayer):
         use_daleslaw: bool = True,
         *args, **kwargs
     ) -> None:
-        super().__init__(forward_matrix, recurrent_matrix, refractory_period, use_daleslaw)
+        super().__init__(forward_matrix, recurrent_matrix, beta_min, beta_max, refractory_period, use_daleslaw)
         self.neurons = MaskedALIFRLeaky(
             beta=beta,
             beta_w=beta_w,

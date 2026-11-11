@@ -42,9 +42,9 @@ cfg = Config(
             # beta_sampling_mode = "single_value"
             # tau_single_values = [10] #ms
 
-            sampling_mode = "normal",
-            tau_means = [10], #ms
-            tau_stds = [1], #ms
+            sampling_mode = "uniform",
+            tau_means = [5], #ms
+            tau_stds = [25], #ms
 
             # beta_sampling_mode = "uniform"
             # tau_uppers = [11] #ms

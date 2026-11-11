@@ -4,7 +4,7 @@ from snntorch.surrogate import fast_sigmoid
 from thesis_code import SRNN, datasets
 from thesis_code.network_components.layers import StandardRecurrentLayer, OutputLayer
 from thesis_code.parameter_sampling import sample_heterogeneous_normal, tau_to_beta
-from thesis_code.connectivity import sample_ee_pv_som_neurons, build_recurrent_matrix, build_recurrent_and_pruned_matrices
+from thesis_code.neuron_emulation.connectivity import sample_ee_pv_som_neurons, build_recurrent_matrix, build_recurrent_and_pruned_matrices
 
 from thesis_code.recording import SpikeRecorder, PerformanceRecorder, GradientRecorder
 import thesis_code.training as tr

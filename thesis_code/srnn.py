@@ -3,6 +3,8 @@ import torch.nn as nn
 
 from dataclasses import dataclass
 
+from .neuron_emulation.decays import LayerBetas
+
 from .network_components.linears import DaleslawLinear
 from .network_components.layers import OutputLayer, StandardRecurrentLayer, SynapticRecurrentLayer, RecurrentLayerConfig
 
@@ -62,6 +64,11 @@ class SRNN(nn.Module):
         for m in self.modules():
             if isinstance(m, DaleslawLinear):
                 m.apply_daleslaw()
+
+    def constrain_betas(self) -> None:
+        for m in self.modules():
+            if isinstance(m, LayerBetas):
+                m.clamp_betas()
 
 @dataclass
 class SRNNConfig:

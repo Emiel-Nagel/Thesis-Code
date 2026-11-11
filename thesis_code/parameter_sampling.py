@@ -38,7 +38,7 @@ def tau_to_beta(dt: float, tau: float | torch.Tensor) -> torch.Tensor:
     """
     return torch.exp(-dt / torch.as_tensor(tau))
 
-def sample_heterogeneous_uniform(n_neurons: int, tau_upper: float, tau_lower: float, device: torch.device) -> torch.Tensor:
+def sample_heterogeneous_uniform(n_neurons: int, tau_upper: float | torch.Tensor, tau_lower: float | torch.Tensor, device: torch.device) -> torch.Tensor:
     return torch.rand(n_neurons, device=device) * (tau_upper - tau_lower) + tau_lower
 
 def sample_heterogeneous_normal(dt: float, n_neurons: int, tau_mean: float, tau_std: float, device: torch.device) -> torch.Tensor:

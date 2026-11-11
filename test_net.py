@@ -6,7 +6,7 @@ import psutil, os
 from thesis_code import SRNN
 from thesis_code.network_components.layers import ALIFRecurrentLayer, OutputLayer
 from thesis_code.parameter_sampling import tau_to_beta, sample_heterogeneous_normal
-from thesis_code.connectivity import sample_ee_pv_som_neurons, build_recurrent_and_pruned_matrices, create_forward_matrix_output
+from thesis_code.neuron_emulation.connectivity import sample_ee_pv_som_neurons, build_recurrent_and_pruned_matrices, create_forward_matrix_output
 from thesis_code.training import compute_loss, measure_accuracy, Regularizer
 
 def sample_data_and_targets(batch_size: int, input_size: int, output_size: int, n_steps: int, device: torch.device) -> tuple[torch.Tensor, torch.Tensor]:

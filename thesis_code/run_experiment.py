@@ -5,7 +5,7 @@ from pathlib import Path
 from thesis_code import SRNN, datasets, runs
 from thesis_code.network_components.layers import OutputLayer, RecurrentLayerConfig, LAYER_CLASSES
 from thesis_code.parameter_sampling import tau_to_beta, sample_values
-from thesis_code.connectivity import sample_ee_pv_som_neurons, save_neurons, build_recurrent_and_pruned_matrices, save_matrices, sample_exc_inh_recurrent_matrices, create_forward_matrix_output
+from thesis_code.neuron_emulation.connectivity import sample_ee_pv_som_neurons, save_neurons, build_recurrent_and_pruned_matrices, save_matrices, sample_exc_inh_recurrent_matrices, create_forward_matrix_output
 
 from thesis_code.recording import Recorder
 import thesis_code.training as tr
@@ -75,6 +75,8 @@ def build_srnns(
                     forward_matrix=torch.ones(n_prev, n, device=device),
                     recurrent_matrix=rec_matrix.to(device),
                     beta=sample_values(hl_cfg.beta, dt, n, device),
+                    beta_min=
+                    beta_max=
                     beta_w=sample_values(hl_cfg.beta_w, dt, n, device) if hl_cfg.beta_w is not None else None,
                     a=sample_values(hl_cfg.a, dt, n, device) if hl_cfg.a is not None else None,
                     b=sample_values(hl_cfg.b, dt, n, device) if hl_cfg.b is not None else None,
