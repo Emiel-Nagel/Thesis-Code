@@ -130,3 +130,6 @@ class MaskedALIFRLeaky(ALIFRLeaky):
 
     def get_recurrent_weights(self) -> torch.Tensor:
         return self.recurrent.get_weights()
+
+    def clamp_beta(self)
+        
