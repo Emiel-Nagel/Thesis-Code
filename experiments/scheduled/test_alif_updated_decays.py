@@ -42,8 +42,8 @@ cfg = Config(
             )
         ],
         add_control_net = False,
-        use_daleslaw = False,
-        use_connectivity = False,
+        use_daleslaw = True,
+        use_connectivity = True,
         refractory_period = 0,
         tau_out = 20, #ms
     ),

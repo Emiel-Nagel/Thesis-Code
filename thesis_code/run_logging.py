@@ -35,7 +35,7 @@ def reset_log_stream(timeout: float = 5.0) -> None:
     
 class Logger:
     def __init__(self, run_name: str, seed: int) -> None:
-        self.run_name = f"{run_name}-{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}"
+        self.run_name = run_name
         self.seed = seed
         self.content = f"Output logs for run={run_name}, seed={seed}:\n"
         send_to_log_stream(self.run_name, self.seed, self.content)
