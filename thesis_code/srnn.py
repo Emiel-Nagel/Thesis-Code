@@ -3,8 +3,6 @@ import torch.nn as nn
 
 from dataclasses import dataclass
 
-from .neuron_emulation.decays import LayerBetas
-
 from .network_components.linears import DaleslawLinear
 from .network_components.layers import OutputLayer, StandardRecurrentLayer, SynapticRecurrentLayer, RecurrentLayerConfig
 
@@ -46,7 +44,7 @@ class SRNN(nn.Module):
 
         return torch.stack(spk_outs, dim=0), torch.stack(mem_outs, dim=0), [torch.stack(spks_h, dim=0) for spks_h in hidden_spks], [torch.stack(mem_h, dim=0) for mem_h in hidden_mems]
 
-    @torch.compile
+    # @torch.compile
     def forward_sequence(self, data: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, list[torch.Tensor]]:        
         hidden_spks = []
         hidden_mems = []
@@ -66,9 +64,8 @@ class SRNN(nn.Module):
                 m.apply_daleslaw()
 
     def constrain_betas(self) -> None:
-        for m in self.modules():
-            if isinstance(m, LayerBetas):
-                m.clamp_betas()
+        for layer in self.rec_layers:
+            layer.clamp_beta()
 
 @dataclass
 class SRNNConfig:

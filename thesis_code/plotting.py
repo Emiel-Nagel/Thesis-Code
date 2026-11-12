@@ -312,3 +312,36 @@ def animate_spike_counts(spike_matrix: np.ndarray, title: str, save_dir: Path | 
     HTML(anim.to_html5_video())
     if save_dir is not None:
         anim.save(save_dir / f"{title}.gif")
+
+def beta_to_tau(beta: np.ndarray, dt: float) -> np.ndarray:
+    """
+    Computes the inverse of 'beta = exp(-dt / tau)'.
+    -dt / tau = log(beta)
+    tau / -dt = 1/log(beta)
+    tau = -dt/log(beta)
+    """
+    return -dt / np.log(beta)
+
+def plot_decays(beta: np.ndarray, dt: float, neuron_ranges: dict[str, tuple[int, int]] = None) -> None:
+    per_neuron_averages = np.array([
+        np.mean(beta[start: end]) for start, end in neuron_ranges.values()
+    ])
+    per_neuron_averages = beta_to_tau(per_neuron_averages, dt)
+    taus = beta_to_tau(beta, dt)
+    x_axis = np.arange(len(beta))
+    fig = plt.figure(facecolor="w", figsize=(16, 8))
+    ax = fig.add_subplot(111)
+    ax.bar(x_axis, taus)
+
+    for i, (name, range) in enumerate(neuron_ranges.items()):
+        y: np.array = per_neuron_averages[i]
+        ax.hlines(y, *range, color="r", label=f"Average decays of {name} neurons = {y.round(3)} ms")
+
+    for neuron_type, (start, stop) in neuron_ranges.items():
+        add_bracket(ax, start, stop + 1, neuron_type, side="bottom", offset=18, cap=4, label_pad=4, color="k", lw=1.2, fontsize=16)
+
+    ax.set_xlabel("Neuron (i)")
+    ax.set_ylabel("Tau Decay (ms)")
+    ax.set_title("Plot of learned decays by network")
+    ax.legend()
+    plt.show(block=True)

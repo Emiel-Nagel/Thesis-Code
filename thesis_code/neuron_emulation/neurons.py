@@ -1,6 +1,7 @@
 import torch
 import numpy as np
 from pathlib import Path
+from typing import Literal
 
 from enum import Enum
 
@@ -8,6 +9,19 @@ class Neurons(Enum):
     EXCITATORY = 1
     PV = 2
     SOM = 3
+
+neuron_map = {member.name: member.value for member in Neurons}
+
+def get_neuron_range(layer: list[Neurons], neuron_type: Literal["Excitatory", "PV", "SOM"]) -> tuple[int, int]:
+    neurons: np.ndarray = np.array([n.value for n in layer], dtype=np.int8)
+    key = neuron_map[neuron_type]
+    return (
+        np.min(np.where(neurons == key)),
+        np.max(np.where(neurons == key))
+    )
+
+def get_neuron_ranges(layer: list[Neurons]) -> dict[str, tuple[int, int]]:
+    return {k: get_neuron_range(layer, k) for k in neuron_map.keys()}
 
 def save_neurons(output_dir: Path, neurons: list[list[Neurons]]) -> None:
     npy_array = np.array([[n.value for n in row] for row in neurons], dtype=np.int8)

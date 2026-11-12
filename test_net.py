@@ -6,8 +6,11 @@ import psutil, os
 from thesis_code import SRNN
 from thesis_code.network_components.layers import ALIFRecurrentLayer, OutputLayer
 from thesis_code.parameter_sampling import tau_to_beta, sample_heterogeneous_normal
-from thesis_code.neuron_emulation.connectivity import sample_ee_pv_som_neurons, build_recurrent_and_pruned_matrices, create_forward_matrix_output
+from thesis_code.neuron_emulation.neurons import get_neuron_ranges, sample_ee_pv_som_neurons
+from thesis_code.neuron_emulation.connectivity import build_recurrent_and_pruned_matrices, create_forward_matrix_output
+from thesis_code.neuron_emulation.decays import get_membrane_decays_ee_pv_som
 from thesis_code.training import compute_loss, measure_accuracy, Regularizer
+from thesis_code.plotting import plot_decays
 
 def sample_data_and_targets(batch_size: int, input_size: int, output_size: int, n_steps: int, device: torch.device) -> tuple[torch.Tensor, torch.Tensor]:
     targets = torch.randint(0, output_size, (batch_size,), device=device)
@@ -42,13 +45,16 @@ def test_net(n_steps: int, n_epochs: int, batch_size: int, lr: float, dt: float 
     neurons = sample_ee_pv_som_neurons([hidden_dim], percent_pv=25, percent_som=25)
     rec_matrices, _ = build_recurrent_and_pruned_matrices(neurons)
     forward_matrix_output = create_forward_matrix_output(neurons[0], output_dim, device=device)
-    
+    beta, beta_min, beta_max = get_membrane_decays_ee_pv_som(neurons[0], dt, device)
+
     net = SRNN(
         rec_layers=[
             ALIFRecurrentLayer(
                 forward_matrix=torch.ones(input_dim, hidden_dim, device=device),
                 recurrent_matrix=rec_matrices[0].to(device),
-                beta=sample_heterogeneous_normal(dt, hidden_dim, tau_mean=10, tau_std=1, device=device),
+                beta=beta,
+                beta_min=beta_min,
+                beta_max=beta_max,
                 beta_w=sample_heterogeneous_normal(dt, hidden_dim, tau_mean=30, tau_std=5, device=device),
                 a=sample_heterogeneous_normal(dt, hidden_dim, tau_mean=3, tau_std=2, device=device),
                 b=sample_heterogeneous_normal(dt, hidden_dim, tau_mean=1, tau_std=1, device=device),
@@ -84,6 +90,7 @@ def test_net(n_steps: int, n_epochs: int, batch_size: int, lr: float, dt: float 
 
         optimizer.step()
         net.apply_daleslaw()
+        net.constrain_betas()
 
         acc = measure_accuracy(mem_outs.detach(), targets)
 
@@ -91,6 +98,9 @@ def test_net(n_steps: int, n_epochs: int, batch_size: int, lr: float, dt: float 
             f"loss={loss_val.item():.2f}, acc={acc * 100:.2f}% "
             f"time_elapsed={progress_bar.format_dict['elapsed']:.1f}s, used_memory={process.memory_info().rss / 1e9:.2f} GB"
         )
+
+    neuron_ranges = get_neuron_ranges(neurons[0])
+    plot_decays(net.rec_layers[0].neurons.beta.clone().detach().numpy(), dt, neuron_ranges)
 
 if __name__ == "__main__":
     test_net(

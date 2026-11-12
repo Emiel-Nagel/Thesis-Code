@@ -37,8 +37,9 @@ class RecurrentLayer(nn.Module):
         self.refractory_period = refractory_period
         self.refractory_buffer: torch.Tensor | None = None
 
+    @torch.no_grad()
     def clamp_beta(self) -> None:
-        self.neurons.clamp_(self.beta_min, self.beta_max)
+        self.neurons.beta.clamp_(self.beta_min, self.beta_max)
 
     def reset(self) -> None:
         self._reset_neuron_state()
