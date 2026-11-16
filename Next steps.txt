@@ -36,3 +36,8 @@ baseline with vs without refractory period
 get results in table
 look at Baronig for parameters (especially when using ALIF)
 look how Miguel unrolls data (sparse matrices)
+
+
+For next test:
+
+Excitatory output only table with naturalistic bounded beta values (uniform) for both LIF and ALIF.
