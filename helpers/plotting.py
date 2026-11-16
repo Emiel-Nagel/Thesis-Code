@@ -324,11 +324,10 @@ def beta_to_tau(beta: np.ndarray, dt: float) -> np.ndarray:
     return -dt / np.log(beta)
 
 def plot_decays(beta: np.ndarray, dt: float, neuron_ranges: dict[str, tuple[int, int]] = None) -> None:
+    taus = np.maximum(beta_to_tau(beta, dt) / dt, 0)
     per_neuron_averages = np.array([
-        np.mean(beta[start: end]) for start, end in neuron_ranges.values()
+        np.mean(taus[start: end]) for start, end in neuron_ranges.values()
     ])
-    per_neuron_averages = beta_to_tau(per_neuron_averages, dt) / dt
-    taus = beta_to_tau(beta, dt) / dt
     x_axis = np.arange(len(beta))
     fig = plt.figure(facecolor="w", figsize=(16, 8))
     ax = fig.add_subplot(111)
