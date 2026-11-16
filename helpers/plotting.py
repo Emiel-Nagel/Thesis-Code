@@ -89,7 +89,7 @@ def add_bracket(ax, start, stop, label, side="left", offset=6, cap=4, label_pad=
     ax.annotate(label, xy=pt((low + high) / 2), xycoords=T(offset + label_pad),
                 ha=ha, va=va, rotation=rot, fontsize=fontsize, annotation_clip=False)
 
-def plot_weight_matrices(weights: np.ndarray, neuron_ranges: dict[str, tuple[int, int]] | None, name: str) -> None:
+def plot_weight_matrices(weights: np.ndarray, neuron_ranges: dict[str, tuple[int, int]] | None, add_ranges_to_side: bool, name: str) -> None:
     matrices = [np.asarray(w) for w in weights]
     n_epochs = len(matrices)
     vmax = max(np.abs(m).max() for m in matrices)
@@ -107,7 +107,8 @@ def plot_weight_matrices(weights: np.ndarray, neuron_ranges: dict[str, tuple[int
 
         if neuron_ranges is not None:
             for neuron_type, (start, stop) in neuron_ranges.items():
-                add_bracket(ax, start, stop, neuron_type, side="left", offset=6, cap=4, label_pad=4, color="k", lw=1.2, fontsize=16)
+                if add_ranges_to_side:
+                    add_bracket(ax, start, stop, neuron_type, side="left", offset=6, cap=4, label_pad=4, color="k", lw=1.2, fontsize=16)
                 add_bracket(ax, start, stop, neuron_type, side="top", offset=6, cap=4, label_pad=4, color="k", lw=1.2, fontsize=16)
 
     fig.suptitle(f"Plots of weight-updating of {name} per training epoch")
@@ -123,7 +124,7 @@ class InteractiveSpikePlot:
         self.epoch_i = epoch_i_start % self.num_epochs
 
         self.fig, axes = plt.subplots(
-            len(layer_spikes),
+            len(layer_spikes) - 1,
             1,
             figsize=(10, 3 * len(layer_spikes)),
             squeeze=False,
@@ -138,18 +139,19 @@ class InteractiveSpikePlot:
         self.btn_next.on_clicked(self.turn_page_right)
 
     def draw(self) -> None:
+        target = self.layer_spikes["targets"][self.epoch_i]
         for ax, (layer_name, data) in zip(self.axes, self.layer_spikes.items()):
             ax.clear()
             if layer_name == "targets":
-                target = data[self.epoch_i]
-                counts = np.zeros(len(self.target_labels))
-                counts[target] = 1
+                # target = data[self.epoch_i]
+                # counts = np.zeros(len(self.target_labels))
+                # counts[target] = 1
 
-                ax.bar(self.target_labels, counts)
-                ax.set_title(f"{layer_name}")
-                ax.set_ylabel("Count (n)")
-                ax.set_xlabel("Target label")
-                ax.set_xticks(range(20))
+                # ax.bar(self.target_labels, counts)
+                # ax.set_title(f"{layer_name}")
+                # ax.set_ylabel("Count (n)")
+                # ax.set_xlabel("Target label")
+                # ax.set_xticks(range(20))
                 continue
 
             if layer_name == "mems_out":
@@ -163,11 +165,31 @@ class InteractiveSpikePlot:
                 ax.set_title(f"{layer_name}")
                 ax.set_ylabel("Neuron (n)")
                 ax.set_xlabel("Time step (t)")
+
+                ax.annotate(
+                    "",
+                    xy=(1.0, target),
+                    xytext=(1.12, target),
+                    xycoords=ax.get_yaxis_transform(),
+                    textcoords=ax.get_yaxis_transform(),
+                    arrowprops=dict(arrowstyle="->", color="red", lw=2),
+                    annotation_clip=False,
+                )
+                ax.annotate(
+                    "target",
+                    xy=(1.06, target),
+                    xycoords=ax.get_yaxis_transform(),
+                    xytext=(0, -6),
+                    textcoords="offset points",
+                    ha="center", va="top",
+                    color="red",
+                    annotation_clip=False,
+                )
                 continue
 
             spike_matrix = data[self.epoch_i, :, :]
             splt.raster(torch.from_numpy(spike_matrix), ax, s=0.1, c="black")
-            ax.set_title(f"{layer_name} (mean rate = {round(a.get_layer_mean_spike_rate(spike_matrix), 3)}")
+            ax.set_title(f"{layer_name} (mean rate = {round(a.get_layer_mean_spike_rate(spike_matrix), 3)})")
             ax.set_ylabel("Neuron (n)")
             ax.set_xlabel("Time step (t)")
             ax.set_xlim(0, spike_matrix.shape[0])
@@ -178,7 +200,10 @@ class InteractiveSpikePlot:
                     add_bracket(ax, start, stop, neuron_type, side="right", offset=6, cap=4, label_pad=4, color="k", lw=1.2, fontsize=10)
                     ax.hlines(y=start - 0.5, color="r", lw=1, ls="--", xmin=0, xmax=spike_matrix.shape[0])
 
-        self.fig.suptitle(f"Epoch {self.epoch_i + 1} / {self.num_epochs}")
+        self.fig.suptitle(
+            f"Epoch {self.epoch_i + 1} / {self.num_epochs}\n"
+            rf"$\mathbf{{Target\ Class = {target}}}$"
+        )
         self.fig.canvas.draw_idle()
 
     def turn_page_left(self, event=None) -> None:
@@ -288,3 +313,35 @@ def animate_spike_counts(spike_matrix: np.ndarray, title: str, save_dir: Path | 
     HTML(anim.to_html5_video())
     if save_dir is not None:
         anim.save(save_dir / f"{title}.gif")
+
+def beta_to_tau(beta: np.ndarray, dt: float) -> np.ndarray:
+    """
+    Computes the inverse of 'beta = exp(-dt / tau)'.
+    -dt / tau = log(beta)
+    tau / -dt = 1/log(beta)
+    tau = -dt/log(beta)
+    """
+    return -dt / np.log(beta)
+
+def plot_decays(beta: np.ndarray, dt: float, seed: int, neuron_ranges: dict[str, tuple[int, int]] = None) -> None:
+    taus = np.maximum(beta_to_tau(beta, dt) / dt, 0)
+    per_neuron_averages = np.array([
+        np.mean(taus[start: end]) for start, end in neuron_ranges.values()
+    ])
+    x_axis = np.arange(len(beta))
+    fig = plt.figure(facecolor="w", figsize=(16, 8))
+    ax = fig.add_subplot(111)
+    ax.bar(x_axis, taus)
+
+    for i, (name, range) in enumerate(neuron_ranges.items()):
+        y: np.array = per_neuron_averages[i]
+        ax.hlines(y, *range, color="r", label=f"Average decays of {name} neurons = {y.round(3)} ms")
+
+    for neuron_type, (start, stop) in neuron_ranges.items():
+        add_bracket(ax, start, stop + 1, neuron_type, side="bottom", offset=18, cap=4, label_pad=4, color="k", lw=1.2, fontsize=16)
+
+    ax.set_xlabel("Neuron (i)")
+    ax.set_ylabel("Tau Decay (ms)")
+    ax.set_title(f"Plot of learned decays by network\nseed: {seed}")
+    ax.legend()
+    plt.show(block=True)
