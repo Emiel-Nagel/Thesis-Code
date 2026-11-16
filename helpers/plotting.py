@@ -46,6 +46,8 @@ def plot_performance(loss_train: np.ndarray, acc_train: np.ndarray, loss_test: n
         ax_acc.xaxis.set_major_locator(MaxNLocator(integer=True))
         ax_acc.legend()
 
+    fig.savefig("loss_acc_plots.png", format="png")
+
 def plot_gradients(max_grad_rec: np.ndarray, avg_grad_rec: np.ndarray) -> None:
     fig, (ax_max, ax_avg) = plt.subplots(nrows=1, ncols=2, facecolor='w', figsize=(18, 7))
     fig.suptitle("Training udpate gradients per iteration per trial")
@@ -63,6 +65,8 @@ def plot_gradients(max_grad_rec: np.ndarray, avg_grad_rec: np.ndarray) -> None:
     ax_avg.set_xlabel("Iteration (n)")
     ax_avg.set_ylabel("Average Gradient (y)")
     ax_avg.legend()
+
+    fig.savefig("grad_plots.png", format="png")
 
 def add_bracket(ax, start, stop, label, side="left", offset=6, cap=4, label_pad=4, color="k", lw=1.2, fontsize=20):
     """Square bracket spanning pixel indices start..stop-1 (end exclusive).
@@ -323,7 +327,7 @@ def beta_to_tau(beta: np.ndarray, dt: float) -> np.ndarray:
     """
     return -dt / np.log(beta)
 
-def plot_decays(beta: np.ndarray, dt: float, seed: int, neuron_ranges: dict[str, tuple[int, int]] = None) -> None:
+def plot_decays(beta: np.ndarray, dt: float, neuron_ranges: dict[str, tuple[int, int]] = None) -> None:
     taus = np.maximum(beta_to_tau(beta, dt) / dt, 0)
     per_neuron_averages = np.array([
         np.mean(taus[start: end]) for start, end in neuron_ranges.values()
@@ -342,6 +346,6 @@ def plot_decays(beta: np.ndarray, dt: float, seed: int, neuron_ranges: dict[str,
 
     ax.set_xlabel("Neuron (i)")
     ax.set_ylabel("Tau Decay (ms)")
-    ax.set_title(f"Plot of learned decays by network\nseed: {seed}")
+    ax.set_title("Plot of learned decays by network")
     ax.legend()
     plt.show(block=True)
