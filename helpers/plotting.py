@@ -46,6 +46,8 @@ def plot_performance(loss_train: np.ndarray, acc_train: np.ndarray, loss_test: n
         ax_acc.xaxis.set_major_locator(MaxNLocator(integer=True))
         ax_acc.legend()
 
+    fig.savefig("loss_acc_plots.png", format="png")
+
 def plot_gradients(max_grad_rec: np.ndarray, avg_grad_rec: np.ndarray) -> None:
     fig, (ax_max, ax_avg) = plt.subplots(nrows=1, ncols=2, facecolor='w', figsize=(18, 7))
     fig.suptitle("Training udpate gradients per iteration per trial")
@@ -63,6 +65,8 @@ def plot_gradients(max_grad_rec: np.ndarray, avg_grad_rec: np.ndarray) -> None:
     ax_avg.set_xlabel("Iteration (n)")
     ax_avg.set_ylabel("Average Gradient (y)")
     ax_avg.legend()
+
+    fig.savefig("grad_plots.png", format="png")
 
 def add_bracket(ax, start, stop, label, side="left", offset=6, cap=4, label_pad=4, color="k", lw=1.2, fontsize=20):
     """Square bracket spanning pixel indices start..stop-1 (end exclusive).
