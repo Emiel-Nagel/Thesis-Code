@@ -9,6 +9,7 @@ class Neurons(Enum):
     EXCITATORY = 1
     PV = 2
     SOM = 3
+    INHIBITORY = 4
 
 neuron_map = {member.name: member.value for member in Neurons}
 
@@ -34,16 +35,18 @@ def load_neurons(work_dir: Path) -> list[list[Neurons]]:
 def sort_neuron_layer(layer: list[Neurons]) -> list[Neurons]:
     return sorted(layer, key=lambda n: n.value)
 
-def sample_ee_pv_som_neurons(ns_hidden: list[int], percent_pv: float, percent_som: float) -> list[list[Neurons]]:
-    percent_excitatory = 100 - (percent_pv + percent_som)
-    assert percent_excitatory > 0, \
-        f"'percent_pv' + 'percent_som' = {percent_pv + percent_som} ,which is > 100%, \
-        there are less than zero excitatory neurons left"
+def sample_exc_pv_som_neurons(n_neurons: int, p_pv: float, p_som: float) -> list[Neurons]:
+    n_pv = round(p_pv * n_neurons)
+    n_som = round(p_som * n_neurons)
+    n_exc = n_neurons - n_pv - n_som
+    assert n_exc > 0, f"p_pv + p_som = {p_pv + p_som}, which is >= 1.0, so there would be no excitatory neurons left"
+    return [Neurons.EXCITATORY]*n_exc + [Neurons.PV]*n_pv + [Neurons.SOM]*n_som
 
-    choices = list(Neurons)
-    probs = torch.tensor([percent_excitatory / 100.0, percent_pv / 100.0, percent_som / 100.0], dtype=torch.float)
-    neurons = [
-        [choices[i] for i in torch.multinomial(probs, num_samples=n, replacement=True).tolist()]
-        for n in ns_hidden
-    ]
-    return [sort_neuron_layer(l) for l in neurons]
+def sample_exc_inh_neurons(n_neurons: int, p_inh: float) -> list[Neurons]:
+    n_inh = round(p_inh * n_neurons)
+    n_exc = n_neurons - n_inh
+    assert n_exc > 0, f"p_inh = {p_inh}, which is >= 1.0, so there would be no excitatory neurons left"
+    return [Neurons.EXCITATORY]*n_exc + [Neurons.INHIBITORY]*n_inh
+
+def sample_exc_neurons(n_neurons: int) -> list[Neurons]:
+    return [Neurons.EXCITATORY]*n_neurons
