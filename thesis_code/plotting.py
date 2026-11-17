@@ -46,6 +46,8 @@ def plot_performance(loss_train: np.ndarray, acc_train: np.ndarray, loss_test: n
         ax_acc.xaxis.set_major_locator(MaxNLocator(integer=True))
         ax_acc.legend()
 
+    fig.savefig("loss_acc_plots.png", format="png")
+
 def plot_gradients(max_grad_rec: np.ndarray, avg_grad_rec: np.ndarray) -> None:
     fig, (ax_max, ax_avg) = plt.subplots(nrows=1, ncols=2, facecolor='w', figsize=(18, 7))
     fig.suptitle("Training udpate gradients per iteration per trial")
@@ -63,6 +65,8 @@ def plot_gradients(max_grad_rec: np.ndarray, avg_grad_rec: np.ndarray) -> None:
     ax_avg.set_xlabel("Iteration (n)")
     ax_avg.set_ylabel("Average Gradient (y)")
     ax_avg.legend()
+
+    fig.savefig("grad_plots.png", format="png")
 
 def add_bracket(ax, start, stop, label, side="left", offset=6, cap=4, label_pad=4, color="k", lw=1.2, fontsize=20):
     """Square bracket spanning pixel indices start..stop-1 (end exclusive).
@@ -89,7 +93,7 @@ def add_bracket(ax, start, stop, label, side="left", offset=6, cap=4, label_pad=
     ax.annotate(label, xy=pt((low + high) / 2), xycoords=T(offset + label_pad),
                 ha=ha, va=va, rotation=rot, fontsize=fontsize, annotation_clip=False)
 
-def plot_weight_matrices(weights: np.ndarray, neuron_ranges: dict[str, tuple[int, int]] | None, name: str) -> None:
+def plot_weight_matrices(weights: np.ndarray, neuron_ranges: dict[str, tuple[int, int]] | None, add_ranges_to_side: bool, name: str) -> None:
     matrices = [np.asarray(w) for w in weights]
     n_epochs = len(matrices)
     vmax = max(np.abs(m).max() for m in matrices)
@@ -107,7 +111,8 @@ def plot_weight_matrices(weights: np.ndarray, neuron_ranges: dict[str, tuple[int
 
         if neuron_ranges is not None:
             for neuron_type, (start, stop) in neuron_ranges.items():
-                add_bracket(ax, start, stop, neuron_type, side="left", offset=6, cap=4, label_pad=4, color="k", lw=1.2, fontsize=16)
+                if add_ranges_to_side:
+                    add_bracket(ax, start, stop, neuron_type, side="left", offset=6, cap=4, label_pad=4, color="k", lw=1.2, fontsize=16)
                 add_bracket(ax, start, stop, neuron_type, side="top", offset=6, cap=4, label_pad=4, color="k", lw=1.2, fontsize=16)
 
     fig.suptitle(f"Plots of weight-updating of {name} per training epoch")
@@ -323,11 +328,10 @@ def beta_to_tau(beta: np.ndarray, dt: float) -> np.ndarray:
     return -dt / np.log(beta)
 
 def plot_decays(beta: np.ndarray, dt: float, neuron_ranges: dict[str, tuple[int, int]] = None) -> None:
+    taus = np.maximum(beta_to_tau(beta, dt) / dt, 0)
     per_neuron_averages = np.array([
-        np.mean(beta[start: end]) for start, end in neuron_ranges.values()
+        np.mean(taus[start: end]) for start, end in neuron_ranges.values()
     ])
-    per_neuron_averages = beta_to_tau(per_neuron_averages, dt)
-    taus = beta_to_tau(beta, dt)
     x_axis = np.arange(len(beta))
     fig = plt.figure(facecolor="w", figsize=(16, 8))
     ax = fig.add_subplot(111)

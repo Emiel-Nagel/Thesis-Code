@@ -1,10 +1,8 @@
 import torch
 import torch.nn as nn
 
-from dataclasses import dataclass
-
 from .network_components.linears import DaleslawLinear
-from .network_components.layers import OutputLayer, StandardRecurrentLayer, SynapticRecurrentLayer, RecurrentLayerConfig
+from .network_components.layers import OutputLayer, StandardRecurrentLayer, SynapticRecurrentLayer
 
 class SRNN(nn.Module):
     def __init__(self,
@@ -66,12 +64,3 @@ class SRNN(nn.Module):
     def constrain_betas(self) -> None:
         for layer in self.rec_layers:
             layer.clamp_beta()
-
-@dataclass
-class SRNNConfig:
-    hidden_layers: list[RecurrentLayerConfig]
-    add_control_net: bool
-    use_daleslaw: bool
-    use_connectivity: bool
-    refractory_period: int
-    tau_out: float  # ms

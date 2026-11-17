@@ -29,22 +29,24 @@ cfg = Config(
     ),
 
     srnn = SRNNConfig(
-        hidden_layers=[
+        recurrent_layers=[
             RecurrentLayerConfig(
                 n_neurons = 256,
-                percent_pv = 25.0,
-                percent_som = 25.0,
+                p_pv = 0.25,
+                p_som = 0.25,
+                p_inh = 0.5,
+                use_daleslaw = True,
+                use_connectivity = True,
+                refractory_period = 0,
                 rec_layer_type = "alif",
                 beta = SamplingConfig(sampling_mode = "normal", is_decay=True, tau_mean = 10, tau_std = 1),
+                learn_beta = False,
                 beta_w = SamplingConfig(sampling_mode = "normal", is_decay=True, tau_mean = 30, tau_std = 5),
                 a = SamplingConfig(sampling_mode = "normal", is_decay=False, tau_mean = 3, tau_std = 2),
                 b = SamplingConfig(sampling_mode = "normal", is_decay=False, tau_mean = 1, tau_std = 1)
             )
         ],
         add_control_net = False,
-        use_daleslaw = True,
-        use_connectivity = True,
-        refractory_period = 0,
         tau_out = 20, #ms
     ),
 

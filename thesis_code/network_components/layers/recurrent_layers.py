@@ -97,6 +97,7 @@ class StandardRecurrentLayer(RecurrentLayer):
         forward_matrix: torch.Tensor,
         recurrent_matrix: torch.Tensor,
         beta: torch.Tensor | float,
+        learn_beta: bool,
         beta_min: torch.Tensor | float,
         beta_max: torch.Tensor | float,
         spike_grad: Any,
@@ -112,7 +113,7 @@ class StandardRecurrentLayer(RecurrentLayer):
             linear_features=self.n_neurons,
             init_hidden=False,
             spike_grad=spike_grad,
-            learn_beta=fully_learnable,
+            learn_beta=learn_beta,
             rec_matrix=recurrent_matrix,
             threshold=threshold,
             reset_delay=False,
@@ -135,6 +136,7 @@ class SynapticRecurrentLayer(RecurrentLayer):
         recurrent_matrix: torch.Tensor,
         alpha: torch.Tensor | float,
         beta: torch.Tensor | float,
+        learn_beta: bool,
         beta_min: torch.Tensor | float,
         beta_max: torch.Tensor | float,
         spike_grad: Any,
@@ -152,7 +154,7 @@ class SynapticRecurrentLayer(RecurrentLayer):
             init_hidden=False,
             spike_grad=spike_grad,
             learn_alpha=fully_learnable,
-            learn_beta=fully_learnable,
+            learn_beta=learn_beta,
             rec_matrix=recurrent_matrix,
             threshold=threshold,
             reset_delay=False,
@@ -174,6 +176,7 @@ class ALIFRecurrentLayer(RecurrentLayer):
         forward_matrix: torch.Tensor,
         recurrent_matrix: torch.Tensor,
         beta: torch.Tensor | float,
+        learn_beta: bool,
         beta_min: torch.Tensor | float,
         beta_max: torch.Tensor | float,
         beta_w: torch.Tensor | float,
@@ -195,7 +198,7 @@ class ALIFRecurrentLayer(RecurrentLayer):
             linear_features=self.n_neurons,
             init_hidden=False,
             spike_grad=spike_grad,
-            learn_beta=fully_learnable,
+            learn_beta=learn_beta,
             learn_beta_w=fully_learnable,
             learn_a=fully_learnable,
             learn_b=fully_learnable,
@@ -220,20 +223,20 @@ LAYER_CLASSES = {
     "alif": ALIFRecurrentLayer,
 }
 
-@dataclass
-class RecurrentLayerConfig:
-    n_neurons: int
-    percent_pv: float
-    percent_som: float
-    rec_layer_type: Literal["standard", "synaptic", "alif"]
-    beta: SamplingConfig = field(default_factory=SamplingConfig)
-    beta_w: Optional[SamplingConfig] = None
-    a: Optional[SamplingConfig] = None
-    b: Optional[SamplingConfig] = None
+# @dataclass
+# class RecurrentLayerConfig:
+#     n_neurons: int
+#     percent_pv: float
+#     percent_som: float
+#     rec_layer_type: Literal["standard", "synaptic", "alif"]
+#     beta: SamplingConfig = field(default_factory=SamplingConfig)
+#     beta_w: Optional[SamplingConfig] = None
+#     a: Optional[SamplingConfig] = None
+#     b: Optional[SamplingConfig] = None
 
-    def __post_init__(self) -> None:
-        required = {"beta_w", "a", "b"} if self.rec_layer_type == "alif" else set()
-        set_params = {p for p in ("beta_w", "a", "b") if getattr(self, p) is not None}
-        if set_params != required:
-            raise ValueError(f"{self.rec_layer_type} requires exactly {sorted(required)} "
-                             f"to be set, but got {sorted(set_params)}")
+#     def __post_init__(self) -> None:
+#         required = {"beta_w", "a", "b"} if self.rec_layer_type == "alif" else set()
+#         set_params = {p for p in ("beta_w", "a", "b") if getattr(self, p) is not None}
+#         if set_params != required:
+#             raise ValueError(f"{self.rec_layer_type} requires exactly {sorted(required)} "
+#                              f"to be set, but got {sorted(set_params)}")

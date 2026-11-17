@@ -1,5 +1,5 @@
 from .output_layer import OutputLayer
-from .recurrent_layers import StandardRecurrentLayer, SynapticRecurrentLayer, ALIFRecurrentLayer, RecurrentLayerConfig, LAYER_CLASSES
+from .recurrent_layers import StandardRecurrentLayer, SynapticRecurrentLayer, ALIFRecurrentLayer, LAYER_CLASSES #, RecurrentLayerConfig, LAYER_CLASSES
 # from .standard_recurrent_layer import StandardRecurrentLayer
 # from .synaptic_recurrent_layer import SynapticRecurrentLayer
 
@@ -8,6 +8,6 @@ __all__ = [
     "StandardRecurrentLayer",
     "SynapticRecurrentLayer",
     "ALIFRecurrentLayer",
-    "RecurrentLayerConfig",
+#    "RecurrentLayerConfig",
     "LAYER_CLASSES",
 ]

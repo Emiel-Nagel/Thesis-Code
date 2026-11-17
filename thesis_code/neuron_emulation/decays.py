@@ -3,7 +3,7 @@ from scipy import stats
 
 from ..parameter_sampling import tau_to_beta, sample_heterogeneous_uniform
 
-from .neurons import Neurons
+from .neurons import Neuron
 
 """
 Decay ranges based on:
@@ -25,8 +25,8 @@ decay_ranges: dict[str, tuple[float, float]] = {
     "SOM":          _get_uniform_bounds(mean=11.8, std=4.6)
 }
 
-def get_membrane_decays_ee_pv_som(layer: list[Neurons], dt: float, device: torch.device) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-    tau_lower_bounds = torch.tensor([decay_ranges[neuron.name][0] for neuron in layer], device=device)
-    tau_upper_bounds = torch.tensor([decay_ranges[neuron.name][1] for neuron in layer], device=device)
-    taus = sample_heterogeneous_uniform(len(layer), tau_upper_bounds, tau_lower_bounds, device)
+def get_membrane_decays_ee_pv_som(neurons: list[Neuron], dt: float, device: torch.device) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    tau_lower_bounds = torch.tensor([decay_ranges[neuron.name][0] for neuron in neurons], device=device)
+    tau_upper_bounds = torch.tensor([decay_ranges[neuron.name][1] for neuron in neurons], device=device)
+    taus = sample_heterogeneous_uniform(len(neurons), tau_upper_bounds, tau_lower_bounds, device)
     return tau_to_beta(dt, taus), tau_to_beta(dt, tau_lower_bounds), tau_to_beta(dt, tau_upper_bounds)

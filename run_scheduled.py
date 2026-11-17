@@ -33,19 +33,6 @@ LOG_DIR = PROJECT_DIR / "local_logs"                 # stdout/stderr of each cop
 
 PYTHON = sys.executable  # use the same interpreter/environment as this script
 
-# def _run_script(script: Path, *args) -> subprocess.CompletedProcess:
-#     proc = subprocess.run(
-#         [PYTHON, str(script), *map(str, args)],
-#         capture_output=True, text=True, cwd=PROJECT_DIR)
-#     if proc.stderr:
-#         print(proc.stderr, file=sys.stderr, end="")
-#     if proc.stdout:
-#         print(proc.stdout, end="")
-#     if proc.returncode != 0:
-#         print(proc.stderr, file=sys.stderr)
-#         return None
-#     return proc
-
 _print_lock = threading.Lock()
 
 def _run_script(script: Path, *args) -> subprocess.CompletedProcess | None:
