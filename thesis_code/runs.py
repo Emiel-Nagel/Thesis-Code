@@ -144,8 +144,8 @@ def push_output(output_dir: Path, branch_name: str) -> None:
         raise
 
     print(f"Created {REPO}@{branch_name} with {len(files)} files")
-    shutil.rmtree(output_dir)
-    print("Removed output directory after push")
+    # shutil.rmtree(output_dir)
+    # print("Removed output directory after push")
 
 def remove_config(config_path: Path):
     shutil.copy2(config_path, DONE_DIR / f"{config_path.name}.py")

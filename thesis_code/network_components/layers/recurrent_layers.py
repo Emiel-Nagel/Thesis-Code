@@ -215,7 +215,7 @@ class ALIFRecurrentLayer(RecurrentLayer):
         return self.spk, self.mem
 
 LAYER_CLASSES = {
-    "standard": StandardRecurrentLayer,
+    "lif": StandardRecurrentLayer,
     "synaptic": SynapticRecurrentLayer,
     "alif": ALIFRecurrentLayer,
 }
