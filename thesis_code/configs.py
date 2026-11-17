@@ -7,11 +7,11 @@ from typing import get_type_hints
 from dacite import Config as DaciteConfig, from_dict
 
 from .parameter_sampling import SamplingConfig
-from .network_components.layers import StandardRecurrentLayer, SynapticRecurrentLayer, ALIFRecurrentLayer, RecurrentLayerConfig
+from .network_components.layers import StandardRecurrentLayer, SynapticRecurrentLayer, ALIFRecurrentLayer
+from .build_net import RecurrentLayerConfig, SRNNConfig
 from .datasets import DatasetConfig
 from .training import TrainingConfig, RegularizationConfig
 from .recording import RecordingConfig
-from .srnn import SRNNConfig
 
 @dataclass
 class Config:

@@ -4,9 +4,9 @@ fix connectivity
 - clamp weights (prevent exploding, enforce dale's law)			DONE
 
 plot individual neurons
-- quantify firing rates                         
+- quantify firing rates                         DONE                 
 - plot membrane potentials next to spikes       DONE
-- really get what's going on!!
+- really get what's going on!!                  DONE
 
 plot loss-variance                              DONE
 
@@ -19,7 +19,7 @@ see how weights evolve!!                        DONE
 ENFORCE SPARSITY!!!!
 - init neurons more sparsely (add normalization term)
 - train bigger networks 1028                            DONE
-- try with alif neurons (see if becomes sparse)
+- try with alif neurons (see if becomes sparse)         DONE
 - maybe play with regularization term
 - look into reference network
 
@@ -29,10 +29,15 @@ Also get deep understanding of Garner paper
 - Really understand the loss!!
 
 
-reduce max-iters to 800
-recude max epochs to 50
-set max timepoints to 200
-baseline with vs without refractory period
-get results in table
+reduce max-iters to 800         DONE
+recude max epochs to 50         DONE
+set max timepoints to 200       DONE
+baseline with vs without refractory period      DONE
+get results in table            DONE
 look at Baronig for parameters (especially when using ALIF)
 look how Miguel unrolls data (sparse matrices)
+
+
+For next test:
+
+Excitatory output only table with naturalistic bounded beta values (uniform) for both LIF and ALIF.
