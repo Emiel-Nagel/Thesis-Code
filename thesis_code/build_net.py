@@ -37,7 +37,7 @@ def build_layer(rl_cfg: RecurrentLayerConfig, neurons_prev: list[Neuron], dt: fl
             learn_beta=rl_cfg.learn_beta, beta_min=beta_min, beta_max=beta_max,
             spike_grad=fast_sigmoid(slope=25), threshold=torch.ones(n_neurons, device=device),
             refractory_period=rl_cfg.refractory_period, use_daleslaw=rl_cfg.use_daleslaw,
-        )
+        ).to(device)
 
     return neurons, _build_layer(rec_matrix), rec_matrix, _build_layer(pruned_matrix), pruned_matrix
 
@@ -64,9 +64,9 @@ def build_srnns(
     if add_control_net:
         save_matrices(output_dir, pruned_matrices + [forward_matrix_output], names, is_control=True)
 
-    beta_out = tau_to_beta(dt, tau_out)
-    net = SRNN(rec_layers, out_layer=OutputLayer(forward_matrix_output.clone(), beta_out))
-    net_control = SRNN(rec_layers_control, out_layer=OutputLayer(forward_matrix_output.clone(), beta_out)) if add_control_net else None
+    beta_out = tau_to_beta(dt, tau_out).to(device)
+    net = SRNN(rec_layers, out_layer=OutputLayer(forward_matrix_output.clone(), beta_out).to(device))
+    net_control = SRNN(rec_layers_control, out_layer=OutputLayer(forward_matrix_output.clone(), beta_out).to(device)) if add_control_net else None
     return net, net_control
 
 @dataclass
