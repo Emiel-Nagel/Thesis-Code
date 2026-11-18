@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 from .srnn import SRNN
 from .recording import Recorder
 from .run_logging import Logger
-from .datasets import DatasetConfig
+from .datasets import DatasetConfig, PreparedLoader
 
 def measure_accuracy(mem_outs: torch.Tensor, targets: torch.Tensor) -> float:
     probs = F.softmax(mem_outs, dim=-1)
@@ -72,7 +72,7 @@ def test_net(net: SRNN, testloader: DataLoader, max_iters: int = None) -> tuple[
 
     return acc / len(testloader), loss / len(testloader)
 
-def train_net(net: SRNN, logger: Logger, device: torch.device, trainloader: DataLoader, testloader: DataLoader, lr: float = 1e-3, n_epochs: int = 1, max_iters: int = None, 
+def train_net(net: SRNN, logger: Logger, device: torch.device, trainloader: PreparedLoader, testloader: PreparedLoader, lr: float = 1e-3, n_epochs: int = 1, max_iters: int = None, 
               max_norm: int = 1e6, separate_timesteps: bool = False, regularizer: Regularizer = None, recorder: Recorder = None,
     ) -> tuple[SRNN, torch.optim.Optimizer, Recorder]:
     optimizer = torch.optim.Adam(net.parameters(), lr=lr)
@@ -88,7 +88,6 @@ def train_net(net: SRNN, logger: Logger, device: torch.device, trainloader: Data
 
         losses, accs = [], []
         for i, (data, targets) in progress_bar:
-
             net.reset()
             forward_fn = net.forward_sequence if not separate_timesteps else net
             spk_outs, mem_outs, hidden_spks, hidden_mems = forward_fn(data)
