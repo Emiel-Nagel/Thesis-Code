@@ -1,0 +1,1 @@
+mlflow server --backend-store-uri sqlite:///MLflow_server/mlflow.db --port 5000
