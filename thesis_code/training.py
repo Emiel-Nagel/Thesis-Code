@@ -3,15 +3,34 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 import torch.nn.functional as F
 
+import mlflow
 import numpy as np
-from tqdm.auto import tqdm
-import psutil, os
+from tqdm.std import EMA
+from datetime import datetime
+from zoneinfo import ZoneInfo
+import time
 from dataclasses import dataclass, field
 
 from .srnn import SRNN
 from .recording import Recorder
-from .run_logging import Logger
 from .datasets import DatasetConfig, PreparedLoader
+
+def get_timestamp() -> int:
+    return int(datetime.now(tz=ZoneInfo("Europe/Amsterdam")).timestamp() * 1000)
+
+class RateTracker:
+    def __init__(self, smoothing=0.3):
+        self.ema_dn = EMA(smoothing)
+        self.ema_dt = EMA(smoothing)
+        self.last_n = 0
+        self.last_t = time.perf_counter()
+
+    def update(self, n):
+        now = time.perf_counter()
+        self.ema_dn(n - self.last_n)
+        self.ema_dt(now - self.last_t)
+        self.last_n, self.last_t = n, now
+        return self.ema_dn() / self.ema_dt()
 
 def measure_accuracy(mem_outs: torch.Tensor, targets: torch.Tensor) -> float:
     probs = F.softmax(mem_outs, dim=-1)
@@ -29,6 +48,16 @@ def compute_loss(mem_outs: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
     probs = F.softmax(mem_outs, dim=-1)
     log_probs = torch.log(probs.mean(dim=0) + 1e-8) # to avoid log(0)
     return F.nll_loss(log_probs, targets)
+
+def get_gradients(net: SRNN) -> tuple[float, float]:
+    grads = [p.grad for p in net.parameters() if p.grad is not None]
+    if grads:
+        n = sum(g.numel() for g in grads)
+        max_grad = torch.stack(torch._foreach_norm(grads, float("inf"))).max()
+        avg_grad = torch.stack(torch._foreach_norm(grads, 1)).sum() / n
+    else:
+        max_grad = avg_grad = torch.zeros(())
+    return max_grad.item(), avg_grad.item()
 
 class Regularizer(nn.Module):
     def __init__(self, lam_lower: float, v_lower: float, lam_uppers: list[float], v_uppers: list[float], L: int = 2) -> None:
@@ -72,22 +101,21 @@ def test_net(net: SRNN, testloader: DataLoader, max_iters: int = None) -> tuple[
 
     return acc / len(testloader), loss / len(testloader)
 
-def train_net(net: SRNN, logger: Logger, device: torch.device, trainloader: PreparedLoader, testloader: PreparedLoader, lr: float = 1e-3, n_epochs: int = 1, max_iters: int = None, 
-              max_norm: int = 1e6, separate_timesteps: bool = False, regularizer: Regularizer = None, recorder: Recorder = None,
+def train_net(net: SRNN, seed_id: str, device: torch.device, trainloader: PreparedLoader, testloader: PreparedLoader, lr: float = 1e-3, n_epochs: int = 1, max_iters: int = None, 
+        separate_timesteps: bool = False, regularizer: Regularizer = None, recorder: Recorder = None,
     ) -> tuple[SRNN, torch.optim.Optimizer, Recorder]:
     optimizer = torch.optim.Adam(net.parameters(), lr=lr)
-    process = psutil.Process(os.getpid())
-
-    net.train()
 
     for epoch in range(n_epochs):
-        logger.log(f"\n\n\nNow evaluating epoch {epoch}:\n\n")
-        progress_bar = tqdm(enumerate(trainloader), total=len(trainloader), position=0, desc=f"Epoch {epoch}"
-                            , dynamic_ncols=True, bar_format="{n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_fmt}] {bar}",)
-        status_bar = tqdm(total=0, position=1, bar_format="{desc}", dynamic_ncols=True)
+        mlflow.set_tag("progress", f"Epoch {epoch + 1}/{n_epochs}")
+
+        net.train()
 
         losses, accs = [], []
-        for i, (data, targets) in progress_bar:
+        tracker = RateTracker()
+        for iteration, (data, targets) in enumerate(trainloader):
+            mlflow.log_metric("it/s", tracker.update(iteration), step=iteration, run_id=seed_id)
+
             net.reset()
             forward_fn = net.forward_sequence if not separate_timesteps else net
             spk_outs, mem_outs, hidden_spks, hidden_mems = forward_fn(data)
@@ -100,38 +128,25 @@ def train_net(net: SRNN, logger: Logger, device: torch.device, trainloader: Prep
             optimizer.zero_grad()
             loss_val.backward()
 
-            # grad_norm = torch.nn.utils.clip_grad_norm_(net.parameters(), max_norm=max_norm)
             if recorder is not None:
                 recorder.record_iteration(net=net)
 
             optimizer.step()
             net.apply_daleslaw()
-            net.constrain_betas()
+            # net.constrain_betas()
 
             losses.append(loss_val.item())
             acc = measure_accuracy(mem_outs.detach(), targets)
             accs.append(acc)
 
-            status_bar.set_description_str(
-                f"loss={loss_val.item():.2f}, acc={acc * 100:.2f}% "
-                f"time_elapsed={progress_bar.format_dict['elapsed']:.1f}s, used_memory={process.memory_info().rss / 1e9:.2f} GB"
-                # loss=f"{loss_val.item():.2f}",
-                # acc=f"{acc * 100:.2f}%",
-                # time_elapsed=f"{progress_bar.format_dict['elapsed']:.1f}s",
-                # used_memory=f"{process.memory_info().rss / 1e9:.2f} GB",
-            )
-
-            logger.log(
-                str(progress_bar) +
-                f"\nloss={loss_val.item():.2f}, acc={acc * 100:.2f}%, "
-                f"time_elapsed={progress_bar.format_dict['elapsed']:.1f}s, used_memory={process.memory_info().rss / 1e9:.2f} GB, "
-                f"cuda_memory_peak={torch.cuda.max_memory_allocated(device) / 2**30:.2f} GiB\n"
-            )
-
-            if max_iters is not None and i == max_iters:
-                break
-
         acc_test, loss_test = test_net(net, testloader, max_iters)
+        max_grad, avg_grad = get_gradients(net)
+        mlflow.log_metrics(
+            {"train_loss": loss_val.item(), "train_accuracy": acc, "test_loss": loss_test, "test_accuracy": acc_test, 
+            "cuda_memory_peak GiB": (torch.cuda.max_memory_allocated(device) / 2**30),
+            "max_grad": max_grad, "avg_grad": avg_grad},
+            step=epoch, synchronous=False, timestamp=get_timestamp(), run_id=seed_id
+        )
 
         if recorder is not None:
             recorder.record_epoch(

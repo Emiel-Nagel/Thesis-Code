@@ -86,7 +86,7 @@ params = {
 run_name = "Run 12"
 params["run_name"] = run_name
 with mlflow.start_run(run_name=run_name) as run:
-    mlflow.log_params(params)
+    mlflow.log_params(params, run_id=run.info.run_id)
 
     for seed in [0, 1]:
         seed_dir = output_dir / str(seed)

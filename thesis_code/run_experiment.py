@@ -1,198 +1,101 @@
+import mlflow
 import torch
-# from snntorch.surrogate import fast_sigmoid
 from pathlib import Path
+import argparse
+from typing import Any
 
-from thesis_code import SRNN, datasets, runs
-# from thesis_code.network_components.layers import OutputLayer, RecurrentLayerConfig, LAYER_CLASSES
-# from thesis_code.parameter_sampling import tau_to_beta, sample_values
-# from thesis_code.neuron_emulation.neurons import sample_ee_pv_som_neurons, save_neurons
-# from thesis_code.neuron_emulation.decays import get_membrane_decays_ee_pv_som
-# from thesis_code.neuron_emulation.connectivity import build_recurrent_and_pruned_matrices, save_matrices, sample_exc_inh_recurrent_matrices, create_forward_matrix_output
-
+from thesis_code import datasets, runs
 from thesis_code.build_net import build_srnns
-
 from thesis_code.recording import Recorder
-import thesis_code.training as tr
-
-from thesis_code.run_logging import Logger
+from thesis_code.training import Regularizer, train_net
 from thesis_code.configs import Config
 
-def setup(output_dir: Path, seed: int, cfg: Config) -> tuple[Path, Logger, torch.device]:
-    output_dir = runs.create_seed_dir(output_dir, seed)
-    logger = Logger(run_name=cfg.run_name, seed=seed)
+p = argparse.ArgumentParser()
+p.add_argument("--output_dir", type=Path, required=True)
+p.add_argument("--run_id", type=str, required=True)
+p.add_argument("--seed", type=int, required=True)
 
-    flushing = torch.set_flush_denormal(True)
-    logger.log(f"Floating point flushing is set to {flushing}")
+def get_args(keymap: dict[str, argparse._ActionType]) -> list[Any]:
+    p = argparse.ArgumentParser()
+    for key, key_type in keymap.items():
+        p.add_argument(f"--{key}", type=key_type, required=True)
 
-    torch.manual_seed(seed)
-    torch.set_num_threads(4)
+    args = p.parse_args()
+    return [args.__getattr__(name=key) for key in keymap.keys()]
 
-    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("mps") if torch.backends.mps.is_available() else torch.device("cpu")
-    logger.log(f"Using device: {device}")
-    return output_dir, logger, device
+output_dir, run_id, seed = get_args({
+    "output_dir": Path,
+    "run_id": str,
+    "seed": int,
+})
 
-# def build_srnns(
-#     dt: float,
-#     input_dim: int,
-#     output_dim: int,
-#     hidden_layer_cfgs: list[RecurrentLayerConfig],
-#     use_daleslaw: bool,
-#     use_connectivity: bool,
-#     refractory_period: int,
-#     tau_out: float,
-#     device: torch.device,
-#     output_dir: Path,
-#     add_control_net: bool,
-# ) -> tuple[SRNN, SRNN | None]:    
-#     ns_hidden = [hl_cfg.n_neurons for hl_cfg in hidden_layer_cfgs]
-#     percent_pv = hidden_layer_cfgs[0].percent_pv
-#     percent_som = hidden_layer_cfgs[0].percent_som
-#     neurons = None
-#     if use_daleslaw:
-#         if use_connectivity:
-#             neurons = sample_ee_pv_som_neurons(ns_hidden, percent_pv, percent_som)
-#             save_neurons(output_dir, neurons)
-#             rec_matrices, pruned_matrices = build_recurrent_and_pruned_matrices(neurons)
-#         else:
-#             rec_matrices = sample_exc_inh_recurrent_matrices(ns_hidden, percent_inh=percent_pv + percent_som)
-#             pruned_matrices = sample_exc_inh_recurrent_matrices(ns_hidden, percent_inh=percent_pv + percent_som)
-#     else:
-#         rec_matrices = [torch.ones(n, n) for n in ns_hidden]
-#         pruned_matrices = [torch.ones(n, n) for n in ns_hidden]
 
-#     save_matrices(output_dir, rec_matrices, 
-#         names=[f"recurrent_mask_{i}" for i, _ in enumerate(rec_matrices)], 
-#         is_control=False
-#     )
-#     if add_control_net:
-#         save_matrices(output_dir, pruned_matrices, 
-#             names=[f"recurrent_mask_{i}" for i, _ in enumerate(pruned_matrices)], 
-#             is_control=True
-#         )
+def run(cfg: Config) -> None:
+    args = p.parse_args()
+    output_dir = args.output_dir
+    run_id = args.run_id
 
-#     def _build_srnn(rec_matrices: list[torch.Tensor]) -> SRNN:
-#         rec_layers = []
-#         n_prev = input_dim
-#         for hl_cfg, rec_matrix in zip(hidden_layer_cfgs, rec_matrices):
-#             n = hl_cfg.n_neurons
+    seed = args.seed
 
-#             if neurons is not None:
-#                 beta, beta_min, beta_max = get_membrane_decays_ee_pv_som(neurons[0], dt, device)
-#             else:
-#                 beta = sample_values(hl_cfg.beta, dt, n, device)
-#                 beta_min, beta_max = 0.0, 1.0
+    mlflow.set_tracking_uri("sqlite:///MLflow_server/mlflow.db")
+    mlflow.set_experiment("SRNN-training Experiment 1")
 
-#             rec_layers.append(
-#                 LAYER_CLASSES[hl_cfg.rec_layer_type](
-#                     forward_matrix=torch.ones(n_prev, n, device=device),
-#                     recurrent_matrix=rec_matrix.to(device),
-#                     beta=beta,
-#                     beta_min=beta_min,
-#                     beta_max=beta_max,
-#                     beta_w=sample_values(hl_cfg.beta_w, dt, n, device) if hl_cfg.beta_w is not None else None,
-#                     a=sample_values(hl_cfg.a, dt, n, device) if hl_cfg.a is not None else None,
-#                     b=sample_values(hl_cfg.b, dt, n, device) if hl_cfg.b is not None else None,
-#                     spike_grad=fast_sigmoid(slope=25),
-#                     threshold=torch.ones(n, device=device),
-#                     refractory_period=refractory_period,
-#                     use_daleslaw=use_daleslaw,
-#                 )
-#             )
-#             n_prev = n
-#         return SRNN(rec_layers, out_layer=OutputLayer(create_forward_matrix_output(neurons[0], output_dim, device=device), beta=tau_to_beta(dt, tau_out*dt))).to(device)
-#         return SRNN(rec_layers, out_layer=OutputLayer(n_prev, output_dim, beta=tau_to_beta(dt, tau_out*dt))).to(device)     # this is only for one test case
+    mlflow.config.enable_system_metrics_logging()
+    mlflow.config.set_system_metrics_sampling_interval(1)
 
-#     net = _build_srnn(rec_matrices=rec_matrices)
-#     net_control = _build_srnn(rec_matrices=pruned_matrices) if add_control_net else None
-#     return net, net_control
+    with mlflow.start_run(run_name=f"seed {seed}", nested=True, parent_run_id=run_id) as seed_run:
+        output_dir = runs.create_output_dir(output_dir, seed)
+        
+        flushing = torch.set_flush_denormal(True)
+        print(f"Floating point flushing is set to {flushing}")
 
-def train(
-        net: SRNN,
-        logger: Logger,
-        device: torch.device,
-        trainloader: torch.utils.data.DataLoader,
-        testloader: torch.utils.data.DataLoader,
-        lr: float,
-        n_epochs: int,
-        regularizer: tr.Regularizer | None,
-        recorder: Recorder | None,
-    ) -> tuple[SRNN, torch.optim.Optimizer, Recorder]:
-        acc_before, _ = tr.test_net(net, testloader)
-        logger.log(f"Test Accuracy before training is: {acc_before}")
+        torch.manual_seed(seed)
+        torch.set_num_threads(4)
 
-        net, optimizer, recorder = tr.train_net(
-            net=net,
-            logger=logger,
+        device = torch.device("cuda") if torch.cuda.is_available() else torch.device("mps") if torch.backends.mps.is_available() else torch.device("cpu")
+        
+        train_cfg = cfg.training
+        dt = train_cfg.dt
+        SHD_trainloader, SHD_testloader, input_dim, classes = datasets.get_SHD_dataset(
+            batch_size=train_cfg.batch_size,
             device=device,
-            trainloader=trainloader,
-            testloader=testloader,
-            lr=lr,
-            n_epochs=n_epochs,
-            regularizer=regularizer,
-            recorder=recorder
+            n_timepoints=train_cfg.dataset.n_timepoints,
         )
 
-        acc_after, _ = tr.test_net(net, testloader)
-        logger.log(f"Test Accuracy after training is: {acc_after}")
+        reg_cfg = train_cfg.regularization
+        regularizer = Regularizer(
+            lam_lower=reg_cfg.lam_lower,
+            v_lower=reg_cfg.v_lower,
+            lam_uppers=reg_cfg.lam_uppers,
+            v_uppers=reg_cfg.v_uppers,
+            L=reg_cfg.L,
+        ) if reg_cfg.apply else None
 
-        return net, optimizer, recorder
+        srnn_cfg = cfg.srnn
+        net, net_control = build_srnns(
+            dt=dt,
+            input_dim=input_dim,
+            output_dim=len(classes),
+            recurrent_layer_cfgs=srnn_cfg.recurrent_layers,
+            tau_out=srnn_cfg.tau_out,
 
-def run(output_dir: Path, seed: int, cfg: Config) -> None:
-    output_dir, logger, device = setup(output_dir, seed, cfg)
+            device=device,
+            output_dir=output_dir,
+            add_control_net=srnn_cfg.add_control_net,
+        )
 
-    train_cfg = cfg.training
-    dt = train_cfg.dt
-    SHD_trainloader, SHD_testloader, input_dim, classes = datasets.get_SHD_dataset(
-        batch_size=train_cfg.batch_size,
-        device=device,
-        n_timepoints=train_cfg.dataset.n_timepoints,
-    )
+        recorder = Recorder(
+            num_hidden_layers=len(srnn_cfg.recurrent_layers),
+            rec_cfg=cfg.recording,
+        )
 
-    reg_cfg = train_cfg.regularization
-    regularizer = tr.Regularizer(
-        lam_lower=reg_cfg.lam_lower,
-        v_lower=reg_cfg.v_lower,
-        lam_uppers=reg_cfg.lam_uppers,
-        v_uppers=reg_cfg.v_uppers,
-        L=reg_cfg.L,
-    ) if reg_cfg.apply else None
+        net, optimizer, recorder = train_net(net, seed_run.info.run_id, device, SHD_trainloader, SHD_testloader, train_cfg.lr, train_cfg.n_epochs, regularizer, recorder)
+        runs.save_net(net, optimizer, epoch=train_cfg.n_epochs, save_path=output_dir / "net.checkpoint.pt")
+        recorder.save(output_dir / "data_net")
 
-    srnn_cfg = cfg.srnn
+        if net_control is not None:
+            recorder.clear()   
 
-    net, net_control = build_srnns(
-        dt=dt,
-        input_dim=input_dim,
-        output_dim=len(classes),
-        recurrent_layer_cfgs=srnn_cfg.recurrent_layers,
-        # use_daleslaw=srnn_cfg.use_daleslaw,
-        # use_connectivity=srnn_cfg.use_connectivity,
-        # refractory_period=srnn_cfg.refractory_period,
-        tau_out=srnn_cfg.tau_out,
-
-        device=device,
-        output_dir=output_dir,
-        add_control_net=srnn_cfg.add_control_net,
-    )
-
-    recorder = Recorder(
-        num_hidden_layers=len(srnn_cfg.recurrent_layers),
-        rec_cfg=cfg.recording,
-    )
-
-    logger.log("\n\n---------------")
-    logger.log("Now testing net")
-
-    net, optimizer, recorder = train(net, logger, device, SHD_trainloader, SHD_testloader, train_cfg.lr, train_cfg.n_epochs, regularizer, recorder)
-    runs.save_net(net, optimizer, epoch=train_cfg.n_epochs, save_path=output_dir / "net.checkpoint.pt")
-    recorder.save(output_dir / "data_net")
-
-    if net_control is not None:
-        recorder.clear()   
-        logger.log("\n\n---------------")
-        logger.log("Now testing control net")
-
-        net_control, optimizer_control, recorder = train(net_control, logger, device, SHD_trainloader, SHD_testloader, train_cfg.lr, train_cfg.n_epochs, regularizer, recorder)
-        runs.save_net(net_control, optimizer_control, epoch=train_cfg.n_epochs, save_path=output_dir / "net_control.checkpoint.pt")
-        recorder.save(output_dir / "data_net_control")
-
-    logger.write_to_file(output_dir)
+            net_control, optimizer_control, recorder = train_net(net_control, seed_run.info.run_id, device, SHD_trainloader, SHD_testloader, train_cfg.lr, train_cfg.n_epochs, regularizer, recorder)
+            runs.save_net(net_control, optimizer_control, epoch=train_cfg.n_epochs, save_path=output_dir / "net_control.checkpoint.pt")
+            recorder.save(output_dir / "data_net_control")
