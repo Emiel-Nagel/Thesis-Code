@@ -10,11 +10,6 @@ from thesis_code.recording import Recorder
 from thesis_code.training import Regularizer, train_net
 from thesis_code.configs import Config
 
-p = argparse.ArgumentParser()
-p.add_argument("--output_dir", type=Path, required=True)
-p.add_argument("--run_id", type=str, required=True)
-p.add_argument("--seed", type=int, required=True)
-
 def get_args(keymap: dict[str, argparse._ActionType]) -> list[Any]:
     p = argparse.ArgumentParser()
     for key, key_type in keymap.items():
@@ -23,19 +18,10 @@ def get_args(keymap: dict[str, argparse._ActionType]) -> list[Any]:
     args = p.parse_args()
     return [args.__getattr__(name=key) for key in keymap.keys()]
 
-output_dir, run_id, seed = get_args({
-    "output_dir": Path,
-    "run_id": str,
-    "seed": int,
-})
+output_dir, run_id, seed = get_args({"output_dir": Path, "run_id": str, "seed": int})
 
-
-def run(cfg: Config) -> None:
-    args = p.parse_args()
-    output_dir = args.output_dir
-    run_id = args.run_id
-
-    seed = args.seed
+def run(output_dir: Path, run_id: str, seed: int, cfg: Config) -> None:
+    output_dir, run_id, seed = get_args({"output_dir": Path, "run_id": str, "seed": int})
 
     mlflow.set_tracking_uri("sqlite:///MLflow_server/mlflow.db")
     mlflow.set_experiment("SRNN-training Experiment 1")
