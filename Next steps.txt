@@ -41,7 +41,7 @@ look how Miguel unrolls data (sparse matrices)
 For next test:
 
 Excitatory output only table with naturalistic bounded beta values (uniform) for both LIF and ALIF.         DONE
-
+test with naturalistic fixed taus, but with one tau_0 baseline time that shifts the entire network taus.    DONE
 
 
 test for which network size it still performs reasonably. Then see if connectivity improves performance
