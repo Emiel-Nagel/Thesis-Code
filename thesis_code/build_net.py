@@ -19,10 +19,10 @@ def build_layer(rl_cfg: RecurrentLayerConfig, neurons_prev: list[Neuron], dt: fl
     if rl_cfg.use_daleslaw and rl_cfg.use_connectivity:
         neurons = sample_exc_pv_som_neurons(n_neurons, rl_cfg.p_pv, rl_cfg.p_som)
         # beta, beta_min, beta_max = get_membrane_decays_ee_pv_som(neurons, dt, device)
-        beta, beta_min, beta_max = sample_values(rl_cfg.beta, dt, n_neurons, device), 0.0, 1.0      # back to random values
+        beta, beta_min, beta_max = sample_values(rl_cfg.beta, dt, n_neurons, device), torch.as_tensor(0.0, device=device), torch.as_tensor(1.0, device=device)      # back to random values
     else:
         neurons = sample_exc_inh_neurons(n_neurons, rl_cfg.p_inh) if rl_cfg.use_connectivity else sample_exc_neurons(n_neurons)
-        beta, beta_min, beta_max = sample_values(rl_cfg.beta, dt, n_neurons, device), 0.0, 1.0
+        beta, beta_min, beta_max = sample_values(rl_cfg.beta, dt, n_neurons, device), torch.as_tensor(0.0, device=device), torch.as_tensor(1.0, device=device)
 
     save_neurons(output_dir, neurons)
     rec_matrix, pruned_matrix = build_recurrent_and_pruned_matrices(neurons)
