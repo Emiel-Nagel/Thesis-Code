@@ -1,8 +1,6 @@
 import mlflow
 import torch
 from pathlib import Path
-import argparse
-from typing import Any
 
 from thesis_code import datasets, runs
 from thesis_code.build_net import build_srnns
@@ -10,18 +8,8 @@ from thesis_code.recording import Recorder
 from thesis_code.training import Regularizer, train_net
 from thesis_code.configs import Config
 
-def get_args(keymap: dict[str, argparse._ActionType]) -> list[Any]:
-    p = argparse.ArgumentParser()
-    for key, key_type in keymap.items():
-        p.add_argument(f"--{key}", type=key_type, required=True)
-
-    args = p.parse_args()
-    return [args.__getattr__(name=key) for key in keymap.keys()]
-
-output_dir, run_id, seed = get_args({"output_dir": Path, "run_id": str, "seed": int})
-
 def run(output_dir: Path, run_id: str, seed: int, cfg: Config) -> None:
-    output_dir, run_id, seed = get_args({"output_dir": Path, "run_id": str, "seed": int})
+    output_dir, run_id, seed = runs.get_args({"output_dir": Path, "run_id": str, "seed": int})
 
     mlflow.set_tracking_uri("sqlite:///MLflow_server/mlflow.db")
     mlflow.set_experiment("SRNN-training Experiment 1")
@@ -77,11 +65,12 @@ def run(output_dir: Path, run_id: str, seed: int, cfg: Config) -> None:
 
         net, optimizer, recorder = train_net(net, seed_run.info.run_id, device, SHD_trainloader, SHD_testloader, train_cfg.lr, train_cfg.n_epochs, regularizer, recorder)
         runs.save_net(net, optimizer, epoch=train_cfg.n_epochs, save_path=output_dir / "net.checkpoint.pt")
-        recorder.save(output_dir / "data_net")
+        recorder.save(output_dir / "raw_output_data_net")
+        mlflow.log_artifacts(str(seed_dir))
 
         if net_control is not None:
             recorder.clear()   
 
             net_control, optimizer_control, recorder = train_net(net_control, seed_run.info.run_id, device, SHD_trainloader, SHD_testloader, train_cfg.lr, train_cfg.n_epochs, regularizer, recorder)
             runs.save_net(net_control, optimizer_control, epoch=train_cfg.n_epochs, save_path=output_dir / "net_control.checkpoint.pt")
-            recorder.save(output_dir / "data_net_control")
+            recorder.save(output_dir / "raw_output_data_net_control")

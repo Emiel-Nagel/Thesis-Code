@@ -4,6 +4,8 @@ from pathlib import Path
 from collections.abc import Iterator
 import logging
 import importlib.util, sys
+import argparse
+from typing import Any
 
 from .srnn import SRNN
 from .configs import Config
@@ -33,6 +35,14 @@ def load_config(config_path: Path) -> Config:
         raise AttributeError(f"{config_path} does not define a module-level `cfg`")
     return mod.cfg
 
+def get_args(keymap: dict[str, argparse._ActionType]) -> list[Any]:
+    p = argparse.ArgumentParser()
+    for key, key_type in keymap.items():
+        p.add_argument(f"--{key}", type=key_type, required=True)
+
+    args = p.parse_args()
+    return [args.__getattr__(name=key) for key in keymap.keys()]
+
 def create_output_dir() -> Path:
     output_dir = OUTPUT_DIR / generate_run_id()
     output_dir.mkdir(parents=True, exist_ok=False)
@@ -52,9 +62,9 @@ def create_run_dir(output_dir: Path, cfg: Config) -> Path:
     return output_dir
 
 def create_seed_dir(output_dir: Path, seed: int) -> Path:
-    output_dir = output_dir / f"seed_{seed}"
-    output_dir.mkdir(parents=True, exist_ok=True)
-    return output_dir
+    seed_dir = output_dir / f"seed_{seed}"
+    seed_dir.mkdir(parents=True, exist_ok=True)
+    return seed_dir
 
 def iter_scheduled_runs() -> Iterator[tuple[Path, dict, str, Path]]:
     DONE_DIR.mkdir(exist_ok=True)
