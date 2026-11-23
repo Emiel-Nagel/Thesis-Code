@@ -35,15 +35,15 @@ cfg = Config(
                 p_pv = 0.25,
                 p_som = 0.25,
                 p_inh = 0.5,
-                use_daleslaw = True,
-                use_connectivity = True,
+                use_daleslaw = False,
+                use_connectivity = False,
                 refractory_period = 0,
-                rec_layer_type = "lif",
+                rec_layer_type = "alif",
                 beta = SamplingConfig(sampling_mode = "normal", is_decay=True, tau_mean = 10, tau_std = 1),
                 learn_beta = True,
-                # beta_w = SamplingConfig(sampling_mode = "normal", is_decay=True, tau_mean = 30, tau_std = 5),
-                # a = SamplingConfig(sampling_mode = "normal", is_decay=False, tau_mean = 3, tau_std = 2),
-                # b = SamplingConfig(sampling_mode = "normal", is_decay=False, tau_mean = 1, tau_std = 1)
+                beta_w = SamplingConfig(sampling_mode = "normal", is_decay=True, tau_mean = 30, tau_std = 5),
+                a = SamplingConfig(sampling_mode = "normal", is_decay=False, tau_mean = 3, tau_std = 2),
+                b = SamplingConfig(sampling_mode = "normal", is_decay=False, tau_mean = 1, tau_std = 1)
             )
         ],
         add_control_net = False,

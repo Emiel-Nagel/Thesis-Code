@@ -31,7 +31,7 @@ cfg = Config(
     srnn = SRNNConfig(
         recurrent_layers=[
             RecurrentLayerConfig(
-                n_neurons = 16,
+                n_neurons = 512,
                 p_pv = 0.25,
                 p_som = 0.25,
                 p_inh = 0.5,
