@@ -101,14 +101,12 @@ def test_net(net: SRNN, testloader: DataLoader, max_iters: int = None) -> tuple[
 
     return acc / len(testloader), loss / len(testloader)
 
-def train_net(net: SRNN, seed_id: str, device: torch.device, trainloader: PreparedLoader, testloader: PreparedLoader, lr: float = 1e-3, n_epochs: int = 1, max_iters: int = None, 
+def train_net(net: SRNN, seed_id: str, device: torch.device, trainloader: PreparedLoader, testloader: PreparedLoader, lr: float = 1e-3, n_epochs: int = 1, 
         separate_timesteps: bool = False, regularizer: Regularizer = None, recorder: Recorder = None,
     ) -> tuple[SRNN, torch.optim.Optimizer, Recorder]:
     optimizer = torch.optim.Adam(net.parameters(), lr=lr)
 
     for epoch in range(n_epochs):
-        mlflow.set_tag("progress", f"Epoch {epoch + 1}/{n_epochs}")
-
         net.train()
 
         losses, accs = [], []
@@ -139,7 +137,7 @@ def train_net(net: SRNN, seed_id: str, device: torch.device, trainloader: Prepar
             acc = measure_accuracy(mem_outs.detach(), targets)
             accs.append(acc)
 
-        acc_test, loss_test = test_net(net, testloader, max_iters)
+        acc_test, loss_test = test_net(net, testloader)
         max_grad, avg_grad = get_gradients(net)
         mlflow.log_metrics(
             {"train_loss": loss_val.item(), "train_accuracy": acc, "test_loss": loss_test, "test_accuracy": acc_test, 
