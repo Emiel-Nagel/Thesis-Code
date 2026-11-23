@@ -8,14 +8,14 @@ from thesis_code.recording import Recorder
 from thesis_code.training import Regularizer, train_net
 from thesis_code.configs import Config
 
-def run(output_dir: Path, run_id: str, seed: int, cfg: Config) -> None:
+mlflow.set_tracking_uri("sqlite:///MLflow_server/mlflow.db")
+mlflow.set_experiment("SRNN-training Experiment 1")
+
+mlflow.config.enable_system_metrics_logging()
+mlflow.config.set_system_metrics_sampling_interval(1)
+
+def run(cfg: Config) -> None:
     output_dir, run_id, seed = runs.get_args({"output_dir": Path, "run_id": str, "seed": int})
-
-    mlflow.set_tracking_uri("sqlite:///MLflow_server/mlflow.db")
-    mlflow.set_experiment("SRNN-training Experiment 1")
-
-    mlflow.config.enable_system_metrics_logging()
-    mlflow.config.set_system_metrics_sampling_interval(1)
 
     with mlflow.start_run(run_name=f"seed {seed}", nested=True, parent_run_id=run_id) as seed_run:
         output_dir = runs.create_output_dir(output_dir, seed)

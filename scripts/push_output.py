@@ -1,3 +1,7 @@
+"""
+This script pushes the outputs to mlflow, after having performed the analyses.
+"""
+
 if __name__ == "__main__":
     import argparse
     import sys
