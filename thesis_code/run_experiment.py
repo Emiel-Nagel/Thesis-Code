@@ -14,20 +14,19 @@ mlflow.set_experiment("SRNN-training Experiment 1")
 mlflow.config.enable_system_metrics_logging()
 mlflow.config.set_system_metrics_sampling_interval(1)
 
+flushing = torch.set_flush_denormal(True)
+print(f"Floating point flushing is set to {flushing}")
+
+torch.set_num_threads(4)
+device = torch.device("cuda") if torch.cuda.is_available() else torch.device("mps") if torch.backends.mps.is_available() else torch.device("cpu")
+print(f"Using device: {device}")
+
 def run(cfg: Config) -> None:
-    output_dir, run_id, seed = runs.get_args({"output_dir": Path, "run_id": str, "seed": int})
+    experiment_id, run_id, run_dir, seed = runs.get_args({"experiment_id": str, "run_id": str, "run_dir": Path, "seed": int})
+    seed_dir = runs.create_seed_dir(run_dir, seed)
+    torch.manual_seed(seed)
 
-    with mlflow.start_run(run_name=f"seed {seed}", nested=True, parent_run_id=run_id) as seed_run:
-        output_dir = runs.create_output_dir(output_dir, seed)
-        
-        flushing = torch.set_flush_denormal(True)
-        print(f"Floating point flushing is set to {flushing}")
-
-        torch.manual_seed(seed)
-        torch.set_num_threads(4)
-
-        device = torch.device("cuda") if torch.cuda.is_available() else torch.device("mps") if torch.backends.mps.is_available() else torch.device("cpu")
-        
+    with mlflow.start_run(experiment_id=experiment_id, run_name=f"seed {seed}", nested=True, parent_run_id=run_id) as seed_run:        
         train_cfg = cfg.training
         dt = train_cfg.dt
         SHD_trainloader, SHD_testloader, input_dim, classes = datasets.get_SHD_dataset(
@@ -54,7 +53,7 @@ def run(cfg: Config) -> None:
             tau_out=srnn_cfg.tau_out,
 
             device=device,
-            output_dir=output_dir,
+            output_dir=seed_dir,
             add_control_net=srnn_cfg.add_control_net,
         )
 
@@ -64,13 +63,14 @@ def run(cfg: Config) -> None:
         )
 
         net, optimizer, recorder = train_net(net, seed_run.info.run_id, device, SHD_trainloader, SHD_testloader, train_cfg.lr, train_cfg.n_epochs, regularizer, recorder)
-        runs.save_net(net, optimizer, epoch=train_cfg.n_epochs, save_path=output_dir / "net.checkpoint.pt")
-        recorder.save(output_dir / "raw_output_data_net")
-        mlflow.log_artifacts(str(seed_dir))
+        runs.save_net(net, optimizer, epoch=train_cfg.n_epochs, save_path=seed_dir / "net.checkpoint.pt")
+        recorder.save(seed_dir / "raw_output_data_net")
 
         if net_control is not None:
             recorder.clear()   
 
             net_control, optimizer_control, recorder = train_net(net_control, seed_run.info.run_id, device, SHD_trainloader, SHD_testloader, train_cfg.lr, train_cfg.n_epochs, regularizer, recorder)
-            runs.save_net(net_control, optimizer_control, epoch=train_cfg.n_epochs, save_path=output_dir / "net_control.checkpoint.pt")
-            recorder.save(output_dir / "raw_output_data_net_control")
+            runs.save_net(net_control, optimizer_control, epoch=train_cfg.n_epochs, save_path=seed_dir / "net_control.checkpoint.pt")
+            recorder.save(seed_dir / "raw_output_data_net_control")
+
+        mlflow.log_artifacts(str(seed_dir), run_id=seed_run.info.run_id)

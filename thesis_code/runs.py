@@ -18,7 +18,7 @@ RUNS_TEMP_DIR = RUNS_DIR / "_runs_tmp"
 CONFIG_DIR = RUNS_DIR / "scheduled"
 DONE_DIR = CONFIG_DIR / "_done"
 
-def generate_run_id() -> str:
+def generate_id() -> str:
     return str(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
 
 def get_git_commit() -> str:
@@ -44,8 +44,14 @@ def get_args(keymap: dict[str, argparse._ActionType]) -> list[Any]:
     return [args.__getattr__(name=key) for key in keymap.keys()]
 
 def create_output_dir() -> Path:
-    output_dir = OUTPUT_DIR / generate_run_id()
+    output_dir = OUTPUT_DIR / generate_id()
     output_dir.mkdir(parents=True, exist_ok=False)
+    return output_dir
+
+def create_run_dir(output_dir: Path, cfg: Config) -> Path:
+    output_dir = output_dir / cfg.run_name
+    output_dir.mkdir(parents=True, exist_ok=True)
+    cfg.save_json(output_dir)
 
     helpers_dir = output_dir / "helpers"
     helpers_dir.mkdir(parents=True, exist_ok=True)
@@ -54,15 +60,11 @@ def create_output_dir() -> Path:
     (helpers_dir / "__init__.py").touch()
     return output_dir
 
-def create_run_dir(output_dir: Path, cfg: Config) -> Path:
-    output_dir = output_dir / cfg.run_name
-    output_dir.mkdir(parents=True, exist_ok=True)
-    cfg.save_json(output_dir)
     shutil.copy2(CODE_DIR / "scripts" / "analysis.ipynb", output_dir / "analysis.ipynb")
     return output_dir
 
-def create_seed_dir(output_dir: Path, seed: int) -> Path:
-    seed_dir = output_dir / f"seed_{seed}"
+def create_seed_dir(run_dir: Path, seed: int) -> Path:
+    seed_dir = run_dir / f"seed_{seed}"
     seed_dir.mkdir(parents=True, exist_ok=True)
     return seed_dir
 
@@ -72,7 +74,7 @@ def iter_scheduled_runs() -> Iterator[tuple[Path, dict, str, Path]]:
     for config_path in sorted(CONFIG_DIR.glob("*.toml")):
         try:
             cfg = load_config(config_path)
-            run_name = f"{generate_run_id()}-{cfg["run_name"]}"
+            run_name = f"{generate_id()}-{cfg["run_name"]}"
             output_dir = create_output_dir(config_path, run_name)
         except (tomllib.TOMLDecodeError, KeyError, ValueError, OSError) as e:
             logging.error("Error: Skipping %s: %s", config_path.name, e)
