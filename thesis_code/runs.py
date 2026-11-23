@@ -48,20 +48,24 @@ def create_output_dir() -> Path:
     output_dir.mkdir(parents=True, exist_ok=False)
     return output_dir
 
-def create_run_dir(output_dir: Path, cfg: Config) -> Path:
-    output_dir = output_dir / cfg.run_name
-    output_dir.mkdir(parents=True, exist_ok=True)
-    cfg.save_json(output_dir)
+def create_experiment_dir(output_dir: Path, experiment_name: str) -> Path:
+    experiment_dir = output_dir / experiment_name
+    experiment_dir.mkdir(parents=True, exist_ok=True)
 
-    helpers_dir = output_dir / "helpers"
+    helpers_dir = experiment_dir / "helpers"
     helpers_dir.mkdir(parents=True, exist_ok=True)
     shutil.copy2(CODE_DIR / "thesis_code" / "plotting.py", helpers_dir / "plotting.py")
     shutil.copy2(CODE_DIR / "thesis_code" / "analysis.py", helpers_dir / "analysis.py")
     (helpers_dir / "__init__.py").touch()
-    return output_dir
+    return experiment_dir
 
-    shutil.copy2(CODE_DIR / "scripts" / "analysis.ipynb", output_dir / "analysis.ipynb")
-    return output_dir
+def create_run_dir(experiment_dir: Path, cfg: Config) -> Path:
+    run_dir = experiment_dir / cfg.run_name
+    run_dir.mkdir(parents=True, exist_ok=True)
+
+    cfg.save_json(run_dir)
+    shutil.copy2(CODE_DIR / "scripts" / "analysis.ipynb", run_dir / "analysis.ipynb")
+    return run_dir
 
 def create_seed_dir(run_dir: Path, seed: int) -> Path:
     seed_dir = run_dir / f"seed_{seed}"

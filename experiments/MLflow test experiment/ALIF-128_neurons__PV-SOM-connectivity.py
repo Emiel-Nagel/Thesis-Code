@@ -60,5 +60,4 @@ cfg = Config(
 
 if __name__ == "__main__":
     from thesis_code import run_experiment
-
     run_experiment.run(cfg)
