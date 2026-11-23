@@ -41,7 +41,7 @@ def get_args(keymap: dict[str, argparse._ActionType]) -> list[Any]:
         p.add_argument(f"--{key}", type=key_type, required=True)
 
     args = p.parse_args()
-    return [args.__getattr__(name=key) for key in keymap.keys()]
+    return [getattr(args, key) for key in keymap.keys()]
 
 def create_output_dir() -> Path:
     output_dir = OUTPUT_DIR / generate_id()

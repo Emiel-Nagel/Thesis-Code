@@ -9,8 +9,6 @@ from thesis_code.training import Regularizer, train_net
 from thesis_code.configs import Config
 
 mlflow.set_tracking_uri("sqlite:///MLflow_server/mlflow.db")
-mlflow.set_experiment("SRNN-training Experiment 1")
-
 mlflow.config.enable_system_metrics_logging()
 mlflow.config.set_system_metrics_sampling_interval(1)
 
@@ -23,10 +21,12 @@ print(f"Using device: {device}")
 
 def run(cfg: Config) -> None:
     experiment_id, run_id, run_dir, seed = runs.get_args({"experiment_id": str, "run_id": str, "run_dir": Path, "seed": int})
+    mlflow.set_experiment(experiment_id)
     seed_dir = runs.create_seed_dir(run_dir, seed)
     torch.manual_seed(seed)
 
-    with mlflow.start_run(experiment_id=experiment_id, run_name=f"seed {seed}", nested=True, parent_run_id=run_id) as seed_run:        
+    with mlflow.start_run(experiment_id=experiment_id, run_name=f"seed {seed}", nested=True, parent_run_id=run_id) as seed_run:
+        seed_id = seed_run.info.run_id
         train_cfg = cfg.training
         dt = train_cfg.dt
         SHD_trainloader, SHD_testloader, input_dim, classes = datasets.get_SHD_dataset(
@@ -62,15 +62,15 @@ def run(cfg: Config) -> None:
             rec_cfg=cfg.recording,
         )
 
-        net, optimizer, recorder = train_net(net, seed_run.info.run_id, device, SHD_trainloader, SHD_testloader, train_cfg.lr, train_cfg.n_epochs, regularizer, recorder)
+        net, optimizer, recorder = train_net(net, seed_id, device, SHD_trainloader, SHD_testloader, train_cfg.lr, train_cfg.n_epochs, regularizer, recorder)
         runs.save_net(net, optimizer, epoch=train_cfg.n_epochs, save_path=seed_dir / "net.checkpoint.pt")
         recorder.save(seed_dir / "raw_output_data_net")
 
         if net_control is not None:
             recorder.clear()   
 
-            net_control, optimizer_control, recorder = train_net(net_control, seed_run.info.run_id, device, SHD_trainloader, SHD_testloader, train_cfg.lr, train_cfg.n_epochs, regularizer, recorder)
+            net_control, optimizer_control, recorder = train_net(net_control, seed_id, device, SHD_trainloader, SHD_testloader, train_cfg.lr, train_cfg.n_epochs, regularizer, recorder)
             runs.save_net(net_control, optimizer_control, epoch=train_cfg.n_epochs, save_path=seed_dir / "net_control.checkpoint.pt")
             recorder.save(seed_dir / "raw_output_data_net_control")
 
-        mlflow.log_artifacts(str(seed_dir), run_id=seed_run.info.run_id)
+        mlflow.log_artifacts(str(seed_dir), run_id=seed_id)

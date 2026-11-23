@@ -22,8 +22,8 @@ import threading
 # ---------------- Config (mirrors the bash script) ----------------
 PROJECT_DIR = Path(__file__).resolve().parent        # change if this file lives elsewhere
 SCHEDULED_DIR = PROJECT_DIR / "experiments" / "scheduled"
-SETUP_SCRIPT = PROJECT_DIR / "scripts" / "setup_experiments.py"       # python setup_output.py <experiment.py>
-PUSH_SCRIPT = PROJECT_DIR / "scripts" / "push_output.py"         # python push_output.py <output_dir>
+SETUP_SCRIPT = PROJECT_DIR / "scripts" / "setup_runs.py"        # python setup_output.py
+PUSH_SCRIPT = PROJECT_DIR / "scripts" / "push_output.py"        # python push_output.py <run_id, run_dir>
 
 N_COPIES = 5                                         # task ids 1..N_COPIES
 MAX_PARALLEL = 5                                     # same as the %2 in --array
@@ -65,28 +65,30 @@ def main() -> int:
     if setup is None:
         return 1
 
-    m = re.search(r"^OUTPUT_DIR (\S+)\s*$", setup.stdout, flags=re.M)
-    run_list = [(Path(c), Path(r)) for c, r in
-                re.findall(r"^RUN (\S+) (\S+)\s*$", setup.stdout, flags=re.M)]
-    if not m or not run_list:
-        print("Setup printed no OUTPUT_DIR/RUN lines")
+    run_list = [
+        [Path(run_file), str(experiment_id), str(run_id), Path(run_dir)]
+        for run_file, experiment_id, run_id, run_dir
+        in re.findall(r"^RUN (.+?) EXPERIMENT_ID (\S+) RUN_ID (\S+) RUN_DIR (.+?)\s*$", setup.stdout, flags=re.M)
+    ]
+    print(f"Run list: {run_list}")
+    if not run_list:
+        print("Setup printed no RUN lines")
         return 1
-    output_dir = m.group(1)
-    print(run_list)
 
     # step 2: run 5 copies of each of the runs
     print("Started running scheduled experiments.")
-    jobs = [(experiment, run_dir, seed)
-        for experiment, run_dir in run_list
+    jobs = [run_params + [seed]
+        for run_params in run_list
         for seed in range(1, N_COPIES + 1)]
+
     print(f"Running {len(run_list)} experiments x {N_COPIES} seeds = {len(jobs)} jobs "
           f"(max {MAX_PARALLEL} at once)")
 
     with ThreadPoolExecutor(max_workers=MAX_PARALLEL) as pool:
         futures = {
-            pool.submit(_run_script, experiment, "--output_dir", run_dir, "--seed", seed):
-            (experiment, seed)
-            for experiment, run_dir, seed in jobs
+            pool.submit(_run_script, run, "--experiment_id", experiment_id, "--run_id", run_id, "--run_dir", run_dir, "--seed", seed):
+            (run, seed)
+            for run, experiment_id, run_id, run_dir, seed in jobs
         }
 
     # the `with` block waits for everything, so all results are ready here
@@ -97,8 +99,9 @@ def main() -> int:
     for name, seeds in failed.items():
         print(f"WARNING: seeds {seeds} of {name} failed")
 
-    # step 3: push the outputs to a new branch
-    _run_script(PUSH_SCRIPT, "--output_dir", output_dir)
+    # step 3: push the outputs for each run to the MLflow server
+    for _, __, run_id, run_dir in run_list:
+        _run_script(PUSH_SCRIPT, "--run_id", run_id, "--run_dir", run_dir)
     return 0
 
 if __name__ == "__main__":
