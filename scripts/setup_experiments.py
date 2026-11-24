@@ -5,17 +5,14 @@ SCHEDULED_DIR = PROJECT_DIR / "experiments" / "scheduled"
 
 if __name__ == "__main__":
     from thesis_code import runs
-    from thesis_code import datasets
 
     output_dir = runs.create_output_dir()
     print(f"OUTPUT_DIR {output_dir}")
 
     for experiment in sorted(SCHEDULED_DIR.glob("*.py")):
-        cfg = runs.load_config(experiment)
-        run_dir = runs.create_run_dir(output_dir, cfg)
+        task = runs.load_task(experiment)
+        run_name = runs.get_run_name(experiment)
+        run_dir = runs.create_run_dir(output_dir, run_name)
         print(f"RUN {experiment} {str(run_dir)}")
 
-    datasets.download_SHD_dataset(
-        n_timepoints=cfg.training.dataset.n_timepoints,
-        re_download=cfg.training.dataset.re_download,
-    )
+    task.download_dataset()

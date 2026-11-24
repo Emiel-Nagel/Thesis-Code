@@ -73,8 +73,8 @@ def _run_script(script: Path, *args) -> subprocess.CompletedProcess | None:
     return subprocess.CompletedProcess(argv, 0, "".join(out), "".join(err))
 
 def main() -> int:
-    # step 1: run setup_output.py
-    setup = _run_script(SETUP_SCRIPT)
+    # step 1: run setup_experiments.py
+    setup = _run_script(SETUP_SCRIPT, "--output_dir", None, "--seed", 0)
     if setup is None:
         return 1
 

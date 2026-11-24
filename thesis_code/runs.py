@@ -1,14 +1,12 @@
 import torch
-import subprocess, shutil, datetime, tomllib, os, base64, requests
+import subprocess, shutil, datetime, os, base64, requests
 from pathlib import Path
-from collections.abc import Iterator
-import logging
 import importlib.util
 import argparse
 from typing import Any
 
 from .srnn import SRNN
-from .configs import Config
+from .tasks import Task
 
 REPO = "Emiel-Nagel/Thesis-Code"
 CODE_DIR = Path(__file__).resolve().parent.parent
@@ -27,13 +25,29 @@ def get_git_commit() -> str:
         capture_output=True, text=True, check=True, cwd=CODE_DIR,
     ).stdout.strip()
 
-def load_config(config_path: Path) -> Config:
-    spec = importlib.util.spec_from_file_location(config_path.stem, config_path)
+# def load_config(config_path: Path) -> Config:
+#     spec = importlib.util.spec_from_file_location(config_path.stem, config_path)
+#     mod = importlib.util.module_from_spec(spec)
+#     spec.loader.exec_module(mod)
+#     if not hasattr(mod, "cfg"):
+#         raise AttributeError(f"{config_path} does not define a module-level `cfg`")
+#     return mod.cfg
+
+def load_task(file: Path) -> Task:
+    spec = importlib.util.spec_from_file_location(file.stem, file)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
-    if not hasattr(mod, "cfg"):
-        raise AttributeError(f"{config_path} does not define a module-level `cfg`")
-    return mod.cfg
+    if not hasattr(mod, "task"):
+        raise AttributeError(f"{file} does not define a module-level `task`")
+    return mod.task
+
+def get_run_name(file: Path) -> str:
+    spec = importlib.util.spec_from_file_location(file.stem, file)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    if not hasattr(mod, "run_name"):
+        raise AttributeError(f"{file} does not define a module-level `run_name`")
+    return mod.run_name
 
 def get_args(keymap: dict[str, Any]) -> list[Any]:
     p = argparse.ArgumentParser()
@@ -54,10 +68,10 @@ def create_output_dir() -> Path:
     (helpers_dir / "__init__.py").touch()
     return output_dir
 
-def create_run_dir(output_dir: Path, cfg: Config) -> Path:
-    output_dir = output_dir / cfg.run_name
+def create_run_dir(output_dir: Path, run_name: str) -> Path:
+    output_dir = output_dir / run_name
     output_dir.mkdir(parents=True, exist_ok=True)
-    cfg.save_json(output_dir)
+    # cfg.save_json(output_dir)
     shutil.copy2(CODE_DIR / "scripts" / "analysis.ipynb", output_dir / "analysis.ipynb")
     return output_dir
 
@@ -66,18 +80,18 @@ def create_seed_dir(output_dir: Path, seed: int) -> Path:
     output_dir.mkdir(parents=True, exist_ok=True)
     return output_dir
 
-def iter_scheduled_runs() -> Iterator[tuple[Path, dict, str, Path]]:
-    DONE_DIR.mkdir(exist_ok=True)
-    print(sorted(CONFIG_DIR.glob("*.toml")))
-    for config_path in sorted(CONFIG_DIR.glob("*.toml")):
-        try:
-            cfg = load_config(config_path)
-            run_name = f"{generate_run_id()}-{cfg["run_name"]}"
-            output_dir = create_output_dir(config_path, run_name)
-        except (tomllib.TOMLDecodeError, KeyError, ValueError, OSError) as e:
-            logging.error("Error: Skipping %s: %s", config_path.name, e)
-            continue
-        yield (config_path, cfg, run_name, output_dir)
+# def iter_scheduled_runs() -> Iterator[tuple[Path, dict, str, Path]]:
+#     DONE_DIR.mkdir(exist_ok=True)
+#     print(sorted(CONFIG_DIR.glob("*.toml")))
+#     for config_path in sorted(CONFIG_DIR.glob("*.toml")):
+#         try:
+#             cfg = load_config(config_path)
+#             run_name = f"{generate_run_id()}-{cfg["run_name"]}"
+#             output_dir = create_output_dir(config_path, run_name)
+#         except (tomllib.TOMLDecodeError, KeyError, ValueError, OSError) as e:
+#             logging.error("Error: Skipping %s: %s", config_path.name, e)
+#             continue
+#         yield (config_path, cfg, run_name, output_dir)
 
 def save_net(net: SRNN, optimizer: torch.optim.Optimizer, epoch: int, save_path: Path) -> None:
     try:
