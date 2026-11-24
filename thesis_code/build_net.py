@@ -6,11 +6,11 @@ from typing import Union, Literal, Optional
 from dataclasses import dataclass, field
 
 from . import SRNN
-from .network_components.layers import StandardRecurrentLayer, SynapticRecurrentLayer, ALIFRecurrentLayer, OutputLayer, LAYER_CLASSES
+from .network_components.layers import StandardRecurrentLayer, SynapticRecurrentLayer, ALIFRecurrentLayer, ALIFFloatingBetaRecurrentLayer, OutputLayer, LAYER_CLASSES
 from .neuron_emulation.neurons import Neuron, sample_exc_pv_som_neurons, sample_exc_inh_neurons, sample_exc_neurons, save_neurons
 from .neuron_emulation.connectivity import build_recurrent_and_pruned_matrices, create_forward_matrix_output, save_matrices
-from .neuron_emulation.decays import get_membrane_decays_ee_pv_som
-from .parameter_sampling import tau_to_beta, sample_values, SamplingConfig
+from .neuron_emulation.decays import get_membrane_decays_ee_pv_som, get_floating_beta_ee_pv_som
+from .parameter_sampling import tau_to_beta, sample_values, SamplingConfig, sample_heterogeneous_normal
 
 Layer = Union[StandardRecurrentLayer, SynapticRecurrentLayer, ALIFRecurrentLayer]
 
@@ -47,26 +47,24 @@ def build_layer(rl_cfg: RecurrentLayerConfig, neurons_prev: list[Neuron], dt: fl
     n_neurons = rl_cfg.n_neurons
     if rl_cfg.use_daleslaw and rl_cfg.use_connectivity:
         neurons = sample_exc_pv_som_neurons(n_neurons, rl_cfg.p_pv, rl_cfg.p_som)
-        # beta, beta_min, beta_max = get_membrane_decays_ee_pv_som(neurons, dt, device)
-        beta, beta_min, beta_max = sample_values(rl_cfg.beta, dt, n_neurons, device), torch.as_tensor(0.0, device=device), torch.as_tensor(1.0, device=device)      # back to random values
     else:
         neurons = sample_exc_inh_neurons(n_neurons, rl_cfg.p_inh) if rl_cfg.use_connectivity else sample_exc_neurons(n_neurons)
-        beta, beta_min, beta_max = sample_values(rl_cfg.beta, dt, n_neurons, device), torch.as_tensor(0.0, device=device), torch.as_tensor(1.0, device=device)
-
+    
     save_neurons(output_dir, neurons)
     rec_matrix, pruned_matrix = build_recurrent_and_pruned_matrices(neurons)
 
-    sample = lambda cfg: sample_values(cfg, dt, n_neurons, device) if cfg is not None else None
-    params = dict(beta=beta, beta_w=sample(rl_cfg.beta_w), a=sample(rl_cfg.a), b=sample(rl_cfg.b))
-
     def _build_layer(rec_matrix: torch.Tensor) -> Layer:
-        return LAYER_CLASSES[rl_cfg.rec_layer_type](
+        return ALIFFloatingBetaRecurrentLayer(
             forward_matrix=torch.ones(len(neurons_prev), n_neurons, device=device),
             recurrent_matrix=rec_matrix.to(device),
-            **{k: v.clone() if v is not None else None for k, v in params.items()},
-            learn_beta=rl_cfg.learn_beta, beta_min=beta_min, beta_max=beta_max,
-            spike_grad=fast_sigmoid(slope=25), threshold=torch.ones(n_neurons, device=device),
-            refractory_period=rl_cfg.refractory_period, use_daleslaw=rl_cfg.use_daleslaw,
+            floating_beta=get_floating_beta_ee_pv_som(neurons, dt, device),
+            beta_w=sample_heterogeneous_normal(dt, n_neurons, tau_mean=30, tau_std=5, device=device),
+            a=sample_heterogeneous_normal(dt, n_neurons, tau_mean=3, tau_std=2, device=device),
+            b=sample_heterogeneous_normal(dt, n_neurons, tau_mean=1, tau_std=1, device=device),
+            spike_grad=fast_sigmoid(slope=25),
+            threshold=torch.ones(n_neurons, device=device),
+            refractory_period=0,
+            use_daleslaw=rl_cfg.use_daleslaw,
         ).to(device)
 
     return neurons, _build_layer(rec_matrix), rec_matrix, _build_layer(pruned_matrix), pruned_matrix

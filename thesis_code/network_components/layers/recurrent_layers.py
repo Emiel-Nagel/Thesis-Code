@@ -224,8 +224,6 @@ class ALIFFloatingBetaRecurrentLayer(RecurrentLayer):
         recurrent_matrix: torch.Tensor,
         floating_beta: FloatingBeta,
         # beta: torch.Tensor | float,
-        beta_min: torch.Tensor | float,
-        beta_max: torch.Tensor | float,
         beta_w: torch.Tensor | float,
         a: torch.Tensor | float,
         b: torch.Tensor | float,
@@ -236,7 +234,7 @@ class ALIFFloatingBetaRecurrentLayer(RecurrentLayer):
         use_daleslaw: bool = True,
         *args, **kwargs
     ) -> None:
-        super().__init__(forward_matrix, recurrent_matrix, beta_min, beta_max, refractory_period, use_daleslaw)
+        super().__init__(forward_matrix, recurrent_matrix, torch.zeros_like(floating_beta()), torch.ones_like(floating_beta()), refractory_period, use_daleslaw)
         self.floating_beta = floating_beta
         self.neurons = MaskedALIFRLeaky(
             beta=self.floating_beta(),      # Gives current beta values, before training

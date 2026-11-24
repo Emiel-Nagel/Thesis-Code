@@ -30,6 +30,9 @@ def sample_exc_neurons(n_neurons: int) -> list[Neuron]:
 def sort_neuron_layer(layer: list[Neuron]) -> list[Neuron]:
     return sorted(layer, key=lambda n: n.value)
 
+def get_neuron_map(neurons: list[Neuron]) -> dict[str, int]:
+    return {member.name: member.value for member in set(neurons)}
+
 def get_neuron_range(neurons: list[Neuron] | np.ndarray, neuron_value: Literal[1, 2, 3, 4]) -> tuple[int, int]:
     if not isinstance(neurons, np.ndarray):
         neurons = np.array([n.value for n in neurons], dtype=np.int8)
@@ -53,7 +56,7 @@ def save_neurons(output_dir: Path, neurons: list[Neuron]) -> None:
     np.savez_compressed(
         output_dir / "neurons.npz",
         neurons=np.array([n.value for n in neurons], dtype=np.int8),
-        neuron_map=json.dumps({member.name: member.value for member in set(neurons)})
+        neuron_map=json.dumps(get_neuron_map(neurons))
     )
 
 def load_neurons(work_dir: Path) -> tuple[np.ndarray, dict[str, int], dict[str, tuple[int, int]]]:
