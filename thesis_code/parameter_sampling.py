@@ -1,6 +1,6 @@
 import torch
 from typing import Optional, Literal
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 @dataclass
 class SamplingConfig:
