@@ -3,7 +3,7 @@ import torch
 from dataclasses import dataclass
 from typing import Callable
 
-from ..datasets.core import PreparedLoader
+from ..task_datasets.core import PreparedLoader
 
 @dataclass
 class Task:

@@ -2,7 +2,7 @@ import torch
 from functools import partial
 
 from ..loss_functions import CrossEntropy
-from ..datasets import SHD, SHD_Summed
+from ..task_datasets import SHD, SHD_Summed
 
 from .core import Task
 

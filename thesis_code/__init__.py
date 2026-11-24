@@ -1,6 +1,6 @@
 from .srnn import SRNN
 from . import training
-from . import datasets
+from . import task_datasets
 from . import network_components
 from . import parameter_sampling
 from . import recording

@@ -2,7 +2,7 @@ import torch
 # from snntorch.surrogate import fast_sigmoid
 from pathlib import Path
 
-from thesis_code import SRNN, datasets, runs
+from thesis_code import SRNN, task_datasets, runs
 # from thesis_code.network_components.layers import OutputLayer, RecurrentLayerConfig, LAYER_CLASSES
 # from thesis_code.parameter_sampling import tau_to_beta, sample_values
 # from thesis_code.neuron_emulation.neurons import sample_ee_pv_som_neurons, save_neurons
@@ -67,7 +67,7 @@ def run(output_dir: Path, seed: int, cfg: Config) -> None:
 
     train_cfg = cfg.training
     dt = train_cfg.dt
-    SHD_trainloader, SHD_testloader, input_dim, classes = datasets.get_SHD_dataset(
+    SHD_trainloader, SHD_testloader, input_dim, classes = task_datasets.get_SHD_dataset(
         batch_size=train_cfg.batch_size,
         device=device,
         n_timepoints=train_cfg.dataset.n_timepoints,

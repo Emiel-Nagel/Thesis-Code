@@ -1,7 +1,7 @@
 import torch
 from snntorch.surrogate import fast_sigmoid
 
-from thesis_code import SRNN, datasets
+from thesis_code import SRNN, task_datasets
 from thesis_code.network_components.layers import StandardRecurrentLayer, OutputLayer
 from thesis_code.parameter_sampling import sample_heterogeneous_normal, tau_to_beta
 from thesis_code.neuron_emulation.connectivity import sample_ee_pv_som_neurons, build_recurrent_matrix, build_recurrent_and_pruned_matrices
@@ -20,7 +20,7 @@ print(f"Using device: {device}")
 
 dt = 0.001     # Timesteps are in milliseconds
 batch_size = 128
-SHD_trainloader, SHD_testloader, input_dim, classes = datasets.get_SHD_dataset(batch_size, device, time_window=dt * 1e6)
+SHD_trainloader, SHD_testloader, input_dim, classes = task_datasets.get_SHD_dataset(batch_size, device, time_window=dt * 1e6)
 
 regularizer = tr.Regularizer(lam_lower=100.0, v_lower=1e-2, lam_uppers=[0.5, 0.5], v_uppers=[50, 50], L=2)
 
