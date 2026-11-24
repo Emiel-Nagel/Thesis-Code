@@ -82,9 +82,9 @@ logger.log("Now testing net")
 
 net, optimizer, recorder = train_net(
     net=net,
+    task=task,
     logger=logger,
     device=device,
-    task=task,
     lr=1e-3,
     n_epochs=50,
     regularizer=regularizer,

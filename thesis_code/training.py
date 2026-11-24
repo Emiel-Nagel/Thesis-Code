@@ -52,7 +52,7 @@ def test_net(net: SRNN, task: Task, max_iters: int = None) -> tuple[float, float
 
     return acc / len(task.testloader), loss / len(task.testloader)
 
-def train_net(net: SRNN, logger: Logger, device: torch.device, task: Task, lr: float = 1e-3, n_epochs: int = 1, max_iters: int = None, 
+def train_net(net: SRNN, task: Task, logger: Logger, device: torch.device, lr: float = 1e-3, n_epochs: int = 1, max_iters: int = None, 
               max_norm: int = 1e6, separate_timesteps: bool = False, regularizer: Regularizer = None, recorder: Recorder = None,
     ) -> tuple[SRNN, torch.optim.Optimizer, Recorder]:
     optimizer = torch.optim.Adam(net.parameters(), lr=lr)
