@@ -37,7 +37,7 @@ class FloatingBeta(nn.Module):
         super().__init__()
         self.register_buffer("taus", taus)
         self.dt = dt
-        self.register_parameter("log_tau_scale", nn.Parameter(torch.zeros(()), requires_grad=True))     # having log scale means it can't go negative, which is necessary for the decay to be valid.
+        self.register_parameter("log_tau_scale", nn.Parameter(torch.zeros(()), requires_grad=True))     # having log scale means it can't go negative, which is necessary for the decay to be valid. Inits at 1.0
 
     def forward(self) -> torch.Tensor:
         return tau_to_beta(self.dt, self.taus * self.log_tau_scale.exp())
