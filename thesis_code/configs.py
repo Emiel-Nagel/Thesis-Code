@@ -9,14 +9,12 @@ from dacite import Config as DaciteConfig, from_dict
 from .parameter_sampling import SamplingConfig
 from .network_components.layers import StandardRecurrentLayer, SynapticRecurrentLayer, ALIFRecurrentLayer
 from .build_net import RecurrentLayerConfig, SRNNConfig
-from .datasets import DatasetConfig
-from .training import TrainingConfig, RegularizationConfig
 from .recording import RecordingConfig
 
 @dataclass
 class Config:
     run_name: str
-    training: TrainingConfig = field(default_factory=TrainingConfig)
+    # training: TrainingConfig = field(default_factory=TrainingConfig)
     srnn: SRNNConfig = field(default_factory=SRNNConfig)
     recording: RecordingConfig = field(default_factory=RecordingConfig)
  
