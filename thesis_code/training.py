@@ -1,34 +1,14 @@
 import torch
 import torch.nn as nn
-from torch.utils.data import DataLoader
-import torch.nn.functional as F
 
 import numpy as np
 from tqdm.auto import tqdm
 import psutil, os
-from dataclasses import dataclass, field
 
 from .srnn import SRNN
 from .recording import Recorder
 from .run_logging import Logger
-from .datasets import DatasetConfig, PreparedLoader
-
-def measure_accuracy(mem_outs: torch.Tensor, targets: torch.Tensor) -> float:
-    probs = F.softmax(mem_outs, dim=-1)
-    idx = probs.mean(dim=0).argmax(-1)
-    return (idx == targets).float().mean().item()
-
-def compute_loss(mem_outs: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
-    """Should converge to cross-entropy loss
-    It does, cross-entropy loss is basically nll losss if you first apply softmax and log around the outputs.
-    See:
-    https://docs.pytorch.org/docs/2.14/generated/torch.nn.CrossEntropyLoss.html
-    and
-    https://docs.pytorch.org/docs/2.14/generated/torch.nn.NLLLoss.html#torch.nn.NLLLoss
-    """
-    probs = F.softmax(mem_outs, dim=-1)
-    log_probs = torch.log(probs.mean(dim=0) + 1e-8) # to avoid log(0)
-    return F.nll_loss(log_probs, targets)
+from .tasks import Task
 
 class Regularizer(nn.Module):
     def __init__(self, lam_lower: float, v_lower: float, lam_uppers: list[float], v_uppers: list[float], L: int = 2) -> None:
@@ -56,23 +36,23 @@ class Regularizer(nn.Module):
             loss_regs.append((g_lower + g_upper).mean(dim=0))      # output shape should be scalar ()
         return torch.stack(loss_regs).sum()
 
-def test_net(net: SRNN, testloader: DataLoader, max_iters: int = None) -> tuple[float, float]:
+def test_net(net: SRNN, task: Task, max_iters: int = None) -> tuple[float, float]:
     with torch.no_grad():
         acc = 0
         loss = 0
         net.eval()
 
-        for i, (data, targets) in enumerate(testloader):
+        for i, (data, targets) in enumerate(task.testloader):
             net.reset()
             _, mem_rec, _, _ = net(data)
-            acc += measure_accuracy(mem_rec, targets)
-            loss += compute_loss(mem_rec, targets)
+            acc += task.measure_accuracy(mem_rec, targets)
+            loss += task.compute_loss(mem_rec, targets)
             if max_iters is not None and i == max_iters:
                 break
 
-    return acc / len(testloader), loss / len(testloader)
+    return acc / len(task.testloader), loss / len(task.testloader)
 
-def train_net(net: SRNN, logger: Logger, device: torch.device, trainloader: PreparedLoader, testloader: PreparedLoader, lr: float = 1e-3, n_epochs: int = 1, max_iters: int = None, 
+def train_net(net: SRNN, logger: Logger, device: torch.device, task: Task, lr: float = 1e-3, n_epochs: int = 1, max_iters: int = None, 
               max_norm: int = 1e6, separate_timesteps: bool = False, regularizer: Regularizer = None, recorder: Recorder = None,
     ) -> tuple[SRNN, torch.optim.Optimizer, Recorder]:
     optimizer = torch.optim.Adam(net.parameters(), lr=lr)
@@ -82,7 +62,7 @@ def train_net(net: SRNN, logger: Logger, device: torch.device, trainloader: Prep
 
     for epoch in range(n_epochs):
         logger.log(f"\n\n\nNow evaluating epoch {epoch}:\n\n")
-        progress_bar = tqdm(enumerate(trainloader), total=len(trainloader), position=0, desc=f"Epoch {epoch}"
+        progress_bar = tqdm(enumerate(task.trainloader), total=len(task.trainloader), position=0, desc=f"Epoch {epoch}"
                             , dynamic_ncols=True, bar_format="{n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_fmt}] {bar}",)
         status_bar = tqdm(total=0, position=1, bar_format="{desc}", dynamic_ncols=True)
 
@@ -92,7 +72,7 @@ def train_net(net: SRNN, logger: Logger, device: torch.device, trainloader: Prep
             forward_fn = net.forward_sequence if not separate_timesteps else net
             spk_outs, mem_outs, hidden_spks, hidden_mems = forward_fn(data)
 
-            loss_val = compute_loss(mem_outs, targets)
+            loss_val = task.compute_loss(mem_outs, targets)
             
             if regularizer is not None:
                 loss_val = loss_val +  regularizer(hidden_spks)
@@ -109,7 +89,7 @@ def train_net(net: SRNN, logger: Logger, device: torch.device, trainloader: Prep
             # net.constrain_betas()
 
             losses.append(loss_val.item())
-            acc = measure_accuracy(mem_outs.detach(), targets)
+            acc = task.measure_accuracy(mem_outs.detach(), targets)
             accs.append(acc)
 
             status_bar.set_description_str(
@@ -131,7 +111,7 @@ def train_net(net: SRNN, logger: Logger, device: torch.device, trainloader: Prep
             if max_iters is not None and i == max_iters:
                 break
 
-        acc_test, loss_test = test_net(net, testloader, max_iters)
+        acc_test, loss_test = test_net(net, task, max_iters)
 
         if recorder is not None:
             recorder.record_epoch(
@@ -147,23 +127,3 @@ def train_net(net: SRNN, logger: Logger, device: torch.device, trainloader: Prep
             )
 
     return net, optimizer, recorder
-
-@dataclass
-class RegularizationConfig:
-    apply: bool
-    lam_lower: float
-    v_lower: float
-    lam_uppers: list[float]
-    v_uppers: list[float]
-    L: int
-
-@dataclass
-class TrainingConfig:
-    dt: float
-    batch_size: int
-    max_iters: int
-    n_epochs: int
-    lr: float
-    separate_timesteps: bool
-    regularization: RegularizationConfig = field(default_factory=RegularizationConfig)
-    dataset: DatasetConfig = field(default_factory=DatasetConfig)
