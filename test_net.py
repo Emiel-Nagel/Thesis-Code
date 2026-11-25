@@ -9,7 +9,8 @@ from thesis_code.parameter_sampling import tau_to_beta, sample_heterogeneous_nor
 from thesis_code.neuron_emulation.neurons import get_neuron_ranges, sample_ee_pv_som_neurons
 from thesis_code.neuron_emulation.connectivity import build_recurrent_and_pruned_matrices, create_forward_matrix_output
 from thesis_code.neuron_emulation.decays import get_membrane_decays_ee_pv_som
-from thesis_code.training import compute_loss, measure_accuracy, Regularizer
+from thesis_code.training import Regularizer
+from thesis_code.loss_functions.cross_entropy import compute_loss, measure_accuracy
 from thesis_code.plotting import plot_decays
 
 def sample_data_and_targets(batch_size: int, input_size: int, output_size: int, n_steps: int, device: torch.device) -> tuple[torch.Tensor, torch.Tensor]:

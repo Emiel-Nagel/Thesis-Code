@@ -5,7 +5,7 @@ import torch
 from torch.utils.data import DataLoader, Dataset
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 DATASETS_DIR = PROJECT_ROOT / "datasets"
 DATA_PATH = DATASETS_DIR / "data"
 CACHE_PATH = DATASETS_DIR / "cache"
