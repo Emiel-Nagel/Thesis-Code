@@ -38,6 +38,6 @@ class ClassifySummedSHD(Task):
             input_dim=input_dim,
             output_dim=len(classes),
             download_dataset=partial(SHD_Summed.download_SHD_dataset, n_timepoints, re_download=False),
-            compute_loss=CrossEntropy.compute_loss,
-            measure_accuracy=CrossEntropy.measure_accuracy,
+            compute_loss=CrossEntropy.compute_loss_multi_target,
+            measure_accuracy=CrossEntropy.measure_accuracy_multi_target,
         )
