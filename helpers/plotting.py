@@ -147,15 +147,6 @@ class InteractiveSpikePlot:
         for ax, (layer_name, data) in zip(self.axes, self.layer_spikes.items()):
             ax.clear()
             if layer_name == "targets":
-                # target = data[self.epoch_i]
-                # counts = np.zeros(len(self.target_labels))
-                # counts[target] = 1
-
-                # ax.bar(self.target_labels, counts)
-                # ax.set_title(f"{layer_name}")
-                # ax.set_ylabel("Count (n)")
-                # ax.set_xlabel("Target label")
-                # ax.set_xticks(range(20))
                 continue
 
             if layer_name == "mems_out":
@@ -170,25 +161,26 @@ class InteractiveSpikePlot:
                 ax.set_ylabel("Neuron (n)")
                 ax.set_xlabel("Time step (t)")
 
-                ax.annotate(
-                    "",
-                    xy=(1.0, target),
-                    xytext=(1.12, target),
-                    xycoords=ax.get_yaxis_transform(),
-                    textcoords=ax.get_yaxis_transform(),
-                    arrowprops=dict(arrowstyle="->", color="red", lw=2),
-                    annotation_clip=False,
-                )
-                ax.annotate(
-                    "target",
-                    xy=(1.06, target),
-                    xycoords=ax.get_yaxis_transform(),
-                    xytext=(0, -6),
-                    textcoords="offset points",
-                    ha="center", va="top",
-                    color="red",
-                    annotation_clip=False,
-                )
+                for target_idx in np.flatnonzero(target):
+                    ax.annotate(
+                        "",
+                        xy=(1.0, target_idx),
+                        xytext=(1.12, target_idx),
+                        xycoords=ax.get_yaxis_transform(),
+                        textcoords=ax.get_yaxis_transform(),
+                        arrowprops=dict(arrowstyle="->", color="red", lw=2),
+                        annotation_clip=False,
+                    )
+                    ax.annotate(
+                        "target",
+                        xy=(1.06, target_idx),
+                        xycoords=ax.get_yaxis_transform(),
+                        xytext=(0, -6),
+                        textcoords="offset points",
+                        ha="center", va="top",
+                        color="red",
+                        annotation_clip=False,
+                    )
                 continue
 
             spike_matrix = data[self.epoch_i, :, :]
@@ -206,7 +198,7 @@ class InteractiveSpikePlot:
 
         self.fig.suptitle(
             f"Epoch {self.epoch_i + 1} / {self.num_epochs}\n"
-            rf"$\mathbf{{Target\ Class = {target}}}$"
+            rf"$\mathbf{{Target\ Class = {str(np.flatnonzero(target).tolist())}}}$"
         )
         self.fig.canvas.draw_idle()
 
