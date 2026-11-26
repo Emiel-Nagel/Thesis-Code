@@ -39,6 +39,27 @@ def compute_loss_multi_target(mem_outs: torch.Tensor, multi_targets: torch.Tenso
     log_probs = torch.log(probs.mean(dim=0) + 1e-8) # to avoid log(0)
     return -(log_probs * targets_dist).sum(-1).mean()
 
+def measure_accuracy_multi_target_exclusive(mem_outs: torch.Tensor, multi_targets: torch.Tensor) -> float:      # TODO: adapt
+    # multi_targets is of shape (N, C) where N is the batch dimension and C the number of classes
+    # mem_outs has shape (T, N, C) where T is the time dimension
+    # It has zeros everywhere, except ones for the correct labels
+    n_classes = multi_targets.count_nonzero(dim=-1)         # shape = (N)
+    mean_probs = F.softmax(mem_outs, dim=-1).mean(dim=0)    # shape = (N, C)
+
+    mem_outs_ranked = mean_probs.argsort(dim=-1, descending=True).argsort(dim=-1)
+    outs_predicted = mem_outs_ranked < n_classes[:, None]       # select n highest predictions
+
+    hits = (outs_predicted & multi_targets.bool()).sum(dim=-1)  # equivalent of (idx == targets)
+    return (hits / n_classes).mean().item()
+
+def compute_loss_multi_target_exclusive(mem_outs: torch.Tensor, multi_targets: torch.Tensor) -> torch.Tensor:   # TODO: adapt
+    # multi_targets is of shape (N, C) where N is the batch dimension and C the number of classes
+    # It has zeros everywhere, except ones for the correct labels
+    targets_dist = multi_targets / multi_targets.sum(-1, keepdim=True)  # normalize over the number of correct classes to match the magnitude with def compute_loss
+    probs = F.softmax(mem_outs, dim=-1)
+    log_probs = torch.log(probs.mean(dim=0) + 1e-8) # to avoid log(0)
+    return -(log_probs * targets_dist).sum(-1).mean()
+
 if __name__ == "__main__":
     T, N, C = 5, 8, 10
     mem_outs = torch.randn(T, N, C)
