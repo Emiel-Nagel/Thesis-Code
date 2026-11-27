@@ -9,6 +9,9 @@ from zoneinfo import ZoneInfo
 def get_timestamp() -> int:
     return int(datetime.now(tz=ZoneInfo("Europe/Amsterdam")).timestamp() * 1000)
 
+from dotenv import load_dotenv
+load_dotenv()
+
 from thesis_code import SRNN
 from thesis_code import datasets
 from thesis_code.build_net import build_srnns
@@ -41,7 +44,7 @@ class RateTracker:
         return self.ema_dn() / self.ema_dt()
 
 # The set_experiment API creates a new experiment if it doesn't exist.
-mlflow.set_tracking_uri("sqlite:///MLflow_server/mlflow.db")
+mlflow.set_tracking_uri("http://127.0.0.1:5000")
 mlflow.set_experiment("SRNN-training Experiment 1")
 
 mlflow.config.enable_system_metrics_logging()
