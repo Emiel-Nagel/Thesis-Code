@@ -3,7 +3,7 @@ import subprocess, shutil, datetime, tomllib, os, base64, requests
 from pathlib import Path
 from collections.abc import Iterator
 import logging
-import importlib.util, sys
+import importlib.util
 import argparse
 from typing import Any
 
@@ -35,7 +35,7 @@ def load_config(config_path: Path) -> Config:
         raise AttributeError(f"{config_path} does not define a module-level `cfg`")
     return mod.cfg
 
-def get_args(keymap: dict[str, argparse._ActionType]) -> list[Any]:
+def get_args(keymap: dict[str, Any]) -> list[Any]:
     p = argparse.ArgumentParser()
     for key, key_type in keymap.items():
         p.add_argument(f"--{key}", type=key_type, required=True)

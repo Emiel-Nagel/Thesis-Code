@@ -15,3 +15,5 @@ server = subprocess.Popen(
     stdout=subprocess.DEVNULL,     # or open("server.log", "w") to keep the output
     stderr=subprocess.STDOUT,
 )
+
+# update to be able to close the server as well

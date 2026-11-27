@@ -62,14 +62,34 @@ def run(cfg: Config) -> None:
             rec_cfg=cfg.recording,
         )
 
-        net, optimizer, recorder = train_net(net, seed_id, device, SHD_trainloader, SHD_testloader, train_cfg.lr, train_cfg.n_epochs, regularizer, recorder)
+        net, optimizer, recorder = train_net(
+            net=net,
+            seed_id=seed_id,
+            device=device,
+            trainloader=SHD_trainloader,
+            testloader=SHD_testloader,
+            lr=train_cfg.lr,
+            n_epochs=train_cfg.n_epochs,
+            regularizer=regularizer,
+            recorder=recorder
+        )
         runs.save_net(net, optimizer, epoch=train_cfg.n_epochs, save_path=seed_dir / "net.checkpoint.pt")
         recorder.save(seed_dir / "raw_output_data_net")
 
         if net_control is not None:
             recorder.clear()   
 
-            net_control, optimizer_control, recorder = train_net(net_control, seed_id, device, SHD_trainloader, SHD_testloader, train_cfg.lr, train_cfg.n_epochs, regularizer, recorder)
+            net_control, optimizer_control, recorder = train_net(
+                net=net_control, 
+                seed_id=seed_id,
+                device=device,
+                trainloader=SHD_trainloader,
+                testloader=SHD_testloader,
+                lr=train_cfg.lr,
+                n_epochs=train_cfg.n_epochs,
+                regularizer=regularizer,
+                recorder=recorder
+            )
             runs.save_net(net_control, optimizer_control, epoch=train_cfg.n_epochs, save_path=seed_dir / "net_control.checkpoint.pt")
             recorder.save(seed_dir / "raw_output_data_net_control")
 
