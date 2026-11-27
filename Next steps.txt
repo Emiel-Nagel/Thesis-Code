@@ -40,8 +40,8 @@ look how Miguel unrolls data (sparse matrices)
 
 For next test:
 
-Excitatory output only table with naturalistic bounded beta values (uniform) for both LIF and ALIF.     DONE
-
+Excitatory output only table with naturalistic bounded beta values (uniform) for both LIF and ALIF.         DONE
+test with naturalistic fixed taus, but with one tau_0 baseline time that shifts the entire network taus.    DONE
 
 
 
@@ -94,3 +94,8 @@ Correlations between cell classes
 Then move on to a spontaneous period and see how the network operates in that regime
 
 Then look at tasks with longer time periods and other types of info such as adding problem. Here we could look at binding or pattern seperation but need to tink about these deeper. 
+
+test for which network size it still performs reasonably. Then see if connectivity improves performance
+test with gamma input separation (sum two heidelberg digits together and split up into two classes)
+test for different input magnitudes (see when oscillations start to appear)
+test for quicker or slower temporal changes and see if pv versus som is preferred

@@ -1,4 +1,5 @@
 import torch
+import torch.nn as nn
 from scipy import stats
 
 from ..parameter_sampling import tau_to_beta, sample_heterogeneous_uniform
@@ -30,3 +31,19 @@ def get_membrane_decays_ee_pv_som(neurons: list[Neuron], dt: float, device: torc
     tau_upper_bounds = torch.tensor([decay_ranges[neuron.name][1] for neuron in neurons], device=device)
     taus = sample_heterogeneous_uniform(len(neurons), tau_upper_bounds, tau_lower_bounds, device)
     return tau_to_beta(dt, taus), tau_to_beta(dt, tau_lower_bounds), tau_to_beta(dt, tau_upper_bounds)
+
+class FloatingBeta(nn.Module):
+    def __init__(self, taus: torch.Tensor, dt: float = 0.001) -> None:
+        super().__init__()
+        self.register_buffer("taus", taus)
+        self.dt = dt
+        self.register_parameter("log_tau_scale", nn.Parameter(torch.zeros(()), requires_grad=True))     # having log scale means it can't go negative, which is necessary for the decay to be valid. Inits at 1.0
+
+    def forward(self) -> torch.Tensor:
+        return tau_to_beta(self.dt, self.taus * self.log_tau_scale.exp())
+
+def get_floating_beta_ee_pv_som(neurons: list[Neuron], dt: float, device: torch.device) -> FloatingBeta:
+    tau_lower_bounds = torch.tensor([decay_ranges[neuron.name][0] for neuron in neurons], device=device)
+    tau_upper_bounds = torch.tensor([decay_ranges[neuron.name][1] for neuron in neurons], device=device)
+    taus = sample_heterogeneous_uniform(len(neurons), tau_upper_bounds, tau_lower_bounds, device)
+    return FloatingBeta(taus, dt=dt).to(device)

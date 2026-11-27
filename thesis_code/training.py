@@ -106,7 +106,7 @@ def train_net(net: SRNN, logger: Logger, device: torch.device, trainloader: Prep
 
             optimizer.step()
             net.apply_daleslaw()
-            net.constrain_betas()
+            # net.constrain_betas()
 
             losses.append(loss_val.item())
             acc = measure_accuracy(mem_outs.detach(), targets)
