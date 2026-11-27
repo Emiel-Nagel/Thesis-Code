@@ -40,4 +40,57 @@ look how Miguel unrolls data (sparse matrices)
 
 For next test:
 
-Excitatory output only table with naturalistic bounded beta values (uniform) for both LIF and ALIF.
+Excitatory output only table with naturalistic bounded beta values (uniform) for both LIF and ALIF.     DONE
+
+
+
+
+
+Look at performance in training vs test set. Have an example for the test and training
+
+Fano factor
+
+Implement measures:
+Firing rate (And maybe compare firing rates in different parts of the trial (stimulus vs no stimulus))
+Methoda to measure the frequency of oscillations
+High level statistics of the firing patterns
+What are the voltages doing in the trained network are they in a realistic regime?
+Synchronos vs non synchronous spikes
+Inter time interval (ISI) and CV of the neurons
+Check resonances of the individual neurons
+Statistics on the weights connections
+Make output weights be positive and negative coming from the E populations and if we have multilayered connections that they do not connect as much to the SST networks.
+Make input neurons also project to PV and E neurons
+
+Probe the network with random inputs and see if oscillations occur.
+
+Adaptation outside of bio ranges:
+Look at the adaptation parameters to see if the PV don’t adapt as strongly than the SOM.
+Luke SHANTTEE in vivo spiking of neurons
+Not looking at synaptic types (depressing or facilitatory), no STDP rule is implemented here
+
+Paper with time of activations:
+Recruitment of Gabaergic interneurons …
+
+For comparisons of the smaller networks:
+Need to ensure the number of parameters is the same
+
+Manipulating time of the simulation:
+Compare Dale with vs without connectivity
+Prolong the period with sustained activity and readout and see what happens
+Or evaluate the readout only at the end
+
+
+New task: Overlapped inputs (maybe classify highest number, maybe have a adding problem, different ratios of PV/SOM and does that help in these tasks)
+Hypothesis: Gamma is able to separate the patterns in its frequencies, and it helps with sustaining information over time and helps with vanishing gradients; (Do read out at the end and see if oscillations help the performance or not)
+H2: Patter separation via competition in winner takes it all kind of networks (Lissman papers)
+
+Martins todo:
+number of parameters are equal
+FIRING RATES
+Correlations between cell classes
+ Look at ratio of PV SOM 
+
+Then move on to a spontaneous period and see how the network operates in that regime
+
+Then look at tasks with longer time periods and other types of info such as adding problem. Here we could look at binding or pattern seperation but need to tink about these deeper. 
